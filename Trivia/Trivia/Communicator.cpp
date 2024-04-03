@@ -60,7 +60,7 @@ void Communicator::handleNewClient(SOCKET clientSoc)
 		{
 
 			// status
-			cout << "waiting for message ..." << endl;
+			cout << endl << "waiting for message ..." << endl;
 
 			// get the data message
 			string msg = receiveData(clientSoc);
@@ -68,11 +68,25 @@ void Communicator::handleNewClient(SOCKET clientSoc)
 			// print the message
 			cout << "got message: " << msg << endl;
 
+			// clients wants to leave
+			if (msg == "exit")
+			{
+				// send a goodbye message to the client
+				sendData(clientSoc, "Goodbye");
+
+				// remove the client from the list
+				this->m_clients.erase(clientSoc);
+
+				// close the socket
+				closesocket(clientSoc);
+				break;
+			}
+
 			/////// DEBUG
 			//// send a test message
-			//string resp = "Hello";
-			//cout << "sending test message: '" << resp << "'" << endl;
-			//sendData(clientSoc, resp);
+			string resp = "Hello";
+			cout << "sending test message: '" << resp << "'" << endl;
+			sendData(clientSoc, resp);
 		}
 	}
 	catch (const exception& e)
@@ -128,7 +142,7 @@ string Communicator::receiveData(SOCKET clientSoc)
 	// init data var
 	char* data = new char[DEFAULT_BUFFER_SIZE];
 
-	// recieve data from the socket
+	// receive data from the socket
 	const int res = recv(clientSoc, data, DEFAULT_BUFFER_SIZE - 1, 0);
 
 	// failed
@@ -140,16 +154,29 @@ string Communicator::receiveData(SOCKET clientSoc)
 		throw exception(s.c_str());
 	}
 
+	// add a null terminator
+	data[res] = '\0';
+
+	// convert the received data into a string
+	string receivedData(data);
+
+	// delete the initialized data variable
+	delete[] data;
+
+
 	// return the data received
-	return string(data);
+	return receivedData;
 }
 
 void Communicator::sendData(SOCKET clientSoc, string data)
 {
+	// convert the data string to sendable data
 	const char* sendableData = data.c_str();
 
+	// send the data 
 	if (send(clientSoc, sendableData, data.length(), 0) == INVALID_SOCKET)
 	{
+		// throw exception if failed
 		throw exception("Error while sending message to client");
 	}
 }
