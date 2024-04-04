@@ -133,11 +133,11 @@
     <ClInclude Include="Requests.h" />
     <ClInclude Include="Responses.h" />
     <ClInclude Include="Server.h" />
+    <ClInclude Include="Tools.h" />
     <ClInclude Include="WSAInitializer.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Communicator.cpp" />
-    <ClCompile Include="LoginRequestHandler.cpp" />
     <ClCompile Include="Server.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="WSAInitializer.cpp" />
