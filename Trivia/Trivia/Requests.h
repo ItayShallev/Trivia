@@ -9,7 +9,7 @@ struct LoginRequest
 {
 	string userName;
 	string password;
-};
+} typedef LoginRequest;
 
 
 struct SignupRequest
@@ -17,4 +17,4 @@ struct SignupRequest
 	string username;
 	string password;
 	string email;
-};
+} typedef SignupRequest;
