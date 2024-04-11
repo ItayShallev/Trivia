@@ -7,14 +7,14 @@ using std::string;
 
 struct LoginRequest
 {
-	string userName;
-	string password;
-} typedef LoginRequest;
+	string userName; // name
+	string password; // password
+};
 
 
 struct SignupRequest
 {
-	string username;
-	string password;
-	string email;
-} typedef SignupRequest;
+	string username; // name
+	string password; // password
+	string email; // mail
+};
