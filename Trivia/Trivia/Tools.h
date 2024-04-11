@@ -3,9 +3,9 @@
 #include <vector>
 #include <ctime>
 
-
 using std::vector;
 using std::time_t;
+
 
 typedef vector<unsigned char> Buffer;
 
@@ -19,7 +19,7 @@ enum ResponseId
 {
 	LoginResponseId = 0,
 	SignupResponseId = 1,
-	ErrorResponseId = 2
+	ErrorResponseId  = 2
 };
 
 typedef struct RequestInfo

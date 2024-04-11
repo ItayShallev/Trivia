@@ -4,19 +4,19 @@
 using std::string;
 
 
-struct LoginResponse
+typedef struct LoginResponse
 {
 	unsigned int status;
-};
+} LoginResponse;
 
 
-struct SignupResponse
+typedef struct SignupResponse
 {
 	unsigned int status;
-};
+} SignupResponse;
 
 
-struct ErrorResponse
+typedef struct ErrorResponse
 {
-	string message;
-};
+	string message = "ERROR";
+} ErrorResponse;
