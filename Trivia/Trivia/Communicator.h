@@ -8,6 +8,7 @@
 using std::map;
 using std::string;
 
+
 class Communicator
 {
 public:

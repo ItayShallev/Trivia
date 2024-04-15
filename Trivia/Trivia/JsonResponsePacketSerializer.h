@@ -1,8 +1,7 @@
 #pragma once
 
 #include <map>
-#include "Tools.h"
-#include "Responses.h"
+#include "Structures.h"
 
 using std::to_string;
 using std::map;

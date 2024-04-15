@@ -4,11 +4,8 @@
 #include <iostream>
 #include <thread>
 #include "LoginRequestHandler.h"
+#include "Constants.h"
 
-#define SERVER_PORT 8888
-
-// TODO: remove when message format is established, update receive data
-#define DEFAULT_BUFFER_SIZE 255 
 
 using std::exception;
 using std::cout;
