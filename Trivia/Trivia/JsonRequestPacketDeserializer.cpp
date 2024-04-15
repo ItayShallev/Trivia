@@ -1,11 +1,11 @@
 #include "JsonRequestPacketDeserializer.h"
 #include "json.hpp"
+#include "Constants.h"
+
 
 using json = nlohmann::json;
-
-#define DATA_BYTE_LENGTH 4
-
 using std::stoi;
+
 
 LoginRequest JsonRequestPacketDeserializer::deserializeLoginRequest(Buffer buff)
 {
@@ -20,6 +20,7 @@ LoginRequest JsonRequestPacketDeserializer::deserializeLoginRequest(Buffer buff)
     return newLoginRequest;
 }
 
+
 SignupRequest JsonRequestPacketDeserializer::deserializeSignupRequest(Buffer buff)
 {
     // get the message part of the buffer
@@ -32,6 +33,7 @@ SignupRequest JsonRequestPacketDeserializer::deserializeSignupRequest(Buffer buf
 
     return newSignupRequest;
 }
+
 
 string JsonRequestPacketDeserializer::getMessageFromBuffer(Buffer buff)
 {

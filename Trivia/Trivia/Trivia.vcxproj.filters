@@ -53,22 +53,19 @@
     <ClInclude Include="LoginRequestHandler.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Requests.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Responses.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="JsonResponsePacketSerializer.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Tools.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="json.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="JsonRequestPacketDeserializer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Structures.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Constants.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

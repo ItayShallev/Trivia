@@ -1,6 +1,6 @@
 #pragma once
-#include "Tools.h"
-#include "Requests.h"
+
+#include "Structures.h"
 
 
 class JsonRequestPacketDeserializer
@@ -13,4 +13,3 @@ private:
 	static string getMessageFromBuffer(Buffer buff);
 
 };
-

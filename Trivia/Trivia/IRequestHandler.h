@@ -1,5 +1,7 @@
 #pragma once
-#include "Tools.h"
+
+#include "Structures.h"
+
 
 class IRequestHandler
 {
