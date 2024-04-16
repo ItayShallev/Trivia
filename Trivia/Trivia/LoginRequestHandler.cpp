@@ -25,6 +25,7 @@ RequestResult LoginRequestHandler::handleRequest(RequestInfo reqInfo)
 		// get the login request
 		LoginResponse logResp;
 		response = JsonResponsePacketSerializer::serializeResponse(logResp);
+		break;
 	}
 
 	case RequestId::SignupRequestId:
@@ -35,6 +36,7 @@ RequestResult LoginRequestHandler::handleRequest(RequestInfo reqInfo)
 		// get the login request
 		SignupResponse signupResp;
 		response = JsonResponsePacketSerializer::serializeResponse(signupResp);
+		break;
 	}
 	}
 
