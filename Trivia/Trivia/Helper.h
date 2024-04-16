@@ -12,4 +12,5 @@ public:
 	static char* turnBufferToCharArr(const Buffer& buff);
 
 	static string padNumWith0(int num, int wantedLength = DATA_BYTE_LENGTH);
+	static int charToInt(const char& digit);
 };

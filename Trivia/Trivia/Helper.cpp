@@ -71,3 +71,9 @@ string Helper::padNumWith0(int num, int wantedLength)
 	// return the num string
 	return numStr;
 }
+
+
+int Helper::charToInt(const char& digit)
+{
+	return digit - '0';
+}
