@@ -11,6 +11,38 @@ Buffer Helper::turnStringIntoBuffer(const string& str)
 	return Buffer(str.begin(), str.end());
 }
 
+Buffer Helper::turnStringIntoBuffer(const char* pCh)
+{
+	// get the char array as string
+	string charStr(pCh);
+
+	// call the other function
+	return turnStringIntoBuffer(charStr);
+}
+
+char* Helper::turnBufferToCharArr(const Buffer& buff)
+{
+	// get the buffer size
+	int buffSize = buff.size();
+
+	// init a char array
+	char* retCharArr = new char[buffSize + 1];
+
+	// iterate through the buffer elements
+	for (int i = 0; i < buffSize; i++)
+	{
+		// add the char to the char array
+		retCharArr[i] = buff[i];
+	}
+
+	// add a null terminator at the end
+	retCharArr[buffSize] = '\0';
+
+	// return the char array
+	return retCharArr;
+
+}
+
 
 /**
  * \brief		Pads a given number with wantedLength - num zeros and returns the result as string

@@ -1,5 +1,7 @@
 #pragma once
 
+struct RequestInfo;
+struct RequestResult;
 #include "Structures.h"
 
 

@@ -4,6 +4,8 @@
 #include <vector>
 #include <ctime>
 #include "Constants.h"
+
+class IRequestHandler;
 #include "IRequestHandler.h"
 
 using std::string;
@@ -31,13 +33,13 @@ struct SignupRequest
 // ******************* RESPONSE STRUCTURES *******************
 struct LoginResponse
 {
-	unsigned int status;
+	unsigned int status = 1;
 };
 
 
 struct SignupResponse
 {
-	unsigned int status;
+	unsigned int status = 1;
 };
 
 
@@ -55,7 +57,7 @@ typedef vector<unsigned char> Buffer;
 
 struct RequestInfo
 {
-	Buffer response;
+	Buffer buffer;
 	RequestId id;
 	time_t ReceivalTime;
 };

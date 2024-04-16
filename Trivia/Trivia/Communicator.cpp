@@ -5,6 +5,9 @@
 #include <thread>
 #include "LoginRequestHandler.h"
 #include "Constants.h"
+#include "Helper.h"
+#include "JsonRequestPacketDeserializer.h"
+#include "JsonResponsePacketSerializer.h"
 
 
 using std::exception;
@@ -60,30 +63,35 @@ void Communicator::handleNewClient(SOCKET clientSoc)
 			cout << endl << "waiting for message ..." << endl;
 
 			// get the data message
-			string msg = receiveData(clientSoc);
+			Buffer buff = receiveDataFromSocket(clientSoc);
 
-			// print the message
-			cout << "got message: " << msg << endl;
+			// get the current time
+            time_t now = time(nullptr);
 
-			// clients wants to leave
-			if (msg == "exit")
+			// build a request info
+			RequestInfo reqInfo = { buff, static_cast<RequestId>(buff[0]),now };
+
+			// get the client request handler 
+			IRequestHandler* clientRequestHandler = m_clients[clientSoc];
+
+			// check whether the request is relevant
+			bool isReqRelevant = clientRequestHandler->isRequestRelevant(reqInfo);
+			if (!isReqRelevant)
 			{
-				// send a goodbye message to the client
-				sendData(clientSoc, "Goodbye");
-
-				// remove the client from the list
-				this->m_clients.erase(clientSoc);
-
-				// close the socket
-				closesocket(clientSoc);
-				break;
+				// send that client an error response
+				ErrorResponse errorResp;
+				sendDataToSocket(clientSoc, JsonResponsePacketSerializer::serializeResponse(errorResp));
 			}
 
-			/////// DEBUG
-			//// send a test message
-			string resp = "Hello";
-			cout << "sending test message: '" << resp << "'" << endl;
-			sendData(clientSoc, resp);
+			// get the request result
+			RequestResult reqResult = clientRequestHandler->handleRequest(reqInfo);
+
+			// set the new handler
+			m_clients[clientSoc] = reqResult.newHandler;
+
+			// send the response to the client
+			sendDataToSocket(clientSoc, reqResult.response);
+
 		}
 	}
 	catch (const exception& e)
@@ -134,7 +142,7 @@ void Communicator::acceptClient(SOCKET serverSoc)
 	clientThread.detach(); // detach the thread
 }
 
-string Communicator::receiveData(SOCKET clientSoc)
+Buffer Communicator::receiveDataFromSocket(SOCKET clientSoc)
 {
 	// init data var
 	char* data = new char[DEFAULT_BUFFER_SIZE];
@@ -155,7 +163,7 @@ string Communicator::receiveData(SOCKET clientSoc)
 	data[res] = '\0';
 
 	// convert the received data into a string
-	string receivedData(data);
+	Buffer receivedData = Helper::turnStringIntoBuffer(data);
 
 	// delete the initialized data variable
 	delete[] data;
@@ -165,13 +173,13 @@ string Communicator::receiveData(SOCKET clientSoc)
 	return receivedData;
 }
 
-void Communicator::sendData(SOCKET clientSoc, string data)
+void Communicator::sendDataToSocket(SOCKET clientSoc, Buffer data)
 {
-	// convert the data string to sendable data
-	const char* sendableData = data.c_str();
+	// convert the Buffer object into sendable data
+	char* sendableData = Helper::turnBufferToCharArr(data);
 
 	// send the data 
-	if (send(clientSoc, sendableData, data.length(), 0) == INVALID_SOCKET)
+	if (send(clientSoc, sendableData, data.size(), 0) == INVALID_SOCKET)
 	{
 		// throw exception if failed
 		throw exception("Error while sending message to client");
