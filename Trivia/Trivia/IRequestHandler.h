@@ -1,6 +1,13 @@
 #pragma once
+
+struct RequestInfo;
+struct RequestResult;
+#include "Structures.h"
+
+
 class IRequestHandler
 {
 public:
-	
+	virtual bool isRequestRelevant(RequestInfo reqInfo) = 0;
+	virtual RequestResult handleRequest(RequestInfo reqInfo) = 0;
 };

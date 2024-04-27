@@ -8,6 +8,7 @@
 using std::map;
 using std::string;
 
+
 class Communicator
 {
 public:
@@ -25,7 +26,7 @@ private:
 	void initSocket();
 	void waitForClients();
 	void acceptClient(SOCKET serverSoc);
-	string receiveData(SOCKET clientSoc);
-	void sendData(SOCKET clientSoc, string data);
+	static Buffer receiveDataFromSocket(SOCKET clientSoc);
+	static void sendDataToSocket(SOCKET clientSoc, Buffer data);
 };
 
