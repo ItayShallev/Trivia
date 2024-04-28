@@ -13,7 +13,7 @@ public:
 	virtual bool open() = 0;
 	virtual bool close() = 0;
 
-	virtual int doesUserExist(string) = 0;
-	virtual int doesPasswordMatch(string, string) = 0;
-	virtual int addNewUser(string, string, string) = 0;
+	virtual bool doesUserExist(const string& username) = 0;
+	virtual bool doesPasswordMatch(const string& username, const string& password) = 0;
+	virtual bool addNewUser(const string& username, const string& password, const string& mail) = 0;
 };

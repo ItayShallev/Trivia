@@ -27,3 +27,13 @@ enum ResponseId
 
 // ************************** DE/SERIALIZERS *************************
 #define DATA_BYTE_LENGTH 4
+
+
+
+
+
+// ************************** Database *************************
+#define USERS_TABLE_SQL_STATEMENT R"(CREATE TABLE USERS(ID INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+USERNAME TEXT NOT NULL,
+PASSWORD TEXT NOT NULL,
+MAIL TEXT NOT NULL);)"
