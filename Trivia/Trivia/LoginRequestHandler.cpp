@@ -64,6 +64,11 @@ RequestResult LoginRequestHandler::signup(RequestInfo reqInfo)
 	return reqResult;
 }
 
+LoginRequestHandler::LoginRequestHandler(RequestHandlerFactory* factory)
+{
+	this->m_handlerFactory = *factory;
+}
+
 bool LoginRequestHandler::isRequestRelevant(RequestInfo reqInfo)
 {
     return reqInfo.id == RequestId::LoginRequestId || reqInfo.id == RequestId::SignupRequestId;

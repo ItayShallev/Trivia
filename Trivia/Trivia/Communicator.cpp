@@ -133,7 +133,7 @@ void Communicator::acceptClient(SOCKET serverSoc)
 
 	// add the client to the clients map
 	// TODO: Weird info showing in debug
-	LoginRequestHandler* newLoginRequest = new LoginRequestHandler;
+	LoginRequestHandler* newLoginRequest = new LoginRequestHandler();
 	auto newClientInfo = pair<SOCKET, IRequestHandler*>(clientSoc, newLoginRequest);
 	this->m_clients.insert(newClientInfo);
 
