@@ -2,6 +2,68 @@
 #include "JsonRequestPacketDeserializer.h"
 #include "JsonResponsePacketSerializer.h"
 
+RequestResult LoginRequestHandler::login(RequestInfo reqInfo)
+{
+	// create an empty result
+	RequestResult reqResult;
+
+	// get the manager
+	LoginManager manager = m_handlerFactory.getLoginManager();
+
+	// create a login request
+	SignupRequest signupReq = JsonRequestPacketDeserializer::deserializeSignupRequest(reqInfo.buffer);
+
+	// sign the user
+	bool success = manager.signup(signupReq.username, signupReq.password, signupReq.email);
+
+	// if signing failed
+	if (!success)
+	{
+		// create error response
+		reqResult.response = JsonResponsePacketSerializer::serializeResponse(ErrorResponse());
+		reqResult.newHandler = m_handlerFactory.createLoginRequestHandler();
+		return reqResult;
+	}
+
+	// create the signup response
+	reqResult.response = JsonResponsePacketSerializer::serializeResponse(SignupResponse());
+	reqResult.newHandler = m_handlerFactory.createMenuRequestHandler();
+
+	// return the response
+	return reqResult;
+}
+
+RequestResult LoginRequestHandler::signup(RequestInfo reqInfo)
+{
+	// create an empty result
+	RequestResult reqResult;
+
+	// get the manager
+	LoginManager manager = m_handlerFactory.getLoginManager();
+
+	// create a signup request
+	SignupRequest signupReq = JsonRequestPacketDeserializer::deserializeSignupRequest(reqInfo.buffer);
+
+	// sign the user
+	bool success = manager.signup(signupReq.username, signupReq.password, signupReq.email);
+
+	// if signing failed
+	if (!success)
+	{
+		// create error response
+		reqResult.response = JsonResponsePacketSerializer::serializeResponse(ErrorResponse());
+		reqResult.newHandler = m_handlerFactory.createLoginRequestHandler();
+		return reqResult;
+	}
+
+	// create the signup response
+	reqResult.response = JsonResponsePacketSerializer::serializeResponse(SignupResponse());
+	reqResult.newHandler = m_handlerFactory.createMenuRequestHandler();
+
+	// return the response
+	return reqResult;
+}
+
 bool LoginRequestHandler::isRequestRelevant(RequestInfo reqInfo)
 {
     return reqInfo.id == RequestId::LoginRequestId || reqInfo.id == RequestId::SignupRequestId;
@@ -9,40 +71,29 @@ bool LoginRequestHandler::isRequestRelevant(RequestInfo reqInfo)
 
 RequestResult LoginRequestHandler::handleRequest(RequestInfo reqInfo)
 {
-	// currently useless
-	IRequestHandler* newHandler = nullptr;
-
-	// init an empty buffer
-	Buffer response;
+	// create an empty result
+	RequestResult retResult;
 
 	switch (reqInfo.id)
 	{
 	case RequestId::LoginRequestId:
-	{
-		// set the new handler to a new login handler
-		newHandler = new LoginRequestHandler();
-
-		// get the login request
-		LoginResponse logResp;
-		response = JsonResponsePacketSerializer::serializeResponse(logResp);
+		// login the user
+		retResult = login(reqInfo);
 		break;
-	}
 
 	case RequestId::SignupRequestId:
-	{
-		// set the new handler to a new login handler
-		newHandler = new LoginRequestHandler();
+		// signup the user
+		retResult = signup(reqInfo);
+		break;
 
-		// get the login request
-		SignupResponse signupResp;
-		response = JsonResponsePacketSerializer::serializeResponse(signupResp);
+	default:
+
+		// create error response
+		retResult.response = JsonResponsePacketSerializer::serializeResponse(ErrorResponse());
+		retResult.newHandler = m_handlerFactory.createLoginRequestHandler();
 		break;
 	}
-	}
 
-	// build and return a request result
-    RequestResult newResult;
-	newResult.response = response;
-	newResult.newHandler = newHandler;
-    return newResult;
+	// return the result
+	return retResult;
 }
