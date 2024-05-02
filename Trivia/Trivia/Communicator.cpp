@@ -64,7 +64,7 @@ void Communicator::handleNewClient(SOCKET clientSoc)
 		{
 
 			// status
-			cout << endl << "waiting for message ..." << endl;
+ 			cout << endl << "waiting for message ..." << endl;
 
 			// get the data message
 			Buffer buff = receiveDataFromSocket(clientSoc);
@@ -137,7 +137,7 @@ void Communicator::acceptClient(SOCKET serverSoc)
 
 	// add the client to the clients map
 	// TODO: Weird info showing in debug
-	LoginRequestHandler* newLoginRequest = this->m_handlerFactory.createLoginRequestHandler() ;
+	IRequestHandler* newLoginRequest = this->m_handlerFactory.createLoginRequestHandler() ;
 	auto newClientInfo = pair<SOCKET, IRequestHandler*>(clientSoc, newLoginRequest);
 	this->m_clients.insert(newClientInfo);
 

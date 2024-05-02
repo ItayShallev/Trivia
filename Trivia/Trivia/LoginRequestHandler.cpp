@@ -11,10 +11,10 @@ RequestResult LoginRequestHandler::login(RequestInfo reqInfo)
 	LoginManager manager = m_handlerFactory.getLoginManager();
 
 	// create a login request
-	SignupRequest signupReq = JsonRequestPacketDeserializer::deserializeSignupRequest(reqInfo.buffer);
+	LoginRequest loginReq = JsonRequestPacketDeserializer::deserializeLoginRequest(reqInfo.buffer);
 
 	// sign the user
-	bool success = manager.signup(signupReq.username, signupReq.password, signupReq.email);
+	bool success = manager.login(loginReq.username, loginReq.password);
 
 	// if signing failed
 	if (!success)
@@ -25,8 +25,8 @@ RequestResult LoginRequestHandler::login(RequestInfo reqInfo)
 		return reqResult;
 	}
 
-	// create the signup response
-	reqResult.response = JsonResponsePacketSerializer::serializeResponse(SignupResponse());
+	// create the login response
+	reqResult.response = JsonResponsePacketSerializer::serializeResponse(LoginResponse());
 	reqResult.newHandler = m_handlerFactory.createMenuRequestHandler();
 
 	// return the response
@@ -64,7 +64,9 @@ RequestResult LoginRequestHandler::signup(RequestInfo reqInfo)
 	return reqResult;
 }
 
-LoginRequestHandler::LoginRequestHandler(RequestHandlerFactory* factory) : m_handlerFactory(*factory) {}
+LoginRequestHandler::LoginRequestHandler(RequestHandlerFactory* factory) : m_handlerFactory(*factory)
+{
+}
 
 bool LoginRequestHandler::isRequestRelevant(RequestInfo reqInfo)
 {
@@ -74,28 +76,24 @@ bool LoginRequestHandler::isRequestRelevant(RequestInfo reqInfo)
 RequestResult LoginRequestHandler::handleRequest(RequestInfo reqInfo)
 {
 	// create an empty result
-	RequestResult retResult;
-
 	switch (reqInfo.id)
 	{
 	case RequestId::LoginRequestId:
 		// login the user
-		retResult = login(reqInfo);
+		return login(reqInfo);
 		break;
 
 	case RequestId::SignupRequestId:
-		// signup the user
-		retResult = signup(reqInfo);
+		return signup(reqInfo);
 		break;
 
 	default:
 
 		// create error response
+		RequestResult retResult;
 		retResult.response = JsonResponsePacketSerializer::serializeResponse(ErrorResponse());
 		retResult.newHandler = m_handlerFactory.createLoginRequestHandler();
-		break;
+		return retResult;
 	}
 
-	// return the result
-	return retResult;
 }
