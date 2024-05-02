@@ -28,6 +28,10 @@ void Communicator::startHandleRequests()
 
 }
 
+Communicator::Communicator(RequestHandlerFactory* handlerFactory) : m_handlerFactory(*handlerFactory)
+{
+}
+
 void Communicator::bindAndListen()
 {
 	// bind
@@ -133,7 +137,7 @@ void Communicator::acceptClient(SOCKET serverSoc)
 
 	// add the client to the clients map
 	// TODO: Weird info showing in debug
-	LoginRequestHandler* newLoginRequest = new LoginRequestHandler();
+	LoginRequestHandler* newLoginRequest = this->m_handlerFactory.createLoginRequestHandler() ;
 	auto newClientInfo = pair<SOCKET, IRequestHandler*>(clientSoc, newLoginRequest);
 	this->m_clients.insert(newClientInfo);
 

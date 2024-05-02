@@ -1,5 +1,9 @@
 #include "RequestHandlerFactory.h"
 
+RequestHandlerFactory::RequestHandlerFactory(IDatabase* database) : m_database(database), m_loginManger(database, *(new vector<LoggedUser>))
+{
+}
+
 LoginRequestHandler* RequestHandlerFactory::createLoginRequestHandler()
 {
 	return new LoginRequestHandler(this);

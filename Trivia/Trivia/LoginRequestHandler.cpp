@@ -64,10 +64,7 @@ RequestResult LoginRequestHandler::signup(RequestInfo reqInfo)
 	return reqResult;
 }
 
-LoginRequestHandler::LoginRequestHandler(RequestHandlerFactory* factory)
-{
-	this->m_handlerFactory = *factory;
-}
+LoginRequestHandler::LoginRequestHandler(RequestHandlerFactory* factory) : m_handlerFactory(*factory) {}
 
 bool LoginRequestHandler::isRequestRelevant(RequestInfo reqInfo)
 {
