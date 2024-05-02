@@ -11,7 +11,11 @@ using std::cout;
  * @brief	Constructor, initializes the SqliteDatabase instance 
  * @param	databaseName		The name to give the database (will determine the .sqlite file name)
  */
-SqliteDatabase::SqliteDatabase(const string& databaseName) : _db(nullptr), _databaseName(databaseName) { }
+SqliteDatabase::SqliteDatabase(const string& databaseName) : _databaseName(databaseName)
+{
+	/*sqlite3_open(this->_databaseName.c_str(), &this->_db);*/
+	this->open();
+}
 
 
 /**

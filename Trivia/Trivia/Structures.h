@@ -15,14 +15,14 @@ using std::vector;
 // ******************* REQUESTS STRUCTURES *******************
 struct LoginRequest
 {
-	string userName;	// name
+	string username;	// username
 	string password;	// password
 };
 
 
 struct SignupRequest
 {
-	string username;	// name
+	string username;	// username
 	string password;	// password
 	string email;		// mail
 };

@@ -5,6 +5,8 @@
 #include <map>
 #include <string>
 
+#include "RequestHandlerFactory.h"
+
 using std::map;
 using std::string;
 
@@ -13,11 +15,13 @@ class Communicator
 {
 public:
 	void startHandleRequests();
+	Communicator(RequestHandlerFactory* handlerFactory);
 
 private:
 	// members
 	SOCKET m_serverSocket;
 	map<SOCKET, IRequestHandler*> m_clients;
+	RequestHandlerFactory m_handlerFactory;	
 
 	// methods
 	void bindAndListen();

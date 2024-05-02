@@ -5,6 +5,10 @@
 #include "WSAInitializer.h"
 
 
+Server::Server(IDatabase* database, RequestHandlerFactory* factory) : m_database(database), m_handlerFactory(*factory), m_communicator(&m_handlerFactory)
+{
+}
+
 void Server::run()
 {
 	try

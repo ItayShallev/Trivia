@@ -11,7 +11,8 @@
 enum RequestId
 {
 	LoginRequestId = 0,
-	SignupRequestId = 1
+	SignupRequestId = 1,
+	MenuRequestId = 2
 };
 
 

@@ -14,7 +14,7 @@ LoginRequest JsonRequestPacketDeserializer::deserializeLoginRequest(Buffer buff)
 
     // get the json data
     json data = json::parse(message);
-    LoginRequest newLoginRequest = { data["name"], data["password"] };
+    LoginRequest newLoginRequest = { data["username"], data["password"] };
 
 
     return newLoginRequest;
@@ -29,7 +29,7 @@ SignupRequest JsonRequestPacketDeserializer::deserializeSignupRequest(Buffer buf
     // get the json data
     json data = json::parse(message);
 
-    SignupRequest newSignupRequest = { data["name"], data["password"], data["mail"] };
+    SignupRequest newSignupRequest = { data["username"], data["password"], data["mail"] };
 
     return newSignupRequest;
 }
