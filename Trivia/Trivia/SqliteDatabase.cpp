@@ -212,6 +212,8 @@ bool SqliteDatabase::doesPasswordMatch(const string& username, const string& pas
  */
 bool SqliteDatabase::addNewUser(const string& username, const string& password, const string& mail)
 {
+	if (this->doesUserExist(username)) return false;
+
 	std::string addNewUserStatement = R"(
 					BEGIN TRANSACTION;
 
