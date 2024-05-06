@@ -23,6 +23,13 @@ enum ResponseId
 	ErrorResponseId = 2
 };
 
+enum RoomState
+{
+	Waiting = 0,
+	Playing = 1,
+	Finished = 2 // future use?
+};
+
 
 
 

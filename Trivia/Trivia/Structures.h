@@ -68,3 +68,15 @@ struct RequestResult
 	Buffer response;
 	IRequestHandler* newHandler;
 };
+
+
+typedef unsigned int uint;
+struct RoomData
+{
+	uint id;
+	string name;
+	uint maxPlayers;
+	uint numOfQuestionsInGame;
+	uint timePerQuestion;
+	RoomState roomState;
+};
