@@ -31,6 +31,6 @@ public:
 	uint getNumOfQuestions();
 	uint getTimePerQuestion();
 	RoomState getRoomState();
-	
+
 };
 

@@ -27,17 +27,9 @@ void Room::addUser(LoggedUser& user)
 
 void Room::removeUser(LoggedUser user)
 {
-	// iterate through the users
-	for (LoggedUser& currUser : m_users)
-	{
-		// if we found the user, erase it
-		if (currUser.getUserName() == user.getUserName())
-		{
-			m_users.erase(find(m_users.begin(), m_users.end(), currUser));
-			break;
-		}
-	}
-
+	// remove the user from the vector
+	auto userIndex = find(m_users.begin(), m_users.end(), user);
+	m_users.erase(userIndex);
 }
 
 vector<string> Room::getAllUsers()
