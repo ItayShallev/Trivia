@@ -45,7 +45,7 @@ RequestResult LoginRequestHandler::signup(RequestInfo reqInfo)
 	SignupRequest signupReq = JsonRequestPacketDeserializer::deserializeSignupRequest(reqInfo.buffer);
 
 	// sign the user
-	bool success = manager.signup(signupReq.username, signupReq.password, signupReq.email);
+	bool success = manager.signup(signupReq.username, signupReq.password, signupReq.mail);
 
 	// if signing failed
 	if (!success)
