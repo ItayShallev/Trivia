@@ -60,7 +60,7 @@ bool SqliteDatabase::executeSqlStatement(const std::string& statement, const fun
  */
 bool SqliteDatabase::initDatabase()
 {
-	std::string initStatement = string(USERS_TABLE_SQL_STATEMENT) + string(QUESTIONS_TABLE_SQL_STATEMENT);
+	std::string initStatement = string(USERS_TABLE_SQL_STATEMENT) + string(QUESTIONS_TABLE_SQL_STATEMENT) + string(STATISTICS_TABLE_SQL_STATEMENT);
 
 	if (!this->executeSqlStatement(initStatement, nullptr, nullptr)) { return false; }
 
