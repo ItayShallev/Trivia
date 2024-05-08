@@ -10,17 +10,33 @@
 // ************************** ENUMS *************************
 enum RequestId
 {
-	LoginRequestId = 0,
-	SignupRequestId = 1,
-	MenuRequestId = 2
+	LogoutRequestId = 0,
+	LoginRequestId,
+	SignupRequestId,
+	MenuRequestId,
+	CreateRoomRequestId,
+	GetRoomRequestId,
+	GetPlayersInRoomRequestId,
+	JoinRoomRequestId,
+	GetStatisticsRequestId
+	
+
 };
 
 
 enum ResponseId
 {
-	LoginResponseId = 0,
-	SignupResponseId = 1,
-	ErrorResponseId = 2
+	LogoutResponseId = 0,
+	LoginResponseId,
+	SignupResponseId,
+	ErrorResponseId,
+	GetRoomsResponseId,
+	GetPlayersInRoomResponseId,
+	GetHighScoreResponseId,
+	GetPersonalStatsResponseId,
+	JoinRoomResponseId,
+	CreateRoomResponseId
+	
 };
 
 enum RoomState
