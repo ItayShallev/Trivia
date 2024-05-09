@@ -11,14 +11,18 @@ public:
 	~SqliteDatabase() override;
 
 	template<typename funcPtr>
-	bool executeSqlStatement(const std::string& statement, const funcPtr callbackFunction, void* callbackParam);
+	bool executeSqlStatement(const string& statement, const funcPtr callbackFunction, void* callbackParam);
 
 	bool initDatabase();
 
 	virtual bool open() override;
 	virtual bool close() override;
 
-	// SQL Queries
+	// Translator functions
+	static int translateUsernameToUserIdCallback(void* data, int argc, char** argv, char** azColName);
+	int translateUsernameToUserId(const string& username);
+
+	// USERS table queries
 	static int doesUserExistsCallback(void* data, int argc, char** argv, char** azColName);
 	virtual bool doesUserExist(const string& username) override;
 
@@ -26,6 +30,15 @@ public:
 	virtual bool doesPasswordMatch(const string& username, const string& password) override;
 
 	virtual bool addNewUser(const string& username, const string& password, const string& mail) override;
+
+	static int intCallback(void* data, int argc, char** argv, char** azColName);
+	static int floatCallback(void* data, int argc, char** argv, char** azColName);
+
+	// STATISTICS table queries
+	virtual float getPlayerAverageAnswerTime(const string& username) override;
+	virtual int getNumOfCorrectAnswers(const string& username) override;
+	virtual int getNumOfTotalAnswers(const string& username) override;
+	virtual int getNumOfPlayerGames(const string& username) override;
 
 private:
 	sqlite3* _db;

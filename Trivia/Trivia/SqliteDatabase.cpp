@@ -4,7 +4,11 @@
 #include <io.h>
 
 
+using std::string;
+using std::to_string;
 using std::cout;
+using std::stoi;
+using std::stof;
 
 
 /**
@@ -13,7 +17,6 @@ using std::cout;
  */
 SqliteDatabase::SqliteDatabase(const string& databaseName) : _databaseName(databaseName)
 {
-	/*sqlite3_open(this->_databaseName.c_str(), &this->_db);*/
 	this->open();
 }
 
@@ -37,7 +40,7 @@ SqliteDatabase::~SqliteDatabase()
  @note		callbackFunction and callbackParam can be nullptr
  */
 template<typename funcPtr>
-bool SqliteDatabase::executeSqlStatement(const std::string& statement, const funcPtr callbackFunction, void* callbackParam)
+bool SqliteDatabase::executeSqlStatement(const string& statement, const funcPtr callbackFunction, void* callbackParam)
 {
 	char* errMessage = nullptr;
 	int res = sqlite3_exec(this->_db, statement.c_str(), callbackFunction, callbackParam, &errMessage);
@@ -60,7 +63,7 @@ bool SqliteDatabase::executeSqlStatement(const std::string& statement, const fun
  */
 bool SqliteDatabase::initDatabase()
 {
-	std::string initStatement = string(USERS_TABLE_SQL_STATEMENT) + string(QUESTIONS_TABLE_SQL_STATEMENT);
+	string initStatement = string(USERS_TABLE_SQL_STATEMENT) + string(QUESTIONS_TABLE_SQL_STATEMENT) + string(STATISTICS_TABLE_SQL_STATEMENT);
 
 	if (!this->executeSqlStatement(initStatement, nullptr, nullptr)) { return false; }
 
@@ -128,6 +131,45 @@ bool SqliteDatabase::close()
 
 
 /**
+ @brief		Callback function for translating username of a certain user into the user's ID
+ @param		data			A pointer to an integer where the answer ID will be stored
+ @param		argc			The number of columns in the result set
+ @param		argv			An array of strings representing the result set
+ @param		azColName		An array of strings containing the column names of the result set
+ @return	Always returns 0
+ */
+int SqliteDatabase::translateUsernameToUserIdCallback(void* data, int argc, char** argv, char** azColName)
+{
+	*(static_cast<bool*>(data)) = stoi(argv[0]);
+
+	return 0;
+}
+
+
+/**
+ * \brief		Translates a given username into the corresponding user ID
+ * \param		username		The username of the user to find its ID
+ * \return		The ID of the user with the given username
+ */
+int SqliteDatabase::translateUsernameToUserId(const string& username)
+{
+	string statement = R"(
+					BEGIN TRANSACTION;
+					
+					SELECT ID FROM USERS
+					WHERE USERNAME = ')" + username + R"(';
+					
+					END TRANSACTION;
+					)";
+
+	int userId = -1;
+	executeSqlStatement(statement, translateUsernameToUserIdCallback, &userId);
+
+	return userId;
+}
+
+
+/**
  @brief		Callback function for checking the result-rows-count to figure out if a given user exists
  @param		data			A pointer to a boolean variable where the answer to the "question" will be stored
  @param		argc			The number of columns in the result set
@@ -150,7 +192,7 @@ int SqliteDatabase::doesUserExistsCallback(void* data, int argc, char** argv, ch
  */
 bool SqliteDatabase::doesUserExist(const string& username)
 {
-	std::string doesUserExistsQuery = R"(
+	string doesUserExistsQuery = R"(
 					BEGIN TRANSACTION;
 					
 					SELECT COUNT(*) FROM USERS
@@ -190,7 +232,7 @@ int SqliteDatabase::doesPasswordMatchCallback(void* data, int argc, char** argv,
  */
 bool SqliteDatabase::doesPasswordMatch(const string& username, const string& password)
 {
-	std::string doesPasswordMatchQuery = R"(
+	string doesPasswordMatchQuery = R"(
 					BEGIN TRANSACTION;
 					
 					SELECT PASSWORD FROM USERS
@@ -217,7 +259,7 @@ bool SqliteDatabase::addNewUser(const string& username, const string& password, 
 {
 	if (this->doesUserExist(username)) return false;
 
-	std::string addNewUserStatement = R"(
+	string addNewUserStatement = R"(
 					BEGIN TRANSACTION;
 
 					INSERT INTO USERS
@@ -230,4 +272,136 @@ bool SqliteDatabase::addNewUser(const string& username, const string& password, 
 	executeSqlStatement(addNewUserStatement, nullptr, nullptr);
 
 	return true;
+}
+
+
+/**
+ @brief		Callback function that returns the result of a select query in an integer
+ @param		data			A pointer to an integer where the result will be stored
+ @param		argc			The number of columns in the result set
+ @param		argv			An array of strings representing the result set
+ @param		azColName		An array of strings containing the column names of the result set
+ @return	Always returns 0
+ */
+int SqliteDatabase::intCallback(void* data, int argc, char** argv, char** azColName)
+{
+	*(static_cast<int*>(data)) = stoi(argv[0]);
+
+	return 0;
+}
+
+
+/**
+ @brief		Callback function that returns the result of a select query in an float
+ @param		data			A pointer to an integer where the result will be stored
+ @param		argc			The number of columns in the result set
+ @param		argv			An array of strings representing the result set
+ @param		azColName		An array of strings containing the column names of the result set
+ @return	Always returns 0
+ */
+int SqliteDatabase::floatCallback(void* data, int argc, char** argv, char** azColName)
+{
+	*(static_cast<float*>(data)) = stof(argv[0]);
+
+	return 0;
+}
+
+
+
+/**
+ * \brief	Returns the average answer time of a given user
+ * \param	username		The username of the user to get its average answer time
+ * \return	The average answer time of the given user
+ */
+float SqliteDatabase::getPlayerAverageAnswerTime(const string& username)
+{
+	int userId = translateUsernameToUserId(username);
+
+	string statement = R"(
+					BEGIN TRANSACTION;
+					
+					SELECT AVERAGE_ANSWER_TIME FROM STATISTICS
+					WHERE USER_ID = ')" + to_string(userId) + R"(';
+					
+					END TRANSACTION;
+					)";
+	
+	float answerTime = 0;
+	executeSqlStatement(statement, floatCallback, &answerTime);
+
+	return answerTime;
+}
+
+
+/**
+ * \brief	Returns the number of correct answers of the given user
+ * \param	username	The username of the user to get its number of correct answers
+ * \return	The number of correct answers of the given user
+ */
+int SqliteDatabase::getNumOfCorrectAnswers(const string& username)
+{
+	const int userId = translateUsernameToUserId(username);
+
+	const string statement = R"(
+					BEGIN TRANSACTION;
+					
+					SELECT NUM_GAMES_PLAYED FROM STATISTICS
+					WHERE USER_ID = ')" + to_string(userId) + R"(';
+					
+					END TRANSACTION;
+					)";
+
+	int correctAnswers = 0;
+	executeSqlStatement(statement, intCallback, &correctAnswers);
+
+	return correctAnswers;
+}
+
+
+/**
+ * \brief	Returns the total number of answers the given user has answered
+ * \param	username	The username of the user to get its number of total answers
+ * \return	The number of total answers the given user has answered
+ */
+int SqliteDatabase::getNumOfTotalAnswers(const string& username)
+{
+	const int userId = translateUsernameToUserId(username);
+
+	const string statement = R"(
+					BEGIN TRANSACTION;
+					
+					SELECT NUM_QUESTIONS_ANSWERED FROM STATISTICS
+					WHERE USER_ID = ')" + to_string(userId) + R"(';
+					
+					END TRANSACTION;
+					)";
+
+	int numQuestionsAnswered = 0;
+	executeSqlStatement(statement, intCallback, &numQuestionsAnswered);
+	return numQuestionsAnswered;
+}
+
+
+/**
+ * \brief	Returns the number of games the given user has played
+ * \param	username	The username of the user to get its number of played games
+ * \return	The number of games the given user has played
+ */
+int SqliteDatabase::getNumOfPlayerGames(const string& username)
+{
+	const int userId = translateUsernameToUserId(username);
+
+	const string statement = R"(
+					BEGIN TRANSACTION;
+					
+					SELECT NUM_QUESTIONS_ANSWERED FROM STATISTICS
+					WHERE USER_ID = ')" + to_string(userId) + R"(';
+					
+					END TRANSACTION;
+					)";
+
+	int numOfPlayerGames = 0;
+	executeSqlStatement(statement, intCallback, &numOfPlayerGames);
+
+	return numOfPlayerGames;
 }
