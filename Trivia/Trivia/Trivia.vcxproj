@@ -145,6 +145,7 @@
     <ClInclude Include="Server.h" />
     <ClInclude Include="sqlite3.h" />
     <ClInclude Include="SqliteDatabase.h" />
+    <ClInclude Include="StatisticsManager.h" />
     <ClInclude Include="Structures.h" />
     <ClInclude Include="WSAInitializer.h" />
   </ItemGroup>
