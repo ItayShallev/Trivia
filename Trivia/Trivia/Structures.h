@@ -4,13 +4,16 @@
 #include <vector>
 #include <ctime>
 #include "Constants.h"
+#include "IRequestHandler.h"
+#include "json.hpp"
 
+// Forward declarations
 struct RoomData;
 class IRequestHandler;
-#include "IRequestHandler.h"
 
 using std::string;
 using std::vector;
+using nlohmann::json;
 
 typedef unsigned int uint;
 
@@ -51,39 +54,50 @@ struct CreateRoomRequest
 
 
 
+
 // ******************* RESPONSE STRUCTURES *******************
+struct ErrorResponse
+{
+	string message = "ERROR";
+};
+void to_json(json& j, const ErrorResponse& response);
+
+
 struct LoginResponse
 {
 	uint status = 1;
 };
+void to_json(json& j, const LoginResponse& response);
 
 
 struct SignupResponse
 {
 	uint status = 1;
 };
+void to_json(json& j, const SignupResponse& response);
 
-
-struct ErrorResponse
-{
-	string message = "ERROR";
-};
 
 struct LogoutResponse
 {
 	uint status = 1;
 };
+void to_json(json& j, const LogoutResponse& response);
 
-struct GetRoomResponse
+
+struct GetRoomsResponse
 {
 	uint status = 1;
 	vector<RoomData> rooms;
 };
+void to_json(json& j, const GetRoomsResponse& response);
+
 
 struct GetPlayersInRoomResponse
 {
 	vector<string> players;
 };
+void to_json(json& j, const GetPlayersInRoomResponse& response);
+
 
 struct GetHighScoreResponse
 {
@@ -91,21 +105,29 @@ struct GetHighScoreResponse
 	vector<string> statistics;
 };
 
+void to_json(json& j, const GetHighScoreResponse& response);
+
+
 struct GetPersonalStatsResponse
 {
 	uint status = 1;
 	vector<string> statistics;
 };
+void to_json(json& j, const GetPersonalStatsResponse& response);
+
 
 struct JoinRoomResponse
 {
 	uint status = 1;
 };
+void to_json(json& j, const JoinRoomResponse& response);
+
 
 struct CreateRoomResponse
 {
 	uint status = 1;
 };
+void to_json(json& j, const CreateRoomResponse& response);
 
 
 
@@ -138,3 +160,4 @@ struct RoomData
 	uint timePerQuestion;
 	RoomState roomState;
 };
+void to_json(json& j, const RoomData& response);
