@@ -32,12 +32,12 @@ SqliteDatabase::~SqliteDatabase()
 
 
 /**
- @brief		Executes an SQL statement/query on an Sqlite database
- @param		statement			The statement/query to execute
- @param		callbackFunction	The callback function to call for each result row
- @param		callbackParam		The parameter for the callback function (The way of transmitting the SQL query result)
- @return	A boolean value indicating whether the operation succeeded or not
- @note		callbackFunction and callbackParam can be nullptr
+ * @brief		Executes an SQL statement/query on an Sqlite database
+ * @param		statement			The statement/query to execute
+ * @param		callbackFunction	The callback function to call for each result row
+ * @param		callbackParam		The parameter for the callback function (The way of transmitting the SQL query result)
+ * @return		A boolean value indicating whether the operation succeeded or not
+ * @note		callbackFunction and callbackParam can be nullptr
  */
 template<typename funcPtr>
 bool SqliteDatabase::executeSqlStatement(const string& statement, const funcPtr callbackFunction, void* callbackParam)
@@ -110,8 +110,8 @@ bool SqliteDatabase::open()
 
 
 /**
- @brief			Closes the Trivia database
- @return		Void
+ * @brief			Closes the Trivia database
+ * @return			Void
  */
 bool SqliteDatabase::close()
 {
@@ -127,45 +127,6 @@ bool SqliteDatabase::close()
 	}
 
 	return false;		// If the program reaches here - the DB has failed to close (shouldn't occur)
-}
-
-
-/**
- @brief		Callback function for translating username of a certain user into the user's ID
- @param		data			A pointer to an integer where the answer ID will be stored
- @param		argc			The number of columns in the result set
- @param		argv			An array of strings representing the result set
- @param		azColName		An array of strings containing the column names of the result set
- @return	Always returns 0
- */
-int SqliteDatabase::translateUsernameToUserIdCallback(void* data, int argc, char** argv, char** azColName)
-{
-	*(static_cast<bool*>(data)) = stoi(argv[0]);
-
-	return 0;
-}
-
-
-/**
- * \brief		Translates a given username into the corresponding user ID
- * \param		username		The username of the user to find its ID
- * \return		The ID of the user with the given username
- */
-int SqliteDatabase::translateUsernameToUserId(const string& username)
-{
-	string statement = R"(
-					BEGIN TRANSACTION;
-					
-					SELECT ID FROM USERS
-					WHERE USERNAME = ')" + username + R"(';
-					
-					END TRANSACTION;
-					)";
-
-	int userId = -1;
-	executeSqlStatement(statement, translateUsernameToUserIdCallback, &userId);
-
-	return userId;
 }
 
 
@@ -209,12 +170,12 @@ bool SqliteDatabase::doesUserExist(const string& username)
 
 
 /**
- @brief		Callback function for finding the password of an existing user on the database
- @param		data			A pointer to a string where the user's password will be stored
- @param		argc			The number of columns in the result set
- @param		argv			An array of strings representing the result set
- @param		azColName		An array of strings containing the column names of the result set
- @return	Always returns 0
+ * @brief		Callback function for finding the password of an existing user on the database
+ * @param		data			A pointer to a string where the user's password will be stored
+ * @param		argc			The number of columns in the result set
+ * @param		argv			An array of strings representing the result set
+ * @param		azColName		An array of strings containing the column names of the result set
+ * @return		Always returns 0
  */
 int SqliteDatabase::doesPasswordMatchCallback(void* data, int argc, char** argv, char** azColName)
 {
@@ -276,12 +237,12 @@ bool SqliteDatabase::addNewUser(const string& username, const string& password, 
 
 
 /**
- @brief		Callback function that returns the result of a select query in an integer
- @param		data			A pointer to an integer where the result will be stored
- @param		argc			The number of columns in the result set
- @param		argv			An array of strings representing the result set
- @param		azColName		An array of strings containing the column names of the result set
- @return	Always returns 0
+ * @brief		Callback function that returns the result of a select query in an integer
+ * @param		data			A pointer to an integer where the result will be stored
+ * @param		argc			The number of columns in the result set
+ * @param		argv			An array of strings representing the result set
+ * @param		azColName		An array of strings containing the column names of the result set
+ * @return	Always returns 0
  */
 int SqliteDatabase::intCallback(void* data, int argc, char** argv, char** azColName)
 {
@@ -292,12 +253,12 @@ int SqliteDatabase::intCallback(void* data, int argc, char** argv, char** azColN
 
 
 /**
- @brief		Callback function that returns the result of a select query in an float
- @param		data			A pointer to an integer where the result will be stored
- @param		argc			The number of columns in the result set
- @param		argv			An array of strings representing the result set
- @param		azColName		An array of strings containing the column names of the result set
- @return	Always returns 0
+ * @brief		Callback function that returns the result of a select query in an float
+ * @param		data			A pointer to an integer where the result will be stored
+ * @param		argc			The number of columns in the result set
+ * @param		argv			An array of strings representing the result set
+ * @param		azColName		An array of strings containing the column names of the result set
+ * @return	Always returns 0
  */
 int SqliteDatabase::floatCallback(void* data, int argc, char** argv, char** azColName)
 {
@@ -309,19 +270,17 @@ int SqliteDatabase::floatCallback(void* data, int argc, char** argv, char** azCo
 
 
 /**
- * \brief	Returns the average answer time of a given user
- * \param	username		The username of the user to get its average answer time
- * \return	The average answer time of the given user
+ * brief	Returns the average answer time of a given user
+ * param	username		The username of the user to get its average answer time
+ * return	The average answer time of the given user
  */
 float SqliteDatabase::getPlayerAverageAnswerTime(const string& username)
 {
-	int userId = translateUsernameToUserId(username);
-
 	string statement = R"(
 					BEGIN TRANSACTION;
 					
 					SELECT AVERAGE_ANSWER_TIME FROM STATISTICS
-					WHERE USER_ID = ')" + to_string(userId) + R"(';
+					WHERE USERNAME = ')" + username + R"(';
 					
 					END TRANSACTION;
 					)";
@@ -334,19 +293,17 @@ float SqliteDatabase::getPlayerAverageAnswerTime(const string& username)
 
 
 /**
- * \brief	Returns the number of correct answers of the given user
- * \param	username	The username of the user to get its number of correct answers
- * \return	The number of correct answers of the given user
+ * brief	Returns the number of correct answers of the given user
+ * param	username	The username of the user to get its number of correct answers
+ * return	The number of correct answers of the given user
  */
 int SqliteDatabase::getNumOfCorrectAnswers(const string& username)
 {
-	const int userId = translateUsernameToUserId(username);
-
 	const string statement = R"(
 					BEGIN TRANSACTION;
 					
-					SELECT NUM_GAMES_PLAYED FROM STATISTICS
-					WHERE USER_ID = ')" + to_string(userId) + R"(';
+					SELECT NUM_CORRECT_ANSWERS FROM STATISTICS
+					WHERE USERNAME = ')" + username + R"(';
 					
 					END TRANSACTION;
 					)";
@@ -359,19 +316,17 @@ int SqliteDatabase::getNumOfCorrectAnswers(const string& username)
 
 
 /**
- * \brief	Returns the total number of answers the given user has answered
- * \param	username	The username of the user to get its number of total answers
- * \return	The number of total answers the given user has answered
+ * brief	Returns the total number of answers the given user has answered
+ * param	username	The username of the user to get its number of total answers
+ * return	The number of total answers the given user has answered
  */
 int SqliteDatabase::getNumOfTotalAnswers(const string& username)
 {
-	const int userId = translateUsernameToUserId(username);
-
 	const string statement = R"(
 					BEGIN TRANSACTION;
 					
 					SELECT NUM_QUESTIONS_ANSWERED FROM STATISTICS
-					WHERE USER_ID = ')" + to_string(userId) + R"(';
+					WHERE USERNAME = ')" + username + R"(';
 					
 					END TRANSACTION;
 					)";
@@ -383,19 +338,17 @@ int SqliteDatabase::getNumOfTotalAnswers(const string& username)
 
 
 /**
- * \brief	Returns the number of games the given user has played
- * \param	username	The username of the user to get its number of played games
- * \return	The number of games the given user has played
+ * brief	Returns the number of games the given user has played
+ * param	username	The username of the user to get its number of played games
+ * return	The number of games the given user has played
  */
 int SqliteDatabase::getNumOfPlayerGames(const string& username)
 {
-	const int userId = translateUsernameToUserId(username);
-
 	const string statement = R"(
 					BEGIN TRANSACTION;
 					
-					SELECT NUM_QUESTIONS_ANSWERED FROM STATISTICS
-					WHERE USER_ID = ')" + to_string(userId) + R"(';
+					SELECT NUM_GAMES_PLAYED FROM STATISTICS
+					WHERE USERNAME = ')" + username + R"(';
 					
 					END TRANSACTION;
 					)";
@@ -404,4 +357,82 @@ int SqliteDatabase::getNumOfPlayerGames(const string& username)
 	executeSqlStatement(statement, intCallback, &numOfPlayerGames);
 
 	return numOfPlayerGames;
+}
+
+
+
+/**
+ * brief	Returns the score that the given user has earned
+ * param	username	The username of the user to get its score
+ * return	The score of the given user
+ */
+int SqliteDatabase::getPlayerScore(const string& username)
+{
+	const string statement = R"(
+					BEGIN TRANSACTION;
+					
+					SELECT POINTS_EARNED FROM STATISTICS
+					WHERE USERNAME = ')" + username + R"(';
+					
+					END TRANSACTION;
+					)";
+
+	int numOfPlayerPoints = 0;
+	executeSqlStatement(statement, intCallback, &numOfPlayerPoints);
+
+	return numOfPlayerPoints;
+}
+
+
+/**
+ * @brief	Returns the statistics of the user with the given username
+ * @param	username		The username of the user to get its statistics
+ * @return	A vector containing the user all-time statistics
+ */
+vector<string> SqliteDatabase::getUserStatistics(const string& username)
+{
+	vector<string> userStatistics;
+
+	userStatistics.push_back(to_string(this->getPlayerScore(username)));					// Points earned
+	userStatistics.push_back(to_string(this->getNumOfPlayerGames(username)));			// Number of Games Played
+	userStatistics.push_back(to_string(this->getNumOfCorrectAnswers(username)));			// Number of Correct Answers
+	userStatistics.push_back(to_string(this->getPlayerAverageAnswerTime(username)));		// Average Answer Time
+
+	return userStatistics;
+}
+
+
+int SqliteDatabase::getHighScoresCallback(void* data, int argc, char** argv, char** azColName)
+{
+	(static_cast<vector<string>*>(data))->push_back(argv[0]);		// Pushing the username of the current user in the leaderboard into the vector
+
+	return 0;
+}
+
+
+/**
+ * @brief	Returns a leaderboard containing the 5 best users
+ * @return	A vector containing the usernames of the 5 best users
+ */
+vector<string> SqliteDatabase::getHighScores()
+{
+	const string statement = R"(
+					BEGIN TRANSACTION;
+					
+					SELECT USERNAME,
+					(NUM_GAMES_WON / NUM_GAMES_PLAYED) * )" + to_string(WINS_WEIGHT) +
+					R"(((1 - (NUM_GAMES_WON / NUM_GAMES_PLAYED)) * (1 / AVERAGE_ANSWER_TIME) * )" + to_string(AVERAGE_ANSWER_TIME_WEIGHT) + R"( AS LeaderboardScore
+					FROM STATISTICS
+					WHERE NUM_GAMES_PLAYED >= )" + to_string(LEADERBOARD_MIN_GAMES_TO_QUALIFY) + R"(
+					GROUP BY USERNAME
+					ORDER BY LeaderboardScore DESC
+					LIMIT )" + to_string(LEADERBOARD_SIZE) + R"(;
+
+					END TRANSACTION;
+					)";
+
+	vector<string> highScores;
+	executeSqlStatement(statement, getHighScoresCallback, &highScores);
+
+	return highScores;
 }
