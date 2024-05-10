@@ -13,8 +13,8 @@ class StatisticsManager
 public:
 	StatisticsManager(IDatabase* database);
 
-	vector<string> getHighScore();
-	vector<string> getUserStatistics(const string& username);
+	vector<string> getHighScore() const;
+	vector<string> getUserStatistics(const string& username) const;
 
 private:
 	IDatabase* m_database;
