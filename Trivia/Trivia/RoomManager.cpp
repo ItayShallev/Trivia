@@ -1,11 +1,8 @@
 #include "RoomManager.h"
 
 using std::pair;
+uint RoomManager::roomID = 0;
 
-RoomManager::RoomManager()
-{
-	roomID = 0;
-}
 
 uint RoomManager::generateRoomID()
 {

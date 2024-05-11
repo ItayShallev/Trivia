@@ -9,10 +9,9 @@ class RoomManager
 
 private:
 	map<uint, Room*> m_rooms;
-	static uint roomID;
 
 public:
-	RoomManager();
+	static uint roomID;
 	static uint generateRoomID();
 	void createRoom(LoggedUser& host, RoomData& roomMetadata);
 	void deleteRoom(uint roomId);
