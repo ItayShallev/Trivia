@@ -18,7 +18,8 @@ enum RequestId
 	GetRoomRequestId,
 	GetPlayersInRoomRequestId,
 	JoinRoomRequestId,
-	GetStatisticsRequestId
+	GetStatisticsRequestId,
+	GetHighScoreRequestId
 	
 
 };
