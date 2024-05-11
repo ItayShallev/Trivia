@@ -27,7 +27,7 @@ RequestResult LoginRequestHandler::login(RequestInfo reqInfo)
 
 	// create the login response
 	reqResult.response = JsonResponsePacketSerializer::serializeResponse(LoginResponse());
-	reqResult.newHandler = m_handlerFactory.createMenuRequestHandler();
+	reqResult.newHandler = m_handlerFactory.createMenuRequestHandler(LoggedUser(loginReq.username));
 
 	// return the response
 	return reqResult;
@@ -45,7 +45,7 @@ RequestResult LoginRequestHandler::signup(RequestInfo reqInfo)
 	SignupRequest signupReq = JsonRequestPacketDeserializer::deserializeSignupRequest(reqInfo.buffer);
 
 	// sign the user
-	bool success = manager.signup(signupReq.username, signupReq.password, signupReq.email);
+	bool success = manager.signup(signupReq.username, signupReq.password, signupReq.mail);
 
 	// if signing failed
 	if (!success)
@@ -58,7 +58,7 @@ RequestResult LoginRequestHandler::signup(RequestInfo reqInfo)
 
 	// create the signup response
 	reqResult.response = JsonResponsePacketSerializer::serializeResponse(SignupResponse());
-	reqResult.newHandler = m_handlerFactory.createMenuRequestHandler();
+	reqResult.newHandler = m_handlerFactory.createMenuRequestHandler(LoggedUser(signupReq.username));
 
 	// return the response
 	return reqResult;

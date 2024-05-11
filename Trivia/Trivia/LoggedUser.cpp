@@ -16,3 +16,8 @@ string LoggedUser::getUserName() const
 {
 	return this->m_username;
 }
+
+bool LoggedUser::operator==(const LoggedUser& other) const
+{
+	return this->m_username == other.m_username;
+}

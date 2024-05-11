@@ -1,73 +1,77 @@
 #include "JsonResponsePacketSerializer.h"
 #include "json.hpp"
 #include "Helper.h"
+#include "Structures.h"
 
 
 using std::to_string;
 using json = nlohmann::json;
 
 
-/**
- * \brief		Serializes an error response
- * \param		errorResponse		The ErrorResponse object to serializer
- * \return		A buffer containing the errorResponse in the protocol's format
- */
+Buffer JsonResponsePacketSerializer::buildResponse(const ResponseId& responseId, json j)
+{
+	string jsonString = j.dump();
+	string response = to_string(responseId) + Helper::padNumWith0(jsonString.length()) + jsonString;
+
+	return Helper::turnStringIntoBuffer(response);
+}
+
+
 Buffer JsonResponsePacketSerializer::serializeResponse(const ErrorResponse& errorResponse)
 {
-	json j;
-
-	// Creating the json object to insert in the data section
-	j["message"] = errorResponse.message;
-	string jsonString = j.dump();
-
-	// Adding the protocol's remaining metadata to the response
-	string response = std::to_string(ErrorResponseId);
-	response += Helper::padNumWith0(jsonString.length());
-	response += jsonString;
-
-	return Helper::turnStringIntoBuffer(response);
+	return buildResponse(ResponseId::ErrorResponseId, errorResponse);
 }
 
 
-/**
- * \brief		Serializes a login response
- * \param		loginResponse		The LoginResponse object to serializer
- * \return		A buffer containing the loginResponse in the protocol's format
- */
 Buffer JsonResponsePacketSerializer::serializeResponse(const LoginResponse& loginResponse)
 {
-	json j;
-
-	// Creating the json object to insert in the data section
-	j["status"] = loginResponse.status;
-	string jsonString = j.dump();
-
-	// Adding the protocol's remaining metadata to the response
-	string response = std::to_string(LoginResponseId);
-	response += Helper::padNumWith0(jsonString.length());
-	response += jsonString;
-
-	return Helper::turnStringIntoBuffer(response);
+	return buildResponse(ResponseId::LoginResponseId, loginResponse);
 }
 
 
-/**
- * \brief		Serializes an signup response
- * \param		signupResponse		The SignupResponse object to serializer
- * \return		A buffer containing the signupResponse in the protocol's format
- */
 Buffer JsonResponsePacketSerializer::serializeResponse(const SignupResponse& signupResponse)
 {
-	json j;
+	return buildResponse(ResponseId::SignupResponseId, signupResponse);
+}
 
-	// Creating the json object to insert in the data section
-	j["status"] = signupResponse.status;
-	string jsonString = j.dump();
 
-	// Adding the protocol's remaining metadata to the response
-	string response = std::to_string(SignupResponseId);
-	response += Helper::padNumWith0(jsonString.length());
-	response += jsonString;
+Buffer JsonResponsePacketSerializer::serializeResponse(const LogoutResponse& logoutResponse)
+{
+	return buildResponse(ResponseId::LogoutResponseId, logoutResponse);
+}
 
-	return Helper::turnStringIntoBuffer(response);
+
+Buffer JsonResponsePacketSerializer::serializeResponse(const GetRoomsResponse& getRoomsResponse)
+{
+	return buildResponse(ResponseId::GetRoomsResponseId, getRoomsResponse);
+}
+
+
+Buffer JsonResponsePacketSerializer::serializeResponse(const GetPlayersInRoomResponse& getPlayersInRoomResponse)
+{
+	return buildResponse(ResponseId::GetPlayersInRoomResponseId, getPlayersInRoomResponse);
+}
+
+
+Buffer JsonResponsePacketSerializer::serializeResponse(const JoinRoomResponse& joinRoomResponse)
+{
+	return buildResponse(ResponseId::JoinRoomResponseId, joinRoomResponse);
+}
+
+
+Buffer JsonResponsePacketSerializer::serializeResponse(const CreateRoomResponse& createRoomResponse)
+{
+	return buildResponse(ResponseId::CreateRoomResponseId, createRoomResponse);
+}
+
+
+Buffer JsonResponsePacketSerializer::serializeResponse(const GetHighScoreResponse& getHighScoreResponse)
+{
+	return buildResponse(ResponseId::GetHighScoreResponseId, getHighScoreResponse);
+}
+
+
+Buffer JsonResponsePacketSerializer::serializeResponse(const GetPersonalStatsResponse& getPersonalStatsResponse)
+{
+	return buildResponse(ResponseId::GetPersonalStatsResponseId, getPersonalStatsResponse);
 }
