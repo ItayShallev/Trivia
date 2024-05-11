@@ -1,6 +1,20 @@
 #include "RoomManager.h"
 
 using std::pair;
+uint RoomManager::roomID = 0;
+
+
+uint RoomManager::generateRoomID()
+{
+	// save the current room id value
+	uint retRoomID = roomID;
+
+	// increment the room id
+	roomID++;
+
+	// return the room id value that was stored
+	return retRoomID;
+}
 
 void RoomManager::createRoom(LoggedUser& host, RoomData& roomMetadata)
 {
