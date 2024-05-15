@@ -5,6 +5,8 @@ VisualStudioVersion = 17.9.34723.18
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Trivia", "Trivia\Trivia.vcxproj", "{4CB16965-3E81-42E0-9CE0-645E9F661D92}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Client", "Client\Client.vcxproj", "{4A4700D5-5556-4921-9B70-5D1F9056C409}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -21,6 +23,14 @@ Global
 		{4CB16965-3E81-42E0-9CE0-645E9F661D92}.Release|x64.Build.0 = Release|x64
 		{4CB16965-3E81-42E0-9CE0-645E9F661D92}.Release|x86.ActiveCfg = Release|Win32
 		{4CB16965-3E81-42E0-9CE0-645E9F661D92}.Release|x86.Build.0 = Release|Win32
+		{4A4700D5-5556-4921-9B70-5D1F9056C409}.Debug|x64.ActiveCfg = Debug|x64
+		{4A4700D5-5556-4921-9B70-5D1F9056C409}.Debug|x64.Build.0 = Debug|x64
+		{4A4700D5-5556-4921-9B70-5D1F9056C409}.Debug|x86.ActiveCfg = Debug|Win32
+		{4A4700D5-5556-4921-9B70-5D1F9056C409}.Debug|x86.Build.0 = Debug|Win32
+		{4A4700D5-5556-4921-9B70-5D1F9056C409}.Release|x64.ActiveCfg = Release|x64
+		{4A4700D5-5556-4921-9B70-5D1F9056C409}.Release|x64.Build.0 = Release|x64
+		{4A4700D5-5556-4921-9B70-5D1F9056C409}.Release|x86.ActiveCfg = Release|Win32
+		{4A4700D5-5556-4921-9B70-5D1F9056C409}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
