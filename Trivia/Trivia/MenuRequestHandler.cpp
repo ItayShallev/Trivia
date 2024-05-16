@@ -187,13 +187,19 @@ RequestResult MenuRequestHandler::createRoom(RequestInfo reqInfo)
     // create a new create-room request
     CreateRoomRequest newRoomReq = JsonRequestPacketDeserializer::deserializeCreateRoomRequest(reqInfo.buffer);
 
+    // if the player chose an invalid max-players value
+    if (newRoomReq.maxPlayers <= 0 || newRoomReq.maxPlayers > LIMIT_OF_MAX_PLAYERS_IN_ROOM)
+    {
+        buildRequestResult(JsonResponsePacketSerializer::serializeResponse(ErrorResponse()), this);
+    }
+
     // build the room metadata
     RoomData newRoomData = {
         RoomManager::generateRoomID(),
         newRoomReq.roomName,
         newRoomReq.maxPlayers,
         newRoomReq.questionCount,
-        newRoomReq.answerTimeout,
+        newRoomReq.answerTimeout, // TODO: change when questions are implemented
         RoomState::Waiting
     };
 
