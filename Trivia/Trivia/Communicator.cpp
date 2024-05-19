@@ -69,6 +69,11 @@ void Communicator::handleNewClient(SOCKET clientSoc)
 			// get the data message
 			Buffer buff = receiveDataFromSocket(clientSoc);
 
+			for (int i = 0; i < buff.size(); i++)
+			{
+				cout << buff[i];
+			}
+
 			// get the current time
             time_t now = time(nullptr);
 
