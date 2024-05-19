@@ -20,8 +20,6 @@ enum RequestId
 	JoinRoomRequestId,
 	GetStatisticsRequestId,
 	GetHighScoreRequestId
-	
-
 };
 
 
@@ -37,7 +35,6 @@ enum ResponseId
 	GetPersonalStatsResponseId,
 	JoinRoomResponseId,
 	CreateRoomResponseId
-	
 };
 
 enum RoomState
