@@ -47,7 +47,7 @@ namespace Client.Communication
             }
         }
 
-        private string ReceiveMessage()
+        public string ReceiveMessage()
         {
             byte[] buffer = new byte[1024];
             int bytesReceived = _clientSocket.Receive(buffer);
