@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Text.Json.Serialization;
 using System.Numerics;
+using System.Windows.Ink;
 
 namespace Client.Communication
 {
@@ -190,6 +191,16 @@ namespace Client.Communication
         }
     }
 
+    public struct CheckIfUserExistsResponse
+    {
+        [JsonPropertyName("exists")] public bool Exists { get; set; } = true;
+
+        public CheckIfUserExistsResponse(bool exists)
+        {
+            Exists = exists;
+        }
+    }
+
     public struct RoomData
     {
         [JsonPropertyName("id")] public uint Id { get; set; } = 0;
@@ -208,5 +219,12 @@ namespace Client.Communication
             NumOfQuestionsInGame = numOfQuestionsInGame;
             RoomState = roomState;
         }
+    }
+
+    public struct ResponseInfo
+    {
+        public string ResponseId { get; set; }
+        public int MessageLength { get; set; }
+        public string Message { get; set; }
     }
 }

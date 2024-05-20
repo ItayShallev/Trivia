@@ -27,16 +27,48 @@ namespace Client.Pages
             InitializeComponent();
         }
 
-        private void BtnLogin_OnClick(object sender, RoutedEventArgs e)
-        {
-            string messageContent = JsonSerializer.Serialize(new LoginRequest(UsernameTextBox.Text, PasswordBox.Password));
-            Communicator.Connection.SendMessage(Helper.BuildRequest(Constants.LoginRequestId, messageContent));
-        }
 
-        private void BtnSignup_OnClick(object sender, RoutedEventArgs e)
+
+        //private void BtnLogin_OnClick(object sender, RoutedEventArgs e)
+        //{
+        //    string messageContent = JsonSerializer.Serialize(new LoginRequest(UsernameTextBox.Text, PasswordBox.Password));
+        //    Communicator.Connection.SendMessage(Helper.BuildRequest(Constants.LoginRequestId, messageContent));
+        //}
+
+        //private void BtnSignup_OnClick(object sender, RoutedEventArgs e)
+        //{
+        //    string messageContent = JsonSerializer.Serialize(new SignupRequest(UsernameTextBox.Text, PasswordBox.Password, "Testing@gmail.com"));
+        //    Communicator.Connection.SendMessage(Helper.BuildRequest(Constants.SignupRequestId, messageContent));
+        //}
+        private void BtnContinue_OnClick(object sender, RoutedEventArgs e)
         {
-            string messageContent = JsonSerializer.Serialize(new SignupRequest(UsernameTextBox.Text, PasswordBox.Password, "Testing@gmail.com"));
-            Communicator.Connection.SendMessage(Helper.BuildRequest(Constants.SignupRequestId, messageContent));
+            // Redirect the user to the LoginPage or to the SignupPage depending if the user exists on the DB
+
+            string messageContent = JsonSerializer.Serialize(new CheckIfUserExistsRequest(UsernameTextBox.Text));
+            Communicator.Connection.SendMessage(Helper.BuildRequest(Constants.CheckIfUserExistsRequestId, messageContent));
+
+            ResponseInfo responseInfo = Helper.GetResponseInfo(Communicator.Connection.ReceiveMessage());
+
+            // Checking the response code
+            if (responseInfo.ResponseId == Constants.CheckIfUserExistsResponseId)           // If the server returned valid response...
+            {
+                CheckIfUserExistsResponse response = JsonSerializer.Deserialize<CheckIfUserExistsResponse>(responseInfo.Message);
+
+                if (response.Exists)
+                {
+                    LoginPage loginPage = new LoginPage();
+                    NavigationService.Navigate(loginPage);
+                }
+                else
+                {
+                    SignupPage signupPage = new SignupPage();
+                    NavigationService.Navigate(signupPage);
+                }
+            }
+            else if (responseInfo.ResponseId == Constants.CheckIfUserExistsResponseId)      // If the server returned an Error...
+            {
+                throw new Exception(responseInfo.Message);
+            }
         }
     }
 }
