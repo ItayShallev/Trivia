@@ -11,6 +11,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Client.Communication;
+using Client.Pages;
 
 namespace Client
 {
@@ -23,6 +24,7 @@ namespace Client
         {
             InitializeComponent();
             Communicator.InitializeConnection();
+            MainFrame.Navigate(new AuthenticationPage());
         }
 
         protected override void OnClosed(EventArgs e)
