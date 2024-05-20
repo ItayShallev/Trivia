@@ -50,7 +50,16 @@ enum RoomState
 
 
 // ************************** DE/SERIALIZERS *************************
-#define DATA_BYTE_LENGTH 4
+
+
+// ************************** PROTOCOL_CONSTANTS *************************
+#define ID_BYTE_LENGTH			2
+
+#define DATA_BYTE_LENGTH		4
+#define DATA_BYTE_START_INDEX	2
+#define DATA_BYTE_END_INDEX		5
+
+#define DOZEN_MULTIPLIER		10
 
 
 

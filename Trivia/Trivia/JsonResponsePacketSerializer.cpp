@@ -11,7 +11,7 @@ using json = nlohmann::json;
 Buffer JsonResponsePacketSerializer::buildResponse(const ResponseId& responseId, json j)
 {
 	string jsonString = j.dump();
-	string response = to_string(responseId) + Helper::padNumWith0(jsonString.length()) + jsonString;
+	string response = Helper::padNumWith0(responseId, ID_BYTE_LENGTH) + Helper::padNumWith0(jsonString.length()) + jsonString;
 
 	return Helper::turnStringIntoBuffer(response);
 }
