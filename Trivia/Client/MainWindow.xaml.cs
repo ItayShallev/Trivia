@@ -19,36 +19,22 @@ namespace Client
     /// </summary>
     public partial class MainWindow : Window
     {
-        private Socket _conn;
-
         public MainWindow()
         {
             InitializeComponent();
-            InitializeConnection();
-        }
-
-        private async void InitializeConnection()
-        {
-            _conn = new Communication.Socket(Constants.SERVER_IP, Constants.SERVER_PORT);
-            _conn.Start();
-        }
-
-        private void LoginButton_OnClick(object sender, RoutedEventArgs e)
-        {
-            string messageContent = JsonSerializer.Serialize(new LoginRequest(UsernameTextBox.Text, PasswordTextBox.Text));
-            _conn.SendMessage(Helper.BuildRequest(Constants.LoginRequestId, messageContent));
-        }
-
-        private void SignupButton_OnClick(object sender, RoutedEventArgs e)
-        {
-            string messageContent = JsonSerializer.Serialize(new SignupRequest(UsernameTextBox.Text, PasswordTextBox.Text, MailTextBox.Text));
-            _conn.SendMessage(Helper.BuildRequest(Constants.SignupRequestId, messageContent));
+            Communicator.InitializeConnection();
         }
 
         protected override void OnClosed(EventArgs e)
         {
-            _conn.CloseConnection();
+            Communicator.Connection.CloseConnection();
             base.OnClosed(e);
+        }
+
+        protected override void OnMouseLeftButtonDown(MouseButtonEventArgs e)
+        {
+            base.OnMouseLeftButtonDown(e);
+            DragMove();
         }
     }
 }

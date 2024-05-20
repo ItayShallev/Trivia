@@ -98,6 +98,11 @@ void Communicator::handleNewClient(SOCKET clientSoc)
 			// set the new handler
 			m_clients[clientSoc] = reqResult.newHandler;
 
+			for (int i = 0; i < reqResult.response.size(); i++)
+			{
+				cout << reqResult.response[i];
+			}
+
 			// send the response to the client
 			sendDataToSocket(clientSoc, reqResult.response);
 

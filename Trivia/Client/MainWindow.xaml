@@ -4,29 +4,9 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Client"
-        xmlns:userControls="clr-namespace:Client.UserControls"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Grid>
-
-        <TextBox Name="UsernameTextBox" Text="Username" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Width="100" Height="30" Margin="350,102,350,302" />
-        <TextBox Name="PasswordTextBox" Text="Password" Width="100" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Height="30" Margin="350,137,350,267"/>
-        <TextBox Name="MailTextBox" Text="Mail" Width="100" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Height="30" Margin="350,172,350,232"/>
-
-
-        <Button
-            Name="LoginButton"
-            Content="LOGIN"
-            Width="100"
-            Height="40"
-            FontFamily="cascadia mono"
-            Click="LoginButton_OnClick" Margin="350,230,350,164"/>
-        <Button
-            Name="SignupButton"
-            Content="SIGNUP"
-            Width="100"
-            Height="40"
-            FontFamily="cascadia mono"
-            Click="SignupButton_OnClick" Margin="350,275,350,119"/>
+        <Button></Button>
     </Grid>
 </Window>

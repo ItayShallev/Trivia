@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Client.Communication
 {
-    internal class Socket
+    public class Socket
     {
         private System.Net.Sockets.Socket _clientSocket;
         private readonly IPAddress _serverAddress;
