@@ -75,3 +75,9 @@ Buffer JsonResponsePacketSerializer::serializeResponse(const GetPersonalStatsRes
 {
 	return buildResponse(ResponseId::GetPersonalStatsResponseId, getPersonalStatsResponse);
 }
+
+
+Buffer JsonResponsePacketSerializer::serializeResponse(const CheckIfUserExistsResponse& checkIfUserExistsResponse)
+{
+	return buildResponse(ResponseId::CheckIfUserExistsResponseId, checkIfUserExistsResponse);
+}

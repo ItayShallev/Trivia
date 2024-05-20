@@ -72,6 +72,16 @@ namespace Client.Communication
         }
     }
 
+    public struct CheckIfUserExistsRequest
+    {
+        [JsonPropertyName("username")] public string Username { get; set; } = "";
+
+        public CheckIfUserExistsRequest(string username)
+        {
+            Username = username;
+        }
+    }
+
 
     // ******************* RESPONSE STRUCTURES *******************
     public struct ErrorResponse

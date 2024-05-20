@@ -91,6 +91,23 @@ CreateRoomRequest JsonRequestPacketDeserializer::deserializeCreateRoomRequest(Bu
     return newCreateRoomRequest;
 }
 
+CheckIfUserExistsRequest JsonRequestPacketDeserializer::deserializeCheckIfUserExistsRequest(Buffer buff)
+{
+    // get the message part of the buffer
+    string message = getMessageFromBuffer(buff);
+
+    // get the json data
+    json data = json::parse(message);
+
+    // create the request
+    CheckIfUserExistsRequest newCheckIfUserExistsRequest = {
+        data["username"],
+    };
+
+    // return the request
+    return newCheckIfUserExistsRequest;
+}
+
 string JsonRequestPacketDeserializer::getMessageFromBuffer(Buffer buff)
 {
     string dataLenStr = "";

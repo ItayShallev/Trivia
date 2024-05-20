@@ -39,10 +39,12 @@ struct GetPlayersInRoomRequest
 	uint roomID;
 };
 
+
 struct JoinRoomRequest
 {
 	uint roomID;
 };
+
 
 struct CreateRoomRequest
 {
@@ -52,6 +54,11 @@ struct CreateRoomRequest
 	uint answerTimeout;
 };
 
+
+struct CheckIfUserExistsRequest
+{
+	string username;
+};
 
 
 
@@ -129,6 +136,13 @@ struct CreateRoomResponse
 };
 void to_json(json& j, const CreateRoomResponse& response);
 
+
+struct CheckIfUserExistsResponse
+{
+	bool exists = true;
+	CheckIfUserExistsResponse(bool _exists) : exists(_exists) {}
+};
+void to_json(json& j, const CheckIfUserExistsResponse& response);
 
 
 

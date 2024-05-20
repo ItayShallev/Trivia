@@ -19,7 +19,8 @@ enum RequestId
 	GetPlayersInRoomRequestId,
 	JoinRoomRequestId,
 	GetStatisticsRequestId,
-	GetHighScoreRequestId
+	GetHighScoreRequestId,
+	CheckIfUserExistsRequestId
 };
 
 
@@ -34,7 +35,8 @@ enum ResponseId
 	GetHighScoreResponseId,
 	GetPersonalStatsResponseId,
 	JoinRoomResponseId,
-	CreateRoomResponseId
+	CreateRoomResponseId,
+	CheckIfUserExistsResponseId
 };
 
 enum RoomState

@@ -70,6 +70,12 @@ void to_json(json& j, const CreateRoomResponse& response)
 	j = json{ {"status", response.status} };
 }
 
+// CheckIfUserExists
+void to_json(json& j, const CheckIfUserExistsResponse& response)
+{
+	j = json{ {"exists", response.exists} };
+}
+
 
 // RoomData
 void to_json(json& j, const RoomData& response)
