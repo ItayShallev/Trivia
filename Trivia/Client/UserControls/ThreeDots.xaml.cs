@@ -13,6 +13,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Client.Communication;
 
 namespace Client.UserControls
 {
@@ -48,6 +49,7 @@ namespace Client.UserControls
 
         private void exitApp(object sender, RoutedEventArgs e)
         {
+            Communicator.Connection.CloseConnection();
             Application.Current.Shutdown();
         }
     }
