@@ -29,11 +29,6 @@
                         ToolTip="Enable Dark Mode" />
                 </StackPanel>
 
-
-                <Button
-                    Margin="0,8,0,0"
-                    Content="Help Me"
-                    ToolTip="Having Trouble Logging In?" />
                 <Button
                     x:Name="BtnExit"
                     Click="exitApp"

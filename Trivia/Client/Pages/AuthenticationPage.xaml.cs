@@ -42,7 +42,7 @@ namespace Client.Pages
         //}
         private void BtnContinue_OnClick(object sender, RoutedEventArgs e)
         {
-            // Redirect the user to the LoginPage or to the SignupPage depending if the user exists on the DB
+            // Redirecting the user to the LoginPage or to the SignupPage depending if the user exists on the DB
 
             string messageContent = JsonSerializer.Serialize(new CheckIfUserExistsRequest(UsernameTextBox.Text));
             Communicator.Connection.SendMessage(Helper.BuildRequest(Constants.CheckIfUserExistsRequestId, messageContent));
