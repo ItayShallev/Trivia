@@ -26,17 +26,20 @@
                         Height="100"
                         Margin="0,60,0,5"
                         Source="pack://siteoforigin:,,,/Media/TriviaLogo.png" />
+
                     <TextBlock
                         Margin="0,25,0,5"
                         HorizontalAlignment="Center"
                         FontSize="28"
                         FontWeight="Bold"
                         Text="Welcome!" />
+
                     <TextBlock
                         HorizontalAlignment="Center"
                         FontSize="17"
                         FontWeight="SemiBold"
                         Text="Log Into Your Account" />
+
                     <TextBox
                         x:Name="UsernameTextBox"
                         Width="300"
@@ -46,16 +49,6 @@
                         BorderThickness="2"
                         FontSize="18"
                         Style="{StaticResource MaterialDesignOutlinedTextBox}" />
-
-                    <!--<PasswordBox
-                        x:Name="PasswordBox"
-                        Width="300"
-                        Margin="0,20,0,0"
-                        materialDesign:HintAssist.Hint="Enter Password"
-                        BorderBrush="{DynamicResource MaterialDesignDivider}"
-                        BorderThickness="2"
-                        FontSize="18"
-                        Style="{StaticResource MaterialDesignOutlinedPasswordBox}" />-->
 
                     <Button
                         x:Name="BtnContinue"
@@ -68,34 +61,7 @@
                         Content="Continue"
                         FontSize="18"
                         Style="{StaticResource MaterialDesignFlatMidBgButton}" />
-
-                    <!--<Button
-                        x:Name="BtnLogin"
-                        Margin="0,20,0,0"
-                        Style="{StaticResource MaterialDesignFlatMidBgButton}"
-                        materialDesign:ShadowAssist.ShadowDepth="Depth0"
-                        Height="53"
-                        Width="300"
-                        materialDesign:ButtonAssist.CornerRadius="10"
-                        FontSize="18"
-                        Content="Login"
-                        Click="BtnLogin_OnClick"/>
-
-                    <Button
-                        x:Name="BtnSignup"
-                        Margin="0,20,0,0"
-                        Style="{StaticResource MaterialDesignFlatButton}"
-                        materialDesign:ShadowAssist.ShadowDepth="Depth0"
-                        Height="53"
-                        Width="300"
-                        materialDesign:ButtonAssist.CornerRadius="10"
-                        FontSize="18"
-                        Content="Signup"
-                        Click="BtnSignup_OnClick"/>-->
-
                 </StackPanel>
-
-
             </materialDesign:DialogHost>
         </materialDesign:Card>
     </Grid>
