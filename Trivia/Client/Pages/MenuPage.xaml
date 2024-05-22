@@ -10,7 +10,9 @@
     Title="MenuPage"
     d:DesignHeight="760"
     d:DesignWidth="450"
-    mc:Ignorable="d">
+    mc:Ignorable="d"
+    Loaded="MenuPage_OnLoaded"
+    >
 
     <Grid>
         <materialDesign:Card
@@ -93,17 +95,7 @@
                                     FontSize="15"
                                     Style="{StaticResource MaterialDesignFlatMidBgButton}" Click="BtnCreateRoom_Click" />
 
-                                <ListBox Height="300">
-                                    <ListBoxItem Content="Room 1" FontWeight="SemiBold" Height="50" Margin="2" />
-                                    <ListBoxItem Content="Room 2" FontWeight="SemiBold" Height="50" Margin="2" />
-                                    <ListBoxItem Content="Room 3" FontWeight="SemiBold" Height="50" Margin="2" />
-                                    <ListBoxItem Content="Room 4" FontWeight="SemiBold" Height="50" Margin="2" />
-                                    <ListBoxItem Content="Room 5" FontWeight="SemiBold" Height="50" Margin="2" />
-                                    <ListBoxItem Content="Room 6" FontWeight="SemiBold" Height="50" Margin="2" />
-                                    <ListBoxItem Content="Room 7" FontWeight="SemiBold" Height="50" Margin="2" />
-                                    <ListBoxItem Content="Room 8" FontWeight="SemiBold" Height="50" Margin="2" />
-                                    <ListBoxItem Content="Room 9" FontWeight="SemiBold" Height="50" Margin="2" />
-                                    <ListBoxItem Content="Room 10" FontWeight="SemiBold" Height="50" Margin="2" />
+                                <ListBox x:Name="lstRoomList" Height="300">
                                 </ListBox>
                             </StackPanel>
                         </Border>

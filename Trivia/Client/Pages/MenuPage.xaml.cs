@@ -55,5 +55,42 @@ namespace Client.Pages
             CreateRoomPage createRoomPage = new CreateRoomPage();
             NavigationService.Navigate(createRoomPage);
         }
+
+        private void MenuPage_OnLoaded(object sender, RoutedEventArgs e)
+        {
+            //// build and send the request
+            //string message = Helper.BuildRequest(Client.Constants., "");
+            //Communicator.Connection.SendMessage(message);
+
+
+            /////////// TODO: DEBUG TO CHECK DESERIALIZER
+            //// receive the response info
+            //ResponseInfo respInfo = Helper.GetResponseInfo(Communicator.Connection.ReceiveMessage());
+            List<RoomData> rooms = new List<RoomData>()
+            {
+                new RoomData(1, "Room1", 5, 5, 5, Constants.RoomState.Waiting),
+                new RoomData(2, "Room2", 5, 5, 5, Constants.RoomState.Waiting),
+                new RoomData(3, "Room3", 5, 5, 5, Constants.RoomState.Waiting),
+                new RoomData(4, "Room4", 5, 5, 5, Constants.RoomState.Waiting),
+                new RoomData(5, "Room5", 5, 5, 5, Constants.RoomState.Waiting)
+            };
+            foreach (RoomData room in rooms)
+            {
+                TextBlock txtBlock = new TextBlock();
+                txtBlock.Text = room.Name;
+                txtBlock.Tag = room;
+                txtBlock.Height = 50;
+                txtBlock.Width = 300;
+                txtBlock.MouseLeftButtonDown += TxtBlock_MouseLeftButtonDown;
+                lstRoomList.Items.Add(txtBlock);
+            }
+
+        }
+
+        private void TxtBlock_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            RoomData room = (RoomData)(((TextBlock)sender).Tag);
+            
+        }
     }
 }
