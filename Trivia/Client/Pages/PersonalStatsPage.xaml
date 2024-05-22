@@ -30,6 +30,7 @@
 
             <UserControls:ThreeDots />
         </Grid>
+        <Image HorizontalAlignment="Left" Height="39" Margin="15,60,0,0" VerticalAlignment="Top" Width="43" Source="/Media/GoBackArrow.png" MouseLeftButtonDown="UIElement_OnMouseLeftButtonDown"/>
         <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,-100,0,0">
             <TextBlock x:Name="txtTotalScore" Text="Total Score: PLAYER_SCORE" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="22"/>
             <TextBlock x:Name="txtGamesPlayed" Text="Games Played: GAMES_PLAYED" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="22"/>

@@ -94,5 +94,9 @@ namespace Client.Pages
         }
 
 
+        private void UIElement_OnMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            NavigationService.GoBack();
+        }
     }
 }
