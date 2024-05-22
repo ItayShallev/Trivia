@@ -22,22 +22,38 @@ namespace Client.Pages
     /// </summary>
     public partial class SignupPage : Page
     {
-        public SignupPage()
+        private string _username;
+
+        public SignupPage(string username)
         {
+            this._username = username;
             InitializeComponent();
 
-            // For debugging purposes - needs to be removed
-            ////////
-            string messageContent1 = JsonSerializer.Serialize(new LoginRequest("test", "test"));
-            Communicator.Connection.SendMessage(Helper.BuildRequest(Constants.LoginRequestId, messageContent1));
-            ResponseInfo responseInfo = Helper.GetResponseInfo(Communicator.Connection.ReceiveMessage());
-            ////////
         }
 
-        private void BtnMenu_OnClick(object sender, RoutedEventArgs e)
+
+        private void BtnSignup_OnClick(object sender, RoutedEventArgs e)
         {
-            MenuPage menuPage = new MenuPage("USERNAME");
-            NavigationService.Navigate(menuPage);
+            // get the user input
+            string password = pswdPasswordBox.Password;
+            string email = txtMail.Text;
+
+            // build and send the request
+            string messageContent = JsonSerializer.Serialize(new SignupRequest(this._username, password, email));
+            string message = Helper.BuildRequest(Client.Constants.SignupRequestId, messageContent);
+            Communicator.Connection.SendMessage(message);
+
+
+            ///////// TODO: DEBUG TO CHECK DESERIALIZER
+            // receive the response
+            ResponseInfo respInfo = Helper.GetResponseInfo(Communicator.Connection.ReceiveMessage());
+            //SignupResponse signupResp = JsonSerializer.Deserialize<SignupResponse>(respInfo.Message);
+
+            if (respInfo.ResponseId == Client.Constants.SignupResponseId)
+            {
+                MenuPage menuPage = new MenuPage(this._username);
+                NavigationService.Navigate(menuPage);
+            }
         }
     }
 }
