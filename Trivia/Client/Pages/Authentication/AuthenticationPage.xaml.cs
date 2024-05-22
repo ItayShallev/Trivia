@@ -28,18 +28,6 @@ namespace Client.Pages
         }
 
 
-
-        //private void BtnLogin_OnClick(object sender, RoutedEventArgs e)
-        //{
-        //    string messageContent = JsonSerializer.Serialize(new LoginRequest(UsernameTextBox.Text, PasswordBox.Password));
-        //    Communicator.Connection.SendMessage(Helper.BuildRequest(Constants.LoginRequestId, messageContent));
-        //}
-
-        //private void BtnSignup_OnClick(object sender, RoutedEventArgs e)
-        //{
-        //    string messageContent = JsonSerializer.Serialize(new SignupRequest(UsernameTextBox.Text, PasswordBox.Password, "Testing@gmail.com"));
-        //    Communicator.Connection.SendMessage(Helper.BuildRequest(Constants.SignupRequestId, messageContent));
-        //}
         private void BtnContinue_OnClick(object sender, RoutedEventArgs e)
         {
             // Redirecting the user to the LoginPage or to the SignupPage depending if the user exists on the DB
@@ -56,12 +44,12 @@ namespace Client.Pages
 
                 if (response.Exists)
                 {
-                    LoginPage loginPage = new LoginPage();
+                    LoginPage loginPage = new LoginPage(UsernameTextBox.Text);
                     NavigationService.Navigate(loginPage);
                 }
                 else
                 {
-                    SignupPage signupPage = new SignupPage();
+                    SignupPage signupPage = new SignupPage(UsernameTextBox.Text);
                     NavigationService.Navigate(signupPage);
                 }
             }

@@ -40,17 +40,20 @@ namespace Client.Pages
 
         private void BtnPersonalStats_Click(object sender, RoutedEventArgs e)
         {
-            // Redirect user to the personal stats page...
+            PersonalStatsPage personalStatsPage = new PersonalStatsPage(this._username);
+            NavigationService.Navigate(personalStatsPage);
         }
 
         private void BtnLeaderboard_Click(object sender, RoutedEventArgs e)
         {
-            // Redirect user to the leaderboard page...
+            LeaderboardPage leaderboardPage = new LeaderboardPage();
+            NavigationService.Navigate(leaderboardPage);
         }
 
         private void BtnCreateRoom_Click(object sender, RoutedEventArgs e)
         {
-            // Redirect user to the create room page...
+            CreateRoomPage createRoomPage = new CreateRoomPage();
+            NavigationService.Navigate(createRoomPage);
         }
     }
 }
