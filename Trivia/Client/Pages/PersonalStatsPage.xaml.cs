@@ -39,7 +39,7 @@ namespace Client.Pages
             UserStatsHeader.Text = _username + "'s Personal Stats";
 
             // build and send the request
-            string message = Helper.BuildRequest(Client.Constants.GetPersonalStatsResponseId, "");
+            string message = Helper.BuildRequest(Client.Constants.GetStatisticsRequestId, "");
             Communicator.Connection.SendMessage(message);
 
 
