@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Mime;
@@ -45,15 +46,53 @@ namespace Client.Pages
             ///////// TODO: DEBUG TO CHECK DESERIALIZER
             // receive the response
             ResponseInfo respInfo  = Helper.GetResponseInfo(Communicator.Connection.ReceiveMessage());
-            GetPersonalStatsResponse stats = JsonSerializer.Deserialize<GetPersonalStatsResponse>(respInfo.Message);
+            if (respInfo.ResponseId != Client.Constants.GetPersonalStatsResponseId)
+            {
+                // build an error list
+                List<string> errorList = BuildErrorList(4);
 
-            txtTotalScore.Text = "Total Score: " + stats.Statistics[0];
-            txtGamesPlayed.Text = "Games Played: " + stats.Statistics[1];
-            txtCorrectAnswers.Text = "Correct Answers: " + stats.Statistics[2];
-            txtAvgAnswerTime.Text = "Average Answer Time: " + stats.Statistics[3];
+                // set the text elements
+                SetTxtElements(errorList);
 
+                return;
+            }
+
+            // extract the personal stats from the response info
+            GetPersonalStatsResponse statsResp = JsonSerializer.Deserialize<GetPersonalStatsResponse>(respInfo.Message);
+
+            // get the personal stats 
+            List<string> stats = statsResp.Statistics;
+
+            // set the text elements
+            SetTxtElements(stats);
 
         }
+
+        private List<string> BuildErrorList(int numElements)
+        {
+            // build a new list
+            List<string> errorList = new List<string>();
+
+            // make numElements amount of error elements
+            for (int i = 0; i < numElements; i++)
+            {
+                // add error
+                errorList.Add("ERROR");
+            }
+
+            // return the error list
+            return errorList;
+        }
+
+
+        private void SetTxtElements(List<string> txtValues)
+        {
+            txtTotalScore.Text = "Total Score: " + txtValues[0];
+            txtGamesPlayed.Text = "Games Played: " + txtValues[1];
+            txtCorrectAnswers.Text = "Correct Answers: " + txtValues[2];
+            txtAvgAnswerTime.Text = "Average Answer Time: " + txtValues[3];
+        }
+
 
     }
 }
