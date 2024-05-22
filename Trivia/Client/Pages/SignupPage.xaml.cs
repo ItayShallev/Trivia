@@ -49,7 +49,7 @@ namespace Client.Pages
             ResponseInfo respInfo = Helper.GetResponseInfo(Communicator.Connection.ReceiveMessage());
             //SignupResponse signupResp = JsonSerializer.Deserialize<SignupResponse>(respInfo.Message);
 
-            if (respInfo.ResponseId == Client.Constants.SignupRequestId)
+            if (respInfo.ResponseId == Client.Constants.SignupResponseId)
             {
                 MenuPage menuPage = new MenuPage(this._username);
                 NavigationService.Navigate(menuPage);
