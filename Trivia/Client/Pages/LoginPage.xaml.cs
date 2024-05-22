@@ -22,22 +22,38 @@ namespace Client.Pages
     /// </summary>
     public partial class LoginPage : Page
     {
-        public LoginPage()
+        private string _username;
+        public LoginPage(string username)
         {
+            this._username = username;
             InitializeComponent();
 
-            // For debugging purposes - needs to be removed
-            ////////
-            string messageContent1 = JsonSerializer.Serialize(new LoginRequest("test", "test"));
-            Communicator.Connection.SendMessage(Helper.BuildRequest(Constants.LoginRequestId, messageContent1));
-            ResponseInfo responseInfo = Helper.GetResponseInfo(Communicator.Connection.ReceiveMessage());
-            ////////
+            
         }
+        
 
-        private void BtnMenu_OnClick(object sender, RoutedEventArgs e)
+        private void BtnLogin_OnClick(object sender, RoutedEventArgs e)
         {
-            MenuPage menuPage = new MenuPage("USERNAME");
-            NavigationService.Navigate(menuPage);
+            // get the password
+            string password = pswdPasswordBox.Password;
+
+            // build and send the request
+            string messageContent = JsonSerializer.Serialize(new LoginRequest(this._username, password));
+            string message = Helper.BuildRequest(Client.Constants.LoginRequestId, messageContent);
+            Communicator.Connection.SendMessage(message);
+
+
+            ///////// TODO: DEBUG TO CHECK DESERIALIZER
+            // receive the response
+            ResponseInfo respInfo = Helper.GetResponseInfo(Communicator.Connection.ReceiveMessage());
+
+            /// if the response is ok
+            if (respInfo.ResponseId == Client.Constants.LoginResponseId)
+            {
+                // navigate to the menu page
+                MenuPage menuPage = new MenuPage(this._username);
+                NavigationService.Navigate(menuPage);
+            }
         }
     }
 }
