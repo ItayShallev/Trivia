@@ -20,6 +20,7 @@ namespace Client.Pages
     /// <summary>
     /// Interaction logic for LeaderboardPage.xaml
     /// </summary>
+    
     public partial class LeaderboardPage : Page
     {
         public LeaderboardPage()
@@ -30,7 +31,7 @@ namespace Client.Pages
         private void LeaderboardPage_OnLoaded(object sender, RoutedEventArgs e)
         {
             const int NUM_MAX_PLAYERS = 5;
-
+            
             // build and send the request
             string message = Helper.BuildRequest(Client.Constants.GetHighScoreRequestId, "");
             Communicator.Connection.SendMessage(message);
@@ -54,7 +55,7 @@ namespace Client.Pages
 
             // extract the high score response from the response info
             GetHighScoreResponse highScoreResp = JsonSerializer.Deserialize<GetHighScoreResponse>(respInfo.Message);
-            
+
             // get the players list from the response
             List<string> players = highScoreResp.Statistics;
 
@@ -113,6 +114,11 @@ namespace Client.Pages
             txtThirdPlayer.Text = "3rd: " + txtValues[2];
             txtFourthPlayer.Text = "4th: " + txtValues[3];
             txtFifthPlayer.Text = "5th: " + txtValues[4];
+        }
+
+        private void UIElement_OnMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            NavigationService.GoBack();
         }
     }
 }
