@@ -68,7 +68,10 @@ void Communicator::handleNewClient(SOCKET clientSoc)
 
 			// get the data message
 			Buffer buff = receiveDataFromSocket(clientSoc);
-
+			if (buff.size() == 0) // might imply the user quit
+			{
+				throw exception("client quit");
+			}
 			for (int i = 0; i < buff.size(); i++)
 			{
 				cout << buff[i];
