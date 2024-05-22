@@ -1,0 +1,46 @@
+﻿<Page
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+    xmlns:local="clr-namespace:Client.Pages"
+    xmlns:UserControls="clr-namespace:Client.UserControls" x:Class="Client.Pages.LeaderboardPage"
+    mc:Ignorable="d" 
+    d:DesignHeight="760"
+    d:DesignWidth="450"
+    Title="LeaderboardPage"
+    >
+
+    <Grid Background="White">
+        <Grid Grid.Row="0" VerticalAlignment="Top" Margin="0,10,0,0">
+            <Image
+                Width="40"
+                Height="40"
+                Margin="15,0,0,0"
+                HorizontalAlignment="Left"
+                Source="pack://siteoforigin:,,,/Media/TriviaLogo.png" />
+
+
+            <TextBlock
+                x:Name="LeaderboardHeader"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                FontFamily="Montserrat"
+                FontSize="18"
+                FontWeight="Bold"
+                Text="Leaderboard"/>
+
+            <UserControls:ThreeDots />
+        </Grid>
+        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,-100,0,0">
+            <TextBlock x:Name="txtFirstPlayer" Text="1st: TBD" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="22"/>
+            <TextBlock x:Name="txtSecondPlayer" Text="2nd: TBD" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="22"/>
+            <TextBlock x:Name="txtThirdPlayer" Text="3rd: TBD" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="22"/>
+            <TextBlock x:Name="txtFourthPlayer" Text="4th: TBD" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="22"/>
+            <TextBlock x:Name="txtFifthPlayer" Text="5th: TBD" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="22"/>
+        </StackPanel>
+        <Image HorizontalAlignment="Left" Height="39" Margin="15,60,0,0" VerticalAlignment="Top" Width="43" Source="/Media/GoBackArrow.png" MouseLeftButtonDown="UIElement_OnMouseLeftButtonDown"/>
+
+    </Grid>
+
+</Page>
