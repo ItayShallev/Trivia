@@ -9,6 +9,7 @@
     d:DesignHeight="760"
     d:DesignWidth="450"
     Title="LeaderboardPage"
+    Loaded="LeaderboardPage_OnLoaded"
     >
 
     <Grid Background="White">
