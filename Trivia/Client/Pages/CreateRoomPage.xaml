@@ -60,6 +60,7 @@
 
 
                     <ComboBox
+                        x:Name="CBMaxUsers"
                         Width="300"
                         Height="30"
                         Margin="0,15,0,15"
@@ -140,7 +141,7 @@
                         materialDesign:ShadowAssist.ShadowDepth="Depth0"
                         Content="Create Room"
                         FontSize="18"
-                        Style="{StaticResource MaterialDesignFlatMidBgButton}" />
+                        Style="{StaticResource MaterialDesignFlatMidBgButton}" Click="BtnCreateRoom_Click" />
                 </StackPanel>
             </materialDesign:DialogHost>
         </materialDesign:Card>

@@ -16,24 +16,21 @@ using System.Windows.Shapes;
 namespace Client.Pages
 {
     /// <summary>
-    /// Interaction logic for CreateRoomPage.xaml
+    /// Interaction logic for WaitingRoomPage.xaml
     /// </summary>
-    public partial class CreateRoomPage : Page
+    public partial class WaitingRoomPage : Page
     {
-        public CreateRoomPage()
+        private int CurrentUsersCount { get; set; }
+
+        public WaitingRoomPage()
         {
             InitializeComponent();
+            CurrentUsersCount = 0;
         }
 
         private void UIElement_OnMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             NavigationService.GoBack();
-        }
-
-        private void BtnCreateRoom_Click(object sender, RoutedEventArgs e)
-        {
-            WaitingRoomPage waitingRoomPage = new WaitingRoomPage(int.Parse(CBMaxUsers.Text));
-            NavigationService.Navigate(waitingRoomPage);
         }
     }
 }
