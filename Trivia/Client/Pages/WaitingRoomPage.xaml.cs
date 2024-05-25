@@ -25,6 +25,7 @@ namespace Client.Pages
         private int _usersCount;
 
         public int MaxUsers { get; set; }
+        public int TimePerQuestion { get; set; }
 
         public int UsersCount
         {
@@ -39,12 +40,13 @@ namespace Client.Pages
             }
         }
 
-        public WaitingRoomPage(int maxUsers)
+        public WaitingRoomPage(int maxUsers, int timePerQuestion)
         {
             InitializeComponent();
             DataContext = this; // Set the DataContext to the current instance
-            MaxUsers = maxUsers;
             UsersCount = 0;
+            MaxUsers = maxUsers;
+            TimePerQuestion = timePerQuestion;
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -61,7 +63,15 @@ namespace Client.Pages
 
         private void BtnStartGame_Click(object sender, RoutedEventArgs e)
         {
-            UsersCount++;
+            if (UsersCount < MaxUsers)
+            {
+                ListBoxItem newUserItem = new ListBoxItem();
+                newUserItem.Content = "USER " + (UsersCount + 1);
+
+                LBUsersList.Items.Add(newUserItem);
+
+                UsersCount++;
+            }
         }
     }
 }

@@ -12,6 +12,17 @@
     d:DesignWidth="460"
     mc:Ignorable="d">
 
+    <Page.Resources>
+        <Style x:Key="MyListBoxItemStyle" TargetType="ListBoxItem">
+            <Setter Property="Foreground" Value="Black" />
+            <Setter Property="FontSize" Value="15" />
+            <Setter Property="FontWeight" Value="SemiBold" />
+            <Setter Property="Margin" Value="2" />
+            <Setter Property="Height" Value="35" />
+            <Setter Property="Focusable" Value="False" />
+        </Style>
+    </Page.Resources>
+
     <Grid>
         <materialDesign:Card
             Margin="25"
@@ -66,7 +77,7 @@
 
                         <Grid Grid.Row="2">
                             <TextBlock
-                                Margin="0,5,0,0"
+                                Margin="0,5,0,35"
                                 HorizontalAlignment="Center"
                                 FontFamily="Montserrat"
                                 FontSize="37"
@@ -82,20 +93,45 @@
 
 
 
-                        <Grid Grid.Row="3">
+
+                        <Grid Grid.Row="3" Margin="0,0,0,0">
+                            <Border
+                                Margin="10 10 10 10"
+                                CornerRadius="15"
+                                BorderBrush="Green"
+                                BorderThickness="2">
                             <TextBlock
+                                Margin="0,5,0,0"
                                 HorizontalAlignment="Center"
+                                FontFamily="Montserrat"
                                 FontSize="20"
-                                Text="ROOM SETTINGS" />
+                                FontWeight="SemiBold">
+                                <TextBlock.Text>
+                                    <MultiBinding StringFormat="Time Per Question: {0} seconds">
+                                        <Binding Path="TimePerQuestion" />
+                                    </MultiBinding>
+                                </TextBlock.Text>
+                            </TextBlock>
+                            </Border>
+
                         </Grid>
 
 
 
-                        <Grid Grid.Row="4">
-                            <TextBlock
-                                HorizontalAlignment="Center"
-                                FontSize="20"
-                                Text="USERS LIST" />
+                        <Grid Grid.Row="4" Margin="10 10 10 50">
+                            <Border
+                                Grid.Row="3"
+                                CornerRadius="15"
+                                BorderThickness="2"
+                                BorderBrush="Gray">
+                                <StackPanel>
+                                    <ListBox x:Name="LBUsersList" Height="300">
+                                        <ListBox.ItemContainerStyle>
+                                            <Style TargetType="ListBoxItem" BasedOn="{StaticResource MyListBoxItemStyle}" />
+                                        </ListBox.ItemContainerStyle>
+                                    </ListBox>
+                                </StackPanel>
+                            </Border>
                         </Grid>
 
 

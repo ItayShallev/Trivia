@@ -59,15 +59,37 @@
                         Style="{StaticResource MaterialDesignOutlinedTextBox}" />
 
 
-                    <ComboBox
-                        x:Name="CBMaxUsers"
-                        Width="300"
-                        Height="30"
-                        Margin="0,15,0,15"
-                        HorizontalContentAlignment="Center"
-                        VerticalContentAlignment="Center"
-                        MaxDropDownHeight="100"
-                        SelectedIndex="0">
+                    <ComboBox x:Name="MaxPlayersComboBox" 
+                              Width="300" 
+                              Height="30" 
+                              Margin="0,15,0,15"
+                              HorizontalContentAlignment="Center"
+                              VerticalContentAlignment="Center"
+                              MaxDropDownHeight="100"
+                              SelectedIndex="0">
+                        <ComboBox.Resources>
+
+                            <Style TargetType="ComboBoxItem">
+                                <Setter Property="FontSize" Value="14" />
+                                <Setter Property="Foreground" Value="Black" />
+                                <Setter Property="Padding" Value="5" />
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate TargetType="ComboBoxItem">
+                                            <Border Background="Transparent">
+                                                <ContentPresenter />
+                                            </Border>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                                <Style.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Background" Value="#FFCCE5FF" />
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </ComboBox.Resources>
+
                         <ComboBoxItem Content="Select number of players" />
                         <ComboBoxItem Content="1" />
                         <ComboBoxItem Content="2" />
@@ -84,18 +106,13 @@
                         <ComboBoxItem Content="13" />
                         <ComboBoxItem Content="14" />
                         <ComboBoxItem Content="15" />
-
-                        <ComboBox.Style>
-                            <Style TargetType="ComboBox">
-                                <Setter Property="FontSize" Value="15" />
-
-                            </Style>
-                        </ComboBox.Style>
                     </ComboBox>
+
+
 
                     <Grid>
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="3*" />
+                            <ColumnDefinition Width="2*" />
                             <ColumnDefinition Width="9*" />
                         </Grid.ColumnDefinitions>
 
@@ -105,7 +122,7 @@
                                 Height="50"
                                 HorizontalAlignment="Right"
                                 VerticalAlignment="Center"
-                                HorizontalContentAlignment="Left"
+                                HorizontalContentAlignment="Right"
                                 VerticalContentAlignment="Center"
                                 Content="{Binding ElementName=QuestionTimerSlider, Path=Value}"
                                 FontFamily="Assistant"
@@ -113,14 +130,12 @@
                                 FontWeight="Bold" />
                         </StackPanel>
 
-                        <StackPanel
-                            Grid.Column="1"
-                            HorizontalAlignment="Left"
-                            VerticalAlignment="Center">
+                        <StackPanel Grid.Column="1" Orientation="Horizontal">
                             <Slider
+                                Grid.Row="0"
                                 x:Name="QuestionTimerSlider"
                                 Width="250"
-                                Height="30"
+                                Height="20"
                                 Maximum="20"
                                 Minimum="1"
                                 TickFrequency="1"
@@ -129,6 +144,15 @@
                                 Cursor="Hand"
                                 Style="{StaticResource MaterialDesignSlider}"
                                 Value="15" />
+
+                            <!-- Hint TextBlock -->
+                            <TextBlock
+                                Grid.Row="1"
+                                Text="Time Per Question"
+                                Margin="5,0,0,0"
+                                VerticalAlignment="Center"
+                                FontSize="9"
+                                Foreground="Gray"/>
                         </StackPanel>
                     </Grid>
 

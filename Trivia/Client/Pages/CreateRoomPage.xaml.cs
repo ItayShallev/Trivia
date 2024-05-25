@@ -1,7 +1,9 @@
-﻿using System;
+﻿using MaterialDesignThemes.Wpf;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -12,6 +14,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Client.Communication;
 
 namespace Client.Pages
 {
@@ -30,10 +33,22 @@ namespace Client.Pages
             NavigationService.GoBack();
         }
 
+        // Checks if the rooms settings are valid and ready for "CreateRoom" Request
+        private bool AreRoomSettingsValid()
+        {
+            return (MaxPlayersComboBox.Text != "Select number of players") && (RoomNameTextBox.Text != "");
+        }
+
         private void BtnCreateRoom_Click(object sender, RoutedEventArgs e)
         {
-            WaitingRoomPage waitingRoomPage = new WaitingRoomPage(int.Parse(CBMaxUsers.Text));
-            NavigationService.Navigate(waitingRoomPage);
+            if (AreRoomSettingsValid())
+            {
+                //string message = JsonSerializer.Serialize(new CreateRoomRequest(RoomNameTextBox.Text, MaxPlayersComboBox.Text, ));
+                //Communicator.Connection.SendMessage();
+
+                WaitingRoomPage waitingRoomPage = new WaitingRoomPage(int.Parse(MaxPlayersComboBox.Text), (int)QuestionTimerSlider.Value);
+                NavigationService.Navigate(waitingRoomPage);
+            }
         }
     }
 }
