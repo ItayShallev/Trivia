@@ -34,7 +34,7 @@ namespace Client
         public const string SignupRequestId = "02";
         public const string MenuRequestId = "03";
         public const string CreateRoomRequestId = "04";
-        public const string GetRoomsRequestId = "05";
+        public const string GetRoomRequestId = "05";
         public const string GetPlayersInRoomRequestId = "06";
         public const string JoinRoomRequestId = "07";
         public const string GetStatisticsRequestId = "08";

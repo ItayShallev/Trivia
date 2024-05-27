@@ -100,7 +100,6 @@
                             </StackPanel>
                         </Border>
                     </StackPanel>
-                    <TextBlock x:Name="txtErrorHeader" HorizontalAlignment="Center" Margin="0,7,0,0" Grid.Row="1" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Top" Height="26" Width="102" TextAlignment="Center" FontSize="20" Visibility="Hidden"/>
                 </Grid>
             </materialDesign:DialogHost>
         </materialDesign:Card>
