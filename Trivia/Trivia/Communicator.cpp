@@ -70,6 +70,7 @@ void Communicator::handleNewClient(SOCKET clientSoc)
 			Buffer buff = receiveDataFromSocket(clientSoc);
 			if (buff.size() == 0) // might imply the user quit
 			{
+				cout << "client quit, closing socket" << endl;
 				throw exception("client quit");
 			}
 			for (int i = 0; i < buff.size(); i++)
