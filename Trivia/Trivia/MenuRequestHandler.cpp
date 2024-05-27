@@ -13,7 +13,7 @@ bool MenuRequestHandler::isRequestRelevant(RequestInfo reqInfo)
     uint reqId = reqInfo.id;
     return
         reqId == RequestId::CreateRoomRequestId ||
-        reqId == RequestId::GetRoomRequestId ||
+        reqId == RequestId::GetRoomsRequestId ||
         reqId == RequestId::GetPlayersInRoomRequestId ||
         reqId == RequestId::JoinRoomRequestId ||
         reqId == RequestId::GetStatisticsRequestId ||
@@ -30,7 +30,7 @@ RequestResult MenuRequestHandler::handleRequest(RequestInfo reqInfo)
 	case RequestId::CreateRoomRequestId:
         return createRoom(reqInfo);
         break;
-	case RequestId::GetRoomRequestId:
+	case RequestId::GetRoomsRequestId:
         return getRooms(reqInfo);
         break;
 	case RequestId::GetPlayersInRoomRequestId:
@@ -76,6 +76,7 @@ RequestResult MenuRequestHandler::signout(RequestInfo reqInfo)
     return buildRequestResult(JsonResponsePacketSerializer::serializeResponse(LogoutResponse()), m_handlerFactory.createLoginRequestHandler());
 
 }
+
 
 RequestResult MenuRequestHandler::getRooms(RequestInfo reqInfo)
 {

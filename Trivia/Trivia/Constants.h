@@ -15,7 +15,7 @@ enum RequestId
 	SignupRequestId,
 	MenuRequestId,
 	CreateRoomRequestId,
-	GetRoomRequestId,
+	GetRoomsRequestId,
 	GetPlayersInRoomRequestId,
 	JoinRoomRequestId,
 	GetStatisticsRequestId,
