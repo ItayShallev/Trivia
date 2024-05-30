@@ -1,0 +1,108 @@
+﻿<Page
+    x:Class="Client.Pages.MenuPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:Client.Pages"
+    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:userControls="clr-namespace:Client.UserControls"
+    Title="MenuPage"
+    d:DesignHeight="760"
+    d:DesignWidth="450"
+    mc:Ignorable="d"
+    Loaded="MenuPage_OnLoaded"
+    >
+
+    <Grid>
+        <materialDesign:Card
+            Margin="25"
+            materialDesign:ShadowAssist.ShadowDepth="Depth4"
+            Background="{DynamicResource MaterialDesignPaper}"
+            UniformCornerRadius="15">
+            <materialDesign:DialogHost>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height=".1*" />
+                        <RowDefinition Height=".2*" />
+                        <RowDefinition Height=".6*" />
+                    </Grid.RowDefinitions>
+
+                    <Grid Grid.Row="0" VerticalAlignment="Center">
+                        <Image
+                            Width="40"
+                            Height="40"
+                            Margin="15,0,0,0"
+                            HorizontalAlignment="Left"
+                            Source="pack://siteoforigin:,,,/Media/TriviaLogo.png" />
+
+                        <TextBlock
+                            Name="UserGreetingTextBlock"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            FontFamily="Montserrat"
+                            FontSize="18"
+                            FontWeight="Bold"
+                            Text="Welcome USER" />
+
+                        <userControls:ThreeDots />
+                    </Grid>
+
+                    <Grid Grid.Row="1" VerticalAlignment="Center">
+                        <Button
+                            x:Name="BtnPersonalStats"
+                            Width="120"
+                            Height="50"
+                            Margin="30,0,10,0"
+                            HorizontalAlignment="Left"
+                            materialDesign:ButtonAssist.CornerRadius="5"
+                            materialDesign:ShadowAssist.ShadowDepth="Depth2"
+                            Content="Personal Stats"
+                            FontSize="14"
+                            Style="{StaticResource MaterialDesignFlatMidBgButton}" Click="BtnPersonalStats_Click" />
+
+                        <Button
+                            x:Name="BtnLeaderboard"
+                            Width="120"
+                            Height="50"
+                            Margin="100,0,30,0"
+                            HorizontalAlignment="Right"
+                            materialDesign:ButtonAssist.CornerRadius="5"
+                            materialDesign:ShadowAssist.ShadowDepth="Depth2"
+                            Content="Leaderboard"
+                            FontSize="15"
+                            Style="{StaticResource MaterialDesignFlatMidBgButton}" Click="BtnLeaderboard_Click" />
+                    </Grid>
+
+
+                    <StackPanel
+                        Grid.Row="2"
+                        Margin="5,5,5,5"
+                        HorizontalAlignment="Stretch"
+                        VerticalAlignment="Stretch"
+                        Orientation="Vertical">
+
+                        <Border BorderBrush="Black" BorderThickness="1">
+                            <StackPanel>
+                                <Button
+                                    x:Name="BtnCreateRoom"
+                                    Width="120"
+                                    Height="50"
+                                    Margin="0,10,0,20"
+                                    materialDesign:ButtonAssist.CornerRadius="5"
+                                    materialDesign:ShadowAssist.ShadowDepth="Depth2"
+                                    Content="Create Room"
+                                    FontSize="15"
+                                    Style="{StaticResource MaterialDesignFlatMidBgButton}" Click="BtnCreateRoom_Click" />
+
+                                <ListBox x:Name="lstRoomList" Height="300">
+                                </ListBox>
+                            </StackPanel>
+                        </Border>
+                    </StackPanel>
+                    <TextBlock x:Name="txtErrorHeader" HorizontalAlignment="Center" Margin="0,7,0,0" Grid.Row="1" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Top" Height="26" Width="102" TextAlignment="Center" FontSize="20" Visibility="Hidden"/>
+                </Grid>
+            </materialDesign:DialogHost>
+        </materialDesign:Card>
+    </Grid>
+</Page>

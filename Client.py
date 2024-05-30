@@ -8,18 +8,18 @@ PORT = 8888
 BUFFER_SIZE = 1024
 
 # MESSAGES
-SIGNUP_MESSAGE_CODE = 1
+SIGNUP_MESSAGE_CODE = 2
 SIGNUP_MESSAGE = {"username": "user1", "password": "1234", "mail": "user1@gmail.com"}
 
-LOGIN_MESSAGE_CODE = 0
+LOGIN_MESSAGE_CODE = 1
 LOGIN_MESSAGE = {"username": "user1", "password": "1234"}
 
 DATA_LENGTH_SIZE = 4
 
 # MENU OPTIONS
 EXIT_OPTION = '0'
-SIGNUP_OPTION = '1'
-LOGIN_OPTION = '2'
+SIGNUP_OPTION = '2'
+LOGIN_OPTION = '1'
 
 
 def print_menu():
@@ -29,8 +29,8 @@ def print_menu():
     :rtype: None
     """
     print("\n\n0. Exit")
-    print("1. Signup")
-    print("2. Login")
+    print("1. Login")
+    print("2. Signup")
 
 
 def send_signup_request(sock):
