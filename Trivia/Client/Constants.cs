@@ -13,6 +13,12 @@ namespace Client
         public const int SERVER_PORT = 8888;
 
         // ************************** COMMUNICATION PROTOCOL CONSTANTS *************************
+        public const int RESPONSE_ID_INDEX = 0;
+        public const int RESPONSE_ID_LENGTH = 2;
+        public const int MESSAGE_LENGTH_INDEX = 2;
+        public const int MESSAGE_LENGTH_LENGTH = 4;
+        public const int MESSAGE_INDEX = 6;
+        
         public const int NUM_ZEROS_TO_PAD = 4;
 
         public enum RoomState
@@ -23,26 +29,28 @@ namespace Client
         };
 
         // ************************** REQUEST & RESPONSE ID'S *************************
-        public const int LogoutRequestId = 0;
-        public const int LoginRequestId = 1;
-        public const int SignupRequestId = 2;
-        public const int MenuRequestId = 3;
-        public const int CreateRoomRequestId = 4;
-        public const int GetRoomRequestId = 5;
-        public const int GetPlayersInRoomRequestId = 6;
-        public const int JoinRoomRequestId = 7;
-        public const int GetStatisticsRequestId = 8;
-        public const int GetHighScoreRequestId = 9;
+        public const string LogoutRequestId = "00";
+        public const string LoginRequestId = "01";
+        public const string SignupRequestId = "02";
+        public const string MenuRequestId = "03";
+        public const string CreateRoomRequestId = "04";
+        public const string GetRoomsRequestId = "05";
+        public const string GetPlayersInRoomRequestId = "06";
+        public const string JoinRoomRequestId = "07";
+        public const string GetStatisticsRequestId = "08";
+        public const string GetHighScoreRequestId = "09";
+        public const string CheckIfUserExistsRequestId = "10";
 
-        public const int LogoutResponseId = 0;
-        public const int LoginResponseId = 1;
-        public const int SignupResponseId = 2;
-        public const int ErrorResponseId = 3;
-        public const int GetRoomsResponseId = 4;
-        public const int GetPlayersInRoomResponseId = 5;
-        public const int GetHighScoreResponseId = 6;
-        public const int GetPersonalStatsResponseId = 7;
-        public const int JoinRoomResponseId = 8;
-        public const int CreateRoomResponseId = 9;
+        public const string LogoutResponseId = "00";
+        public const string LoginResponseId = "01";
+        public const string SignupResponseId = "02";
+        public const string ErrorResponseId = "03";
+        public const string GetRoomsResponseId = "04";
+        public const string GetPlayersInRoomResponseId = "05";
+        public const string GetHighScoreResponseId = "06";
+        public const string GetPersonalStatsResponseId = "07";
+        public const string JoinRoomResponseId = "08";
+        public const string CreateRoomResponseId = "09";
+        public const string CheckIfUserExistsResponseId = "10";
     }
 }

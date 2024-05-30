@@ -68,7 +68,11 @@ void Communicator::handleNewClient(SOCKET clientSoc)
 
 			// get the data message
 			Buffer buff = receiveDataFromSocket(clientSoc);
-
+			if (buff.size() == 0) // might imply the user quit
+			{
+				cout << "client quit, closing socket" << endl;
+				throw exception("client quit");
+			}
 			for (int i = 0; i < buff.size(); i++)
 			{
 				cout << buff[i];
@@ -78,7 +82,7 @@ void Communicator::handleNewClient(SOCKET clientSoc)
             time_t now = time(nullptr);
 
 			// build a request info
-			RequestInfo reqInfo = { buff, static_cast<RequestId>(Helper::charToInt(buff[0])),now};
+			RequestInfo reqInfo = { buff, Helper::convertCharsToRequestId(buff[0], buff[1]),now};
 
 			// get the client request handler 
 			IRequestHandler* clientRequestHandler = m_clients[clientSoc];

@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Text.Json.Serialization;
 using System.Numerics;
+using System.Windows.Ink;
 
 namespace Client.Communication
 {
@@ -38,21 +39,21 @@ namespace Client.Communication
 
     public struct GetPlayersInRoomRequest
     {
-        [JsonPropertyName("roomID")] public uint RoomID { get; set; } = 0;
+        [JsonPropertyName("roomId")] public uint RoomId { get; set; } = 0;
 
         public GetPlayersInRoomRequest(uint roomID)
         {
-            RoomID = roomID;
+            RoomId = roomID;
         }
     }
 
     public struct JoinRoomRequest
     {
-        [JsonPropertyName("roomID")] public uint RoomID { get; set; } = 0;
+        [JsonPropertyName("roomId")] public uint RoomId { get; set; } = 0;
 
         public JoinRoomRequest(uint roomID)
         {
-            RoomID = roomID;
+            RoomId = roomID;
         }
     }
 
@@ -69,6 +70,16 @@ namespace Client.Communication
             MaxPlayers = maxPlayers;
             QuestionCount = questionCount;
             AnswerTimeout = answerTimeout;
+        }
+    }
+
+    public struct CheckIfUserExistsRequest
+    {
+        [JsonPropertyName("username")] public string Username { get; set; } = "";
+
+        public CheckIfUserExistsRequest(string username)
+        {
+            Username = username;
         }
     }
 
@@ -172,18 +183,30 @@ namespace Client.Communication
 
     public struct CreateRoomResponse
     {
-        [JsonPropertyName("status")] public uint Status { get; set; } = 1;
+        [JsonPropertyName("status")] public uint Status { get; set; } = 5;
+        [JsonPropertyName("roomData")] public RoomData RoomData { get; set; }
 
-        public CreateRoomResponse(uint status)
+        public CreateRoomResponse(uint status, RoomData roomData)
         {
             Status = status;
+            RoomData = roomData;
+        }
+    }
+
+    public struct CheckIfUserExistsResponse
+    {
+        [JsonPropertyName("exists")] public bool Exists { get; set; } = true;
+
+        public CheckIfUserExistsResponse(bool exists)
+        {
+            Exists = exists;
         }
     }
 
     public struct RoomData
     {
         [JsonPropertyName("id")] public uint Id { get; set; } = 0;
-        [JsonPropertyName("name")] public string Name { get; set; } = "";
+        [JsonPropertyName("name")] public string Name { get; set; } = "lkdsnvlsdknfldsnlfnsdlfnlksdnflnkdslfknsdlnlk";
         [JsonPropertyName("maxPlayers")] public uint MaxPlayers { get; set; } = 0;
         [JsonPropertyName("numOfQuestionsInGame")] public uint NumOfQuestionsInGame { get; set; } = 0;
         [JsonPropertyName("timePerQuestion")] public uint TimePerQuestion { get; set; } = 0;
@@ -193,10 +216,17 @@ namespace Client.Communication
             Constants.RoomState roomState)
         {
             Id = id;
-            Name = name;
+            //Name = name;
             MaxPlayers = maxPlayers;
             NumOfQuestionsInGame = numOfQuestionsInGame;
             RoomState = roomState;
         }
+    }
+
+    public struct ResponseInfo
+    {
+        public string ResponseId { get; set; }
+        public int MessageLength { get; set; }
+        public string Message { get; set; }
     }
 }
