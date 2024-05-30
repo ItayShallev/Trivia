@@ -91,13 +91,30 @@ CreateRoomRequest JsonRequestPacketDeserializer::deserializeCreateRoomRequest(Bu
     return newCreateRoomRequest;
 }
 
+CheckIfUserExistsRequest JsonRequestPacketDeserializer::deserializeCheckIfUserExistsRequest(Buffer buff)
+{
+    // get the message part of the buffer
+    string message = getMessageFromBuffer(buff);
+
+    // get the json data
+    json data = json::parse(message);
+
+    // create the request
+    CheckIfUserExistsRequest newCheckIfUserExistsRequest = {
+        data["username"],
+    };
+
+    // return the request
+    return newCheckIfUserExistsRequest;
+}
+
 string JsonRequestPacketDeserializer::getMessageFromBuffer(Buffer buff)
 {
     string dataLenStr = "";
 
     // first byte is request code which is irrelevant
     // iterate from 1 to DATA BYTE LENGTH to get the message length
-    for (int i = 1; i <= DATA_BYTE_LENGTH; i++)
+    for (int i = DATA_BYTE_START_INDEX; i <= DATA_BYTE_END_INDEX; i++)
     {
         // read the current byte
         dataLenStr += buff[i];
@@ -109,7 +126,7 @@ string JsonRequestPacketDeserializer::getMessageFromBuffer(Buffer buff)
     // init an empty message string
     string message = "";
 
-    int currentIndex = DATA_BYTE_LENGTH + 1;
+    int currentIndex = DATA_BYTE_END_INDEX + 1;
     // start reading the message
     for (int i = 0; i < dataLength; ++i)
     {

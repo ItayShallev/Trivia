@@ -66,3 +66,14 @@ bool LoginManager::logout(const string& username)
 
 	return false;
 }
+
+
+/**
+ * @brief	Checks if a user with a given username exists on the database
+ * @param	username	The username of the user to check if exists on the database
+ * @return	True if the user was exists, false otherwise
+ */
+bool LoginManager::doesUserExist(const string& username)
+{
+	return this->m_database->doesUserExist(username);
+}
