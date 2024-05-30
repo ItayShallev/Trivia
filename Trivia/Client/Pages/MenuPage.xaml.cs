@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Text;
 using System.Text.Json;
@@ -54,6 +55,57 @@ namespace Client.Pages
         {
             CreateRoomPage createRoomPage = new CreateRoomPage();
             NavigationService.Navigate(createRoomPage);
+        }
+
+        private void MenuPage_OnLoaded(object sender, RoutedEventArgs e)
+        {
+            // build and send the request
+            string message = Helper.BuildRequest(Client.Constants.GetRoomsRequestId, "");
+            Communicator.Connection.SendMessage(message);
+
+
+            ///////// TODO: DEBUG TO CHECK DESERIALIZER
+            // receive the response info
+            ResponseInfo respInfo = Helper.GetResponseInfo(Communicator.Connection.ReceiveMessage());
+
+            // if the response id is not the expected one
+            if (respInfo.ResponseId != Constants.GetRoomsResponseId)
+            {
+                // enable the error header and show the error
+                txtErrorHeader.Text = "ERROR WITH GET ROOMS REQUEST";
+                txtErrorHeader.Visibility = Visibility.Visible;
+                return;
+            }
+
+            // get the rooms response
+            GetRoomsResponse roomsResp = JsonSerializer.Deserialize<GetRoomsResponse>(respInfo.Message);
+
+            // get the rooms
+            List<RoomData> rooms = roomsResp.Rooms;
+
+
+            foreach (RoomData room in rooms)
+            {
+                // add a room to the list
+                TextBlock txtBlock = new TextBlock();
+                txtBlock.Text = room.Name;
+                txtBlock.Tag = room;
+                txtBlock.Height = 50;
+                txtBlock.Width = 300;
+                txtBlock.MouseLeftButtonDown += TxtBlock_MouseLeftButtonDown;
+                lstRoomList.Items.Add(txtBlock);
+            }
+
+        }
+
+        private void TxtBlock_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            RoomData room = (RoomData)((TextBlock)sender).Tag;
+
+            // TODO: UNCOMMENT WHEN ROOM PAGE IS READY
+            //RoomPage roomPage = new RoomPage(room);
+            //NavigationService.Navigate(roomPage);
+
         }
     }
 }
