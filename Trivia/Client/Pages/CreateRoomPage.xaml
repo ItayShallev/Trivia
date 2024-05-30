@@ -118,6 +118,7 @@
 
                         <StackPanel Grid.Column="0" Margin="10,0,0,0">
                             <Label
+                                x:Name="QuetionTimoutLable"
                                 Width="50"
                                 Height="50"
                                 HorizontalAlignment="Right"

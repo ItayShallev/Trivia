@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -14,6 +15,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Client.Communication;
 
 namespace Client.Pages
 {
@@ -47,6 +49,8 @@ namespace Client.Pages
             UsersCount = 0;
             MaxUsers = maxUsers;
             TimePerQuestion = timePerQuestion;
+
+            //Timer timer = new Timer()
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -72,6 +76,19 @@ namespace Client.Pages
 
                 UsersCount++;
             }
+        }
+
+        private void SendGetPlayersInRoomRequest()
+        {
+            // build and send the request
+            string messageContent = JsonSerializer.Serialize(new GetPlayersInRoomRequest());
+            string message = Helper.BuildRequest(Client.Constants.LoginRequestId, messageContent);
+            Communicator.Connection.SendMessage(message);
+
+
+            ///////// TODO: DEBUG TO CHECK DESERIALIZER
+            // receive the response
+            ResponseInfo respInfo = Helper.GetResponseInfo(Communicator.Connection.ReceiveMessage());
         }
     }
 }

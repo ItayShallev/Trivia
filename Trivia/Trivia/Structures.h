@@ -133,6 +133,7 @@ void to_json(json& j, const JoinRoomResponse& response);
 struct CreateRoomResponse
 {
 	uint status = 1;
+	uint roomId = 0;
 };
 void to_json(json& j, const CreateRoomResponse& response);
 

@@ -43,8 +43,13 @@ namespace Client.Pages
         {
             if (AreRoomSettingsValid())
             {
-                //string message = JsonSerializer.Serialize(new CreateRoomRequest(RoomNameTextBox.Text, MaxPlayersComboBox.Text, ));
-                //Communicator.Connection.SendMessage();
+                // Sending a request to get the players in the room
+                string messageContent = JsonSerializer.Serialize(new CreateRoomRequest(RoomNameTextBox.Text, uint.Parse(MaxPlayersComboBox.Text), 20, uint.Parse(QuetionTimoutLable.Content.ToString())));
+                string message = Helper.BuildRequest(Client.Constants.CreateRoomRequestId, messageContent);
+                Communicator.Connection.SendMessage(message);
+                
+                // Getting the response
+                ResponseInfo respInfo = Helper.GetResponseInfo(Communicator.Connection.ReceiveMessage());
 
                 WaitingRoomPage waitingRoomPage = new WaitingRoomPage(int.Parse(MaxPlayersComboBox.Text), (int)QuestionTimerSlider.Value);
                 NavigationService.Navigate(waitingRoomPage);
