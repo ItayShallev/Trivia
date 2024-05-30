@@ -102,9 +102,8 @@ namespace Client.Pages
         {
             RoomData room = (RoomData)((TextBlock)sender).Tag;
 
-            // TODO: UNCOMMENT WHEN ROOM PAGE IS READY
-            //RoomPage roomPage = new RoomPage(room);
-            //NavigationService.Navigate(roomPage);
+            WaitingRoomPage newWaitingRoomPage = new WaitingRoomPage(room);
+            NavigationService.Navigate(newWaitingRoomPage);
 
         }
     }
