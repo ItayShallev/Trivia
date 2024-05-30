@@ -64,13 +64,36 @@ RequestResult LoginRequestHandler::signup(RequestInfo reqInfo)
 	return reqResult;
 }
 
+RequestResult LoginRequestHandler::continueAuthentication(RequestInfo reqInfo)
+{
+	// create an empty result
+	RequestResult reqResult;
+
+	// get the manager
+	LoginManager manager = m_handlerFactory.getLoginManager();
+
+	// create the request
+	CheckIfUserExistsRequest checkIfUsersExistsReq = JsonRequestPacketDeserializer::deserializeCheckIfUserExistsRequest(reqInfo.buffer);
+
+	// check if the user exists
+	bool doesUserExist = manager.doesUserExist(checkIfUsersExistsReq.username);
+
+	// create the response
+	CheckIfUserExistsResponse response(doesUserExist);
+	reqResult.response = JsonResponsePacketSerializer::serializeResponse(response);
+	reqResult.newHandler = m_handlerFactory.createLoginRequestHandler();
+
+	// return the response
+	return reqResult;
+}
+
 LoginRequestHandler::LoginRequestHandler(RequestHandlerFactory* factory) : m_handlerFactory(*factory)
 {
 }
 
 bool LoginRequestHandler::isRequestRelevant(RequestInfo reqInfo)
 {
-    return reqInfo.id == RequestId::LoginRequestId || reqInfo.id == RequestId::SignupRequestId;
+    return reqInfo.id == RequestId::LoginRequestId || reqInfo.id == RequestId::SignupRequestId || reqInfo.id == RequestId::CheckIfUserExistsRequestId;
 }
 
 RequestResult LoginRequestHandler::handleRequest(RequestInfo reqInfo)
@@ -85,6 +108,10 @@ RequestResult LoginRequestHandler::handleRequest(RequestInfo reqInfo)
 
 	case RequestId::SignupRequestId:
 		return signup(reqInfo);
+		break;
+
+	case RequestId::CheckIfUserExistsRequestId:
+		return continueAuthentication(reqInfo);
 		break;
 
 	default:

@@ -51,11 +51,8 @@ vector<RoomData> RoomManager::getRooms()
 	// iterate through the map
 	for (auto& room : m_rooms)
 	{
-		if (room.second->getRoomState() == RoomState::Playing) // instructions say to add only active rooms
-		{
-			// add the room data to the vector
-			rooms.push_back(room.second->getRoomData());
-		}
+		// add the room data to the vector
+		rooms.push_back(room.second->getRoomData());
 	}
 
 	// return the rooms
