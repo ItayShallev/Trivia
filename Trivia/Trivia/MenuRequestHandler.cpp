@@ -188,8 +188,10 @@ RequestResult MenuRequestHandler::createRoom(RequestInfo reqInfo)
     CreateRoomRequest newRoomReq = JsonRequestPacketDeserializer::deserializeCreateRoomRequest(reqInfo.buffer);
 
     // build the room metadata
+    uint roomId = RoomManager::generateRoomID();
+
     RoomData newRoomData = {
-        RoomManager::generateRoomID(),
+        roomId,
         newRoomReq.roomName,
         newRoomReq.maxPlayers,
         newRoomReq.questionCount,
@@ -202,6 +204,6 @@ RequestResult MenuRequestHandler::createRoom(RequestInfo reqInfo)
 
     // build and return the result
 	// TODO: update when room handlers are implemented
-    return buildRequestResult(JsonResponsePacketSerializer::serializeResponse(CreateRoomResponse()), this);
-
+    CreateRoomResponse createRoomResponse = CreateRoomResponse{ 1, newRoomData };
+    return buildRequestResult(JsonResponsePacketSerializer::serializeResponse(createRoomResponse), this);
 }

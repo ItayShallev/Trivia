@@ -67,7 +67,10 @@ void to_json(json& j, const JoinRoomResponse& response)
 // CreateRoomResponse
 void to_json(json& j, const CreateRoomResponse& response)
 {
-	j = json{ {"status", response.status} };
+	j = json{
+		{"status", response.status},
+		{"roomData", response.roomData}
+	};
 }
 
 // CheckIfUserExists

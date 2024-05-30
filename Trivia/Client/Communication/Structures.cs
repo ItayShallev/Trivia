@@ -39,21 +39,21 @@ namespace Client.Communication
 
     public struct GetPlayersInRoomRequest
     {
-        [JsonPropertyName("roomID")] public uint RoomID { get; set; } = 0;
+        [JsonPropertyName("roomId")] public uint RoomId { get; set; } = 0;
 
         public GetPlayersInRoomRequest(uint roomID)
         {
-            RoomID = roomID;
+            RoomId = roomID;
         }
     }
 
     public struct JoinRoomRequest
     {
-        [JsonPropertyName("roomID")] public uint RoomID { get; set; } = 0;
+        [JsonPropertyName("roomId")] public uint RoomId { get; set; } = 0;
 
         public JoinRoomRequest(uint roomID)
         {
-            RoomID = roomID;
+            RoomId = roomID;
         }
     }
 
@@ -183,11 +183,13 @@ namespace Client.Communication
 
     public struct CreateRoomResponse
     {
-        [JsonPropertyName("status")] public uint Status { get; set; } = 1;
+        [JsonPropertyName("status")] public uint Status { get; set; } = 5;
+        [JsonPropertyName("roomData")] public RoomData RoomData { get; set; }
 
-        public CreateRoomResponse(uint status)
+        public CreateRoomResponse(uint status, RoomData roomData)
         {
             Status = status;
+            RoomData = roomData;
         }
     }
 
@@ -204,7 +206,7 @@ namespace Client.Communication
     public struct RoomData
     {
         [JsonPropertyName("id")] public uint Id { get; set; } = 0;
-        [JsonPropertyName("name")] public string Name { get; set; } = "";
+        [JsonPropertyName("name")] public string Name { get; set; } = "lkdsnvlsdknfldsnlfnsdlfnlksdnflnkdslfknsdlnlk";
         [JsonPropertyName("maxPlayers")] public uint MaxPlayers { get; set; } = 0;
         [JsonPropertyName("numOfQuestionsInGame")] public uint NumOfQuestionsInGame { get; set; } = 0;
         [JsonPropertyName("timePerQuestion")] public uint TimePerQuestion { get; set; } = 0;
@@ -214,7 +216,7 @@ namespace Client.Communication
             Constants.RoomState roomState)
         {
             Id = id;
-            Name = name;
+            //Name = name;
             MaxPlayers = maxPlayers;
             NumOfQuestionsInGame = numOfQuestionsInGame;
             RoomState = roomState;

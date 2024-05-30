@@ -18,6 +18,18 @@ using nlohmann::json;
 typedef unsigned int uint;
 
 
+struct RoomData
+{
+	uint id;
+	string name;
+	uint maxPlayers;
+	uint numOfQuestionsInGame;
+	uint timePerQuestion;
+	RoomState roomState;
+};
+void to_json(json& j, const RoomData& response);
+
+
 // ******************* REQUESTS STRUCTURES *******************
 struct LoginRequest
 {
@@ -133,6 +145,7 @@ void to_json(json& j, const JoinRoomResponse& response);
 struct CreateRoomResponse
 {
 	uint status = 1;
+	RoomData roomData;
 };
 void to_json(json& j, const CreateRoomResponse& response);
 
@@ -163,15 +176,3 @@ struct RequestResult
 	Buffer response;
 	IRequestHandler* newHandler;
 };
-
-
-struct RoomData
-{
-	uint id;
-	string name;
-	uint maxPlayers;
-	uint numOfQuestionsInGame;
-	uint timePerQuestion;
-	RoomState roomState;
-};
-void to_json(json& j, const RoomData& response);
