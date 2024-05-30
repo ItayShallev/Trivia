@@ -50,8 +50,9 @@ namespace Client.Pages
                 
                 // Getting the response
                 ResponseInfo respInfo = Helper.GetResponseInfo(Communicator.Connection.ReceiveMessage());
+                CreateRoomResponse createRoomResponse = JsonSerializer.Deserialize<CreateRoomResponse>(respInfo.Message);
 
-                WaitingRoomPage waitingRoomPage = new WaitingRoomPage(int.Parse(MaxPlayersComboBox.Text), (int)QuestionTimerSlider.Value);
+                WaitingRoomPage waitingRoomPage = new WaitingRoomPage(createRoomResponse.RoomData);
                 NavigationService.Navigate(waitingRoomPage);
             }
         }

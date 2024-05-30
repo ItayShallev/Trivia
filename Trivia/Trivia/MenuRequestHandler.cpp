@@ -204,6 +204,6 @@ RequestResult MenuRequestHandler::createRoom(RequestInfo reqInfo)
 
     // build and return the result
 	// TODO: update when room handlers are implemented
-    CreateRoomResponse createRoomResponse = CreateRoomResponse{ 1, roomId };
+    CreateRoomResponse createRoomResponse = CreateRoomResponse{ 1, newRoomData };
     return buildRequestResult(JsonResponsePacketSerializer::serializeResponse(createRoomResponse), this);
 }

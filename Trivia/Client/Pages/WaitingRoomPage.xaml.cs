@@ -24,12 +24,28 @@ namespace Client.Pages
     /// </summary>
     public partial class WaitingRoomPage : Page, INotifyPropertyChanged
     {
-        private int _usersCount;
+        private uint _usersCount;
+        private uint _maxUsers;
+        private uint RoomId { get; set; }
+        private string RoomName { get; set; }
+        private uint NumOfQuestionsInGame { get; set; }
+        private uint TimePerQuestion { get; set; }
+        private Constants.RoomState RoomState { get; set; }
 
-        public int MaxUsers { get; set; }
-        public int TimePerQuestion { get; set; }
 
-        public int UsersCount
+        public uint MaxUsers
+        {
+            get { return _maxUsers; }
+            set
+            {
+                if (_maxUsers != value)
+                {
+                    _maxUsers = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+        public uint UsersCount
         {
             get { return _usersCount; }
             set
@@ -42,15 +58,20 @@ namespace Client.Pages
             }
         }
 
-        public WaitingRoomPage(int maxUsers, int timePerQuestion)
+
+        public WaitingRoomPage(RoomData roomData)
         {
             InitializeComponent();
             DataContext = this; // Set the DataContext to the current instance
-            UsersCount = 0;
-            MaxUsers = maxUsers;
-            TimePerQuestion = timePerQuestion;
 
-            //Timer timer = new Timer()
+            RoomId = roomData.Id;
+            RoomName = roomData.Name;
+            MaxUsers = roomData.MaxPlayers;
+            NumOfQuestionsInGame = roomData.NumOfQuestionsInGame;
+            TimePerQuestion = roomData.TimePerQuestion;
+            RoomState = roomData.RoomState;
+
+            Timer timer = new Timer(SendGetPlayersInRoomRequest, null, 0, 10000);
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -78,17 +99,17 @@ namespace Client.Pages
             }
         }
 
-        private void SendGetPlayersInRoomRequest()
+        private void SendGetPlayersInRoomRequest(object state)
         {
             // build and send the request
             string messageContent = JsonSerializer.Serialize(new GetPlayersInRoomRequest());
-            string message = Helper.BuildRequest(Client.Constants.LoginRequestId, messageContent);
+            string message = Helper.BuildRequest(Client.Constants.GetPlayersInRoomRequestId, messageContent);
             Communicator.Connection.SendMessage(message);
 
-
-            ///////// TODO: DEBUG TO CHECK DESERIALIZER
-            // receive the response
             ResponseInfo respInfo = Helper.GetResponseInfo(Communicator.Connection.ReceiveMessage());
+            GetPlayersInRoomResponse response = JsonSerializer.Deserialize<GetPlayersInRoomResponse>(respInfo.Message);
+
+            UsersCount = (uint)response.Players.Count;
         }
     }
 }

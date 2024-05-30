@@ -69,7 +69,7 @@ void to_json(json& j, const CreateRoomResponse& response)
 {
 	j = json{
 		{"status", response.status},
-		{"roomId", response.roomId}
+		{"roomData", response.roomData}
 	};
 }
 
