@@ -24,4 +24,5 @@ public:
 	static Buffer serializeResponse(const CreateRoomResponse& createRoomResponse);
 	static Buffer serializeResponse(const GetHighScoreResponse& getHighScoreResponse);
 	static Buffer serializeResponse(const GetPersonalStatsResponse& getPersonalStatsResponse);
+	static Buffer serializeResponse(const CheckIfUserExistsResponse& checkIfUserExistsResponse);
 };

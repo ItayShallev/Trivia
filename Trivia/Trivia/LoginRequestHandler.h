@@ -11,6 +11,7 @@ private:
 	RequestHandlerFactory& m_handlerFactory;
 	RequestResult login(RequestInfo reqInfo);
 	RequestResult signup(RequestInfo reqInfo);
+	RequestResult continueAuthentication(RequestInfo reqInfo);
 public:
 	LoginRequestHandler(RequestHandlerFactory* factory);
 	bool isRequestRelevant(RequestInfo reqInfo) override;

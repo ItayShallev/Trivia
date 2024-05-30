@@ -11,6 +11,7 @@ public:
 	static GetPlayersInRoomRequest deserializeGetPlayersRequest(Buffer buff);
 	static JoinRoomRequest deserializeJoinRoomRequest(Buffer buff);
 	static CreateRoomRequest deserializeCreateRoomRequest(Buffer buff);
+	static CheckIfUserExistsRequest deserializeCheckIfUserExistsRequest(Buffer buff);
 
 private:
 	static string getMessageFromBuffer(Buffer buff);

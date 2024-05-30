@@ -73,7 +73,13 @@ string Helper::padNumWith0(int num, int wantedLength)
 }
 
 
-int Helper::charToInt(const char& digit)
+int Helper::charToInt(const unsigned char& digit)
 {
 	return digit - '0';
+}
+
+
+RequestId Helper::convertCharsToRequestId(const unsigned char& first, const unsigned char& second)
+{
+	return static_cast<RequestId>((Helper::charToInt(first) * DOZEN_MULTIPLIER) + Helper::charToInt(second));
 }
