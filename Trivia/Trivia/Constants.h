@@ -36,7 +36,11 @@ enum ResponseId
 	GetPersonalStatsResponseId,
 	JoinRoomResponseId,
 	CreateRoomResponseId,
-	CheckIfUserExistsResponseId
+	CheckIfUserExistsResponseId,
+	CloseRoomResponseId,
+	StartGameResponseId,
+	GetRoomStateResponseId,
+	LeaveRoomResponseId
 };
 
 enum RoomState

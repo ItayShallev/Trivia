@@ -52,5 +52,9 @@ namespace Client
         public const string JoinRoomResponseId = "08";
         public const string CreateRoomResponseId = "09";
         public const string CheckIfUserExistsResponseId = "10";
+        public const string CloseRoomResponseId = "11";
+        public const string StartGameResponseId = "12";
+        public const string GetRoomStateResponseId = "13";
+        public const string LeaveRoomResponseId = "14";
     }
 }
