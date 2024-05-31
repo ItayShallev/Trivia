@@ -158,6 +158,37 @@ struct CheckIfUserExistsResponse
 void to_json(json& j, const CheckIfUserExistsResponse& response);
 
 
+struct CloseRoomResponse
+{
+	uint status = 1;
+};
+void to_json(json& j, const CloseRoomResponse& response);
+
+
+struct StartGameResponse
+{
+	uint status = 1;
+};
+void to_json(json& j, const StartGameResponse& response);
+
+
+struct GetRoomStateResponse
+{
+	uint status = 1;
+	bool hasGameBegan = false;
+	vector<string> players;
+	uint questionCount = 0;
+	uint answerTimeout = 0;
+};
+void to_json(json& j, const GetRoomStateResponse& response);
+
+
+struct LeaveRoomResponse
+{
+	uint status = 1;
+};
+void to_json(json& j, const LeaveRoomResponse& response);
+
 
 // ************************** OTHERS *************************
 typedef vector<unsigned char> Buffer;
