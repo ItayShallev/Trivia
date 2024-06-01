@@ -34,10 +34,10 @@ void RoomManager::deleteRoom(uint roomId)
 	this->m_rooms.erase(roomId);
 }
 
-RoomState RoomManager::getRoomState(uint roomId)
+RoomStatus RoomManager::getRoomStatus(uint roomId)
 {
-	// return the room state
-	return m_rooms[roomId]->getRoomState();
+	// return the room status
+	return m_rooms[roomId]->getRoomStatus();
 }
 
 vector<RoomData> RoomManager::getRooms()

@@ -11,7 +11,7 @@ Room::Room(uint id)
 		1,
 		1,
 		1,
-		RoomState::Waiting
+		RoomStatus::Waiting
 	};
 }
 
@@ -68,7 +68,7 @@ void Room::setTimePerQuestion(const uint timePerQuestion)
 	this->m_metadata.timePerQuestion = timePerQuestion;
 }
 
-void Room::setRoomState(const RoomState state)
+void Room::setRoomStatus(const RoomStatus state)
 {
 	this->m_metadata.roomState = state;
 }
@@ -103,7 +103,7 @@ uint Room::getTimePerQuestion()
 	return this->m_metadata.timePerQuestion;
 }
 
-RoomState Room::getRoomState()
+RoomStatus Room::getRoomStatus()
 {
-	return this->m_metadata.roomState;
+	return this->m_metadata.roomStatus;
 }

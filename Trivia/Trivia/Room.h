@@ -21,7 +21,7 @@ public:
 	void setMaxPlayers(const uint maxPlayers);
 	void setNumOfQuestions(const uint numOfQuestions);
 	void setTimePerQuestion(const uint timePerQuestion);
-	void setRoomState(const RoomState state);
+	void setRoomStatus(const RoomStatus state);
 
 	// getters
 	RoomData getRoomData();
@@ -30,7 +30,7 @@ public:
 	uint getMaxPlayers();
 	uint getNumOfQuestions();
 	uint getTimePerQuestion();
-	RoomState getRoomState();
+	RoomStatus getRoomStatus();
 
 };
 

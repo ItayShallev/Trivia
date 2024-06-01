@@ -47,7 +47,7 @@ enum ResponseId
 	LeaveRoomResponseId
 };
 
-enum RoomState
+enum RoomStatus
 {
 	Waiting = 0,
 	Playing = 1,

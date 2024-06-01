@@ -25,7 +25,7 @@ struct RoomData
 	uint maxPlayers;
 	uint numOfQuestionsInGame;
 	uint timePerQuestion;
-	RoomState roomState;
+	RoomStatus roomStatus;
 };
 void to_json(json& j, const RoomData& response);
 
