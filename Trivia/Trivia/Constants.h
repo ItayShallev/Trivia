@@ -20,7 +20,11 @@ enum RequestId
 	JoinRoomRequestId,
 	GetStatisticsRequestId,
 	GetHighScoreRequestId,
-	CheckIfUserExistsRequestId
+	CheckIfUserExistsRequestId,
+	CloseRoomRequestId,
+	StartGameRequestId,
+	GetRoomStateRequestId,
+	LeaveRoomRequestId
 };
 
 
