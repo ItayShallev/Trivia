@@ -43,17 +43,20 @@ namespace Client.Pages
         {
             if (AreRoomSettingsValid())
             {
-                // Sending a request to get the players in the room
-                string messageContent = JsonSerializer.Serialize(new CreateRoomRequest(RoomNameTextBox.Text, uint.Parse(MaxPlayersComboBox.Text), 20, uint.Parse(QuetionTimoutLable.Content.ToString())));
-                string message = Helper.BuildRequest(Client.Constants.CreateRoomRequestId, messageContent);
-                Communicator.Connection.SendMessage(message);
-                
-                // Getting the response
-                ResponseInfo respInfo = Helper.GetResponseInfo(Communicator.Connection.ReceiveMessage());
-                CreateRoomResponse createRoomResponse = JsonSerializer.Deserialize<CreateRoomResponse>(respInfo.Message);
+                // Sending a create room request to the server
+                CreateRoomRequest createRoomRequest = new CreateRoomRequest(RoomNameTextBox.Text,
+                    uint.Parse(MaxPlayersComboBox.Text), 20, uint.Parse(QuetionTimoutLable.Content.ToString()));
+                Helper.SendRequest(Constants.CreateRoomRequestId, JsonSerializer.Serialize(createRoomRequest));
 
-                WaitingRoomPage waitingRoomPage = new WaitingRoomPage(createRoomResponse.RoomData);
-                NavigationService.Navigate(waitingRoomPage);
+                CreateRoomResponse createRoomResponse = Helper.GetResponse<CreateRoomResponse>();       // Getting the server's response
+
+                // Checking if the server has approved to create the room
+                if (createRoomResponse.Status == 1)
+                {
+                    // Navigating the user to the waiting room
+                    WaitingRoomPage waitingRoomPage = new WaitingRoomPage(createRoomResponse.RoomData);
+                    NavigationService.Navigate(waitingRoomPage);
+                }
             }
         }
     }

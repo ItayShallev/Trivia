@@ -65,7 +65,7 @@ JoinRoomRequest JsonRequestPacketDeserializer::deserializeJoinRoomRequest(Buffer
     json data = json::parse(message);
 
     // create the request
-    JoinRoomRequest newJoinRoomRequest = { data["roomID"] };
+    JoinRoomRequest newJoinRoomRequest = { data["roomId"] };
 
     // return the request
     return newJoinRoomRequest;

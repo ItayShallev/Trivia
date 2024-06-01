@@ -33,8 +33,7 @@ namespace Client.Pages
             const int NUM_MAX_PLAYERS = 5;
             
             // build and send the request
-            string message = Helper.BuildRequest(Client.Constants.GetHighScoreRequestId, "");
-            Communicator.Connection.SendMessage(message);
+            Helper.SendRequest(Constants.GetHighScoreRequestId, "");
 
 
             ///////// TODO: DEBUG TO CHECK DESERIALIZER
@@ -42,7 +41,7 @@ namespace Client.Pages
             ResponseInfo respInfo = Helper.GetResponseInfo(Communicator.Connection.ReceiveMessage());
 
             // if the response is not the wanted response
-            if (respInfo.ResponseId != Client.Constants.GetHighScoreResponseId)
+            if (respInfo.ResponseId != Constants.GetHighScoreResponseId)
             {
                 // build an error list
                 List<string> errorList = BuildErrorList(NUM_MAX_PLAYERS);

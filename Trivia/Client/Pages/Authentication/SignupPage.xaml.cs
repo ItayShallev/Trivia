@@ -28,20 +28,12 @@ namespace Client.Pages
         {
             this._username = username;
             InitializeComponent();
-
         }
-
 
         private void BtnSignup_OnClick(object sender, RoutedEventArgs e)
         {
-            // get the user input
-            string password = pswdPasswordBox.Password;
-            string email = txtMail.Text;
-
-            // build and send the request
-            string messageContent = JsonSerializer.Serialize(new SignupRequest(this._username, password, email));
-            string message = Helper.BuildRequest(Client.Constants.SignupRequestId, messageContent);
-            Communicator.Connection.SendMessage(message);
+            // Sending a signup request to the server
+            Helper.SendRequest(Constants.SignupRequestId, JsonSerializer.Serialize(new SignupRequest(this._username, pswdPasswordBox.Password, txtMail.Text)));
 
 
             ///////// TODO: DEBUG TO CHECK DESERIALIZER

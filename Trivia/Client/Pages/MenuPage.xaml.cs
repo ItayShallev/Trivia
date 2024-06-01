@@ -60,8 +60,7 @@ namespace Client.Pages
         private void MenuPage_OnLoaded(object sender, RoutedEventArgs e)
         {
             // build and send the request
-            string message = Helper.BuildRequest(Client.Constants.GetRoomsRequestId, "");
-            Communicator.Connection.SendMessage(message);
+            Helper.SendRequest(Constants.GetRoomsRequestId, "");
 
 
             ///////// TODO: DEBUG TO CHECK DESERIALIZER
@@ -102,9 +101,13 @@ namespace Client.Pages
         {
             RoomData room = (RoomData)((TextBlock)sender).Tag;
 
+            // Sending a join room request
+            Helper.SendRequest(Constants.JoinRoomRequestId, JsonSerializer.Serialize(new JoinRoomRequest(room.Id)));
+            JoinRoomResponse joinRoomResponse = Helper.GetResponse<JoinRoomResponse>();
+
+            // Navigating the user to the waiting room
             WaitingRoomPage newWaitingRoomPage = new WaitingRoomPage(room);
             NavigationService.Navigate(newWaitingRoomPage);
-
         }
     }
 }

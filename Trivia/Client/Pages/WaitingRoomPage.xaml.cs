@@ -16,6 +16,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Client.Communication;
+using static Client.Constants;
 
 namespace Client.Pages
 {
@@ -26,12 +27,7 @@ namespace Client.Pages
     {
         private uint _usersCount;
         private uint _maxUsers;
-        private uint RoomId { get; set; }
-        private string RoomName { get; set; }
-        private uint NumOfQuestionsInGame { get; set; }
-        private uint TimePerQuestion { get; set; }
-        private Constants.RoomState RoomState { get; set; }
-
+        private RoomData _roomData;
 
         public uint MaxUsers
         {
@@ -45,6 +41,7 @@ namespace Client.Pages
                 }
             }
         }
+
         public uint UsersCount
         {
             get { return _usersCount; }
@@ -58,20 +55,15 @@ namespace Client.Pages
             }
         }
 
-
         public WaitingRoomPage(RoomData roomData)
         {
             InitializeComponent();
-            DataContext = this; // Set the DataContext to the current instance
+            DataContext = this;         // Setting the DataContext to the current instance
 
-            RoomId = roomData.Id;
-            RoomName = roomData.Name;
+            this._roomData = roomData;
             MaxUsers = roomData.MaxPlayers;
-            NumOfQuestionsInGame = roomData.NumOfQuestionsInGame;
-            TimePerQuestion = roomData.TimePerQuestion;
-            RoomState = roomData.RoomState;
 
-            Timer timer = new Timer(SendGetPlayersInRoomRequest, null, 0, 10000);
+            Timer timer = new Timer(UpdateUI, null, 0, 3000);
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -83,33 +75,39 @@ namespace Client.Pages
 
         private void UIElement_OnMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
+            // Leave Room
             NavigationService.GoBack();
         }
 
-        private void BtnStartGame_Click(object sender, RoutedEventArgs e)
+        private void UpdateUsersList(List<string> players)
         {
-            if (UsersCount < MaxUsers)
+            LBUsersList.Items.Clear();      // Removing all players boxes from the players list
+
+            // Iterating over the players list and creating a list box item for each player
+            foreach (string playerName in players)
             {
-                ListBoxItem newUserItem = new ListBoxItem();
-                newUserItem.Content = "USER " + (UsersCount + 1);
-
-                LBUsersList.Items.Add(newUserItem);
-
-                UsersCount++;
+                ListBoxItem newPlayerBox = new ListBoxItem { Content = playerName };
+                LBUsersList.Items.Add(newPlayerBox);
             }
         }
 
-        private void SendGetPlayersInRoomRequest(object state)
+        private void UpdateUI(object state)
         {
-            // build and send the request
-            string messageContent = JsonSerializer.Serialize(new GetPlayersInRoomRequest());
-            string message = Helper.BuildRequest(Client.Constants.GetPlayersInRoomRequestId, messageContent);
-            Communicator.Connection.SendMessage(message);
+            // Sending a request to get the list of players in the room
+            Helper.SendRequest(Constants.GetPlayersInRoomRequestId, JsonSerializer.Serialize(new GetPlayersInRoomRequest()));
 
-            ResponseInfo respInfo = Helper.GetResponseInfo(Communicator.Connection.ReceiveMessage());
-            GetPlayersInRoomResponse response = JsonSerializer.Deserialize<GetPlayersInRoomResponse>(respInfo.Message);
+            // Getting the response from the server
+            GetPlayersInRoomResponse response = Helper.GetResponse<GetPlayersInRoomResponse>();
 
-            UsersCount = (uint)response.Players.Count;
+            // Updating the users list and users count
+            Application.Current.Dispatcher.Invoke(() =>     // To change the UI looks, the program needs to switch to the UI thread
+            {
+                if (UsersCount != response.Players.Count)
+                {
+                    UpdateUsersList(response.Players);
+                    UsersCount = (uint)response.Players.Count;
+                }
+            });
         }
     }
 }
