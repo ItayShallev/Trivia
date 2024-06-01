@@ -39,8 +39,7 @@ namespace Client.Pages
             UserStatsHeader.Text = _username + "'s Personal Stats";
 
             // build and send the request
-            string message = Helper.BuildRequest(Client.Constants.GetStatisticsRequestId, "");
-            Communicator.Connection.SendMessage(message);
+            Helper.SendRequest(Constants.GetStatisticsRequestId, "");
 
 
             ///////// TODO: DEBUG TO CHECK DESERIALIZER
@@ -84,7 +83,6 @@ namespace Client.Pages
             return errorList;
         }
 
-
         private void SetTxtElements(List<string> txtValues)
         {
             txtTotalScore.Text = "Total Score: " + txtValues[0];
@@ -92,7 +90,6 @@ namespace Client.Pages
             txtCorrectAnswers.Text = "Correct Answers: " + txtValues[2];
             txtAvgAnswerTime.Text = "Average Answer Time: " + txtValues[3];
         }
-
 
         private void UIElement_OnMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
