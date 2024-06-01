@@ -25,7 +25,7 @@ private:
 
 	// methods
 	void bindAndListen();
-	void handleNewClient(SOCKET clientSoc);
+	void handleNewClient(SOCKET clientSoc, int id);
 
 	void initSocket();
 	void waitForClients();

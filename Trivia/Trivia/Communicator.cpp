@@ -56,7 +56,7 @@ void Communicator::bindAndListen()
 	
 }
 
-void Communicator::handleNewClient(SOCKET clientSoc)
+void Communicator::handleNewClient(SOCKET clientSoc, int id)
 {
 	try
 	{
@@ -73,10 +73,15 @@ void Communicator::handleNewClient(SOCKET clientSoc)
 				cout << "client quit, closing socket" << endl;
 				throw exception("client quit");
 			}
+
+			Helper::setConsoleColor(CYAN);
+			cout << "CLIENT: " << id << ":\n";
 			for (int i = 0; i < buff.size(); i++)
 			{
 				cout << buff[i];
 			}
+			cout << "\n";
+			Helper::setConsoleColor(WHITE);
 
 			// get the current time
             time_t now = time(nullptr);
@@ -102,10 +107,12 @@ void Communicator::handleNewClient(SOCKET clientSoc)
 			// set the new handler
 			m_clients[clientSoc] = reqResult.newHandler;
 
+			Helper::setConsoleColor(GREEN);
 			for (int i = 0; i < reqResult.response.size(); i++)
 			{
 				cout << reqResult.response[i];
 			}
+			Helper::setConsoleColor(WHITE);
 
 			// send the response to the client
 			sendDataToSocket(clientSoc, reqResult.response);
@@ -156,7 +163,7 @@ void Communicator::acceptClient(SOCKET serverSoc)
 	this->m_clients.insert(newClientInfo);
 
 	// open a thread for the new client
-	thread clientThread(&Communicator::handleNewClient, this, clientSoc);
+	thread clientThread(&Communicator::handleNewClient, this, clientSoc, this->m_clients.size());
 	clientThread.detach(); // detach the thread
 }
 
