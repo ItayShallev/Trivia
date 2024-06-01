@@ -1,6 +1,7 @@
 #include "MenuRequestHandler.h"
 
 #include "Communicator.h"
+#include "Helper.h"
 #include "JsonRequestPacketDeserializer.h"
 #include "JsonResponsePacketSerializer.h"
 
@@ -49,16 +50,11 @@ RequestResult MenuRequestHandler::handleRequest(RequestInfo reqInfo)
         return signout(reqInfo);
         break;
     default:
-        return buildRequestResult(JsonResponsePacketSerializer::serializeResponse(ErrorResponse()), this);
+        return Helper::buildRequestResult(JsonResponsePacketSerializer::serializeResponse(ErrorResponse()), this);
 	}
 
     
 
-}
-
-RequestResult MenuRequestHandler::buildRequestResult(const Buffer& buff, IRequestHandler* newHandler)
-{
-    return { buff, newHandler };
 }
 
 RequestResult MenuRequestHandler::signout(RequestInfo reqInfo)
@@ -69,11 +65,11 @@ RequestResult MenuRequestHandler::signout(RequestInfo reqInfo)
     if (!success)
     {
         // build an error result
-        return buildRequestResult(JsonResponsePacketSerializer::serializeResponse(ErrorResponse()), this);
+        return Helper::buildRequestResult(JsonResponsePacketSerializer::serializeResponse(ErrorResponse()), this);
     }
 
     // build and return the result
-    return buildRequestResult(JsonResponsePacketSerializer::serializeResponse(LogoutResponse()), m_handlerFactory.createLoginRequestHandler());
+    return Helper::buildRequestResult(JsonResponsePacketSerializer::serializeResponse(LogoutResponse()), m_handlerFactory.createLoginRequestHandler());
 
 }
 
@@ -90,7 +86,7 @@ RequestResult MenuRequestHandler::getRooms(RequestInfo reqInfo)
 
     
     // build and return the result
-    return buildRequestResult(JsonResponsePacketSerializer::serializeResponse(roomResp), this);
+    return Helper::buildRequestResult(JsonResponsePacketSerializer::serializeResponse(roomResp), this);
 }
 
 RequestResult MenuRequestHandler::getPlayersInRoom(RequestInfo reqInfo)
@@ -125,7 +121,7 @@ RequestResult MenuRequestHandler::getPlayersInRoom(RequestInfo reqInfo)
     GetPlayersInRoomResponse playersInRoomResp = GetPlayersInRoomResponse{players};
 
     // build and return the result
-    return buildRequestResult(JsonResponsePacketSerializer::serializeResponse(playersInRoomResp), this);
+    return Helper::buildRequestResult(JsonResponsePacketSerializer::serializeResponse(playersInRoomResp), this);
 }
 
 RequestResult MenuRequestHandler::getPersonalStats(RequestInfo reqInfo)
@@ -137,7 +133,7 @@ RequestResult MenuRequestHandler::getPersonalStats(RequestInfo reqInfo)
     GetPersonalStatsResponse personalStatsResp = GetPersonalStatsResponse{ 1, userStats };
     
     // build and return the result
-    return buildRequestResult(JsonResponsePacketSerializer::serializeResponse(personalStatsResp), this);
+    return Helper::buildRequestResult(JsonResponsePacketSerializer::serializeResponse(personalStatsResp), this);
 
 }
 
@@ -150,7 +146,7 @@ RequestResult MenuRequestHandler::getHighScore(RequestInfo reqInfo)
     GetHighScoreResponse highScoreResp = GetHighScoreResponse{ 1, highScore };
     
     // build and return the result
-    return buildRequestResult(JsonResponsePacketSerializer::serializeResponse(highScoreResp), this);
+    return Helper::buildRequestResult(JsonResponsePacketSerializer::serializeResponse(highScoreResp), this);
 }
 
 RequestResult MenuRequestHandler::joinRoom(RequestInfo reqInfo)
@@ -180,7 +176,7 @@ RequestResult MenuRequestHandler::joinRoom(RequestInfo reqInfo)
 
 
     //  build and return the result
-    return buildRequestResult(JsonResponsePacketSerializer::serializeResponse(JoinRoomResponse()), this);
+    return Helper::buildRequestResult(JsonResponsePacketSerializer::serializeResponse(JoinRoomResponse()), this);
 }
 
 RequestResult MenuRequestHandler::createRoom(RequestInfo reqInfo)
@@ -191,7 +187,7 @@ RequestResult MenuRequestHandler::createRoom(RequestInfo reqInfo)
     // if the player chose an invalid max-players value
     if (newRoomReq.maxPlayers <= 0 || newRoomReq.maxPlayers > LIMIT_OF_MAX_PLAYERS_IN_ROOM)
     {
-        buildRequestResult(JsonResponsePacketSerializer::serializeResponse(ErrorResponse()), this);
+        Helper::buildRequestResult(JsonResponsePacketSerializer::serializeResponse(ErrorResponse()), this);
     }
 
     // build the room metadata
@@ -212,5 +208,5 @@ RequestResult MenuRequestHandler::createRoom(RequestInfo reqInfo)
     // build and return the result
 	// TODO: update when room handlers are implemented
     CreateRoomResponse createRoomResponse = CreateRoomResponse{ 1, newRoomData };
-    return buildRequestResult(JsonResponsePacketSerializer::serializeResponse(createRoomResponse), this);
+    return Helper::buildRequestResult(JsonResponsePacketSerializer::serializeResponse(createRoomResponse), this);
 }

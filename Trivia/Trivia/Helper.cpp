@@ -94,3 +94,9 @@ void Helper::setConsoleColor(unsigned int color)
 	SetConsoleTextAttribute(hConsole, color);
 }
 
+RequestResult Helper::buildRequestResult(const Buffer& buff, IRequestHandler* newHandler)
+{
+	return { buff, newHandler };
+
+}
+
