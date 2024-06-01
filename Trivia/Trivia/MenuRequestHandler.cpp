@@ -168,7 +168,7 @@ RequestResult MenuRequestHandler::joinRoom(RequestInfo reqInfo)
         if (currRoomData.id == joinRoomReq.roomID)
         {
             // get the room
-			Room currRoom = this->m_handlerFactory.getRoomManager().getRoom(currRoomData.id);
+			Room& currRoom = this->m_handlerFactory.getRoomManager().getRoom(currRoomData.id);
 
             // join the room
             currRoom.addUser(this->m_user);
