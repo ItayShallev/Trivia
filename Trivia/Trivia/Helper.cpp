@@ -1,3 +1,4 @@
+#include <Windows.h>
 #include "Helper.h"
 
 
@@ -83,3 +84,13 @@ RequestId Helper::convertCharsToRequestId(const unsigned char& first, const unsi
 {
 	return static_cast<RequestId>((Helper::charToInt(first) * DOZEN_MULTIPLIER) + Helper::charToInt(second));
 }
+
+
+void Helper::setConsoleColor(unsigned int color)
+{
+	HANDLE hConsole;
+
+	hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+	SetConsoleTextAttribute(hConsole, color);
+}
+

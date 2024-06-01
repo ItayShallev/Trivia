@@ -110,3 +110,10 @@ FOREIGN KEY (USERNAME) REFERENCES USERS(USERNAME));)"
 #define LEADERBOARD_MIN_GAMES_TO_QUALIFY 5
 #define WINS_WEIGHT 2
 #define AVERAGE_ANSWER_TIME_WEIGHT 1
+
+
+// ************************** Console Colors *************************
+#define GREEN	2
+#define WHITE	15
+#define CYAN	3
+#define GREY	7

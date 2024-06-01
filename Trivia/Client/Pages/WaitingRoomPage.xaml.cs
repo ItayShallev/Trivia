@@ -28,6 +28,7 @@ namespace Client.Pages
         private uint _usersCount;
         private uint _maxUsers;
         private RoomData _roomData;
+        private Timer _timer;
 
         public uint MaxUsers
         {
@@ -63,7 +64,7 @@ namespace Client.Pages
             this._roomData = roomData;
             MaxUsers = roomData.MaxPlayers;
 
-            Timer timer = new Timer(UpdateUI, null, 0, 3000);
+            _timer = new Timer(UpdateUI, null, 0, 3000);
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
