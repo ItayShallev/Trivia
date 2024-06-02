@@ -100,3 +100,15 @@ RequestResult Helper::buildRequestResult(const Buffer& buff, IRequestHandler* ne
 
 }
 
+GetRoomStateResponse Helper::buildRoomStateResponse(const RoomState& roomState)
+{
+	// build and return the room state response
+	return {
+		1,
+		roomState.hasGameBegun,
+		roomState.players,
+		roomState.questionCount,
+		roomState.answerTimeout
+	};
+}
+

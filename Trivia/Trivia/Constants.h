@@ -50,8 +50,8 @@ enum ResponseId
 enum RoomStatus
 {
 	Waiting = 0,
-	Playing = 1,
-	Finished = 2 // future use?
+	Playing,
+	Closed
 };
 
 

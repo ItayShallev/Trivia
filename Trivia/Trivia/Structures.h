@@ -207,3 +207,11 @@ struct RequestResult
 	Buffer response;
 	IRequestHandler* newHandler;
 };
+
+struct RoomState
+{
+	bool hasGameBegun;
+	vector<string> players;
+	uint questionCount;
+	uint answerTimeout;
+};

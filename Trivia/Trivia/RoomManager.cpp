@@ -22,7 +22,7 @@ void RoomManager::createRoom(LoggedUser& host, RoomData& roomMetadata)
 	Room* newRoom = new Room(roomMetadata);
 
 	// add the host
-	newRoom->addUser(host);
+	newRoom->addUser(&host);
 
 	// insert the room into the map
 	this->m_rooms.insert(pair<uint, Room*>(roomMetadata.id, newRoom));
@@ -32,6 +32,31 @@ void RoomManager::deleteRoom(uint roomId)
 {
 	// delete the room from the map
 	this->m_rooms.erase(roomId);
+}
+
+RoomState RoomManager::getRoomState(uint roomId)
+{
+	// get the room
+	Room& room = getRoom(roomId);
+
+	// build and return the room state
+	return {
+		room.getRoomStatus() == RoomStatus::Playing,
+		room.getAllUsers(),
+		room.getNumOfQuestions(),
+		room.getTimePerQuestion()
+	};
+}
+
+RoomState RoomManager::getRoomState(Room& room)
+{
+	// build and return the room state
+	return {
+		room.getRoomStatus() == RoomStatus::Playing,
+		room.getAllUsers(),
+		room.getNumOfQuestions(),
+		room.getTimePerQuestion()
+	};
 }
 
 RoomStatus RoomManager::getRoomStatus(uint roomId)

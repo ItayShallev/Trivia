@@ -15,6 +15,8 @@ public:
 	static uint generateRoomID();
 	void createRoom(LoggedUser& host, RoomData& roomMetadata);
 	void deleteRoom(uint roomId);
+	RoomState getRoomState(uint roomId);
+	RoomState getRoomState(Room& room);
 	RoomStatus getRoomStatus(uint roomId);
 	vector<RoomData> getRooms();
 	Room& getRoom(uint roomId);

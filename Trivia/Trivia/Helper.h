@@ -17,5 +17,5 @@ public:
 	static void setConsoleColor(unsigned int color);
 
 	static RequestResult buildRequestResult(const Buffer& buff, IRequestHandler* newHandler);
-
+	static GetRoomStateResponse buildRoomStateResponse(const RoomState& roomState);
 };
