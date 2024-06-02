@@ -39,13 +39,13 @@ namespace Client.Pages
             UserGreetingTextBlock.Text = "Welcome " + this._username + "!";
         }
 
-        private void BtnPersonalStats_Click(object sender, RoutedEventArgs e)
+        private void BtnPersonalStats_OnClick(object sender, RoutedEventArgs e)
         {
             PersonalStatsPage personalStatsPage = new PersonalStatsPage(this._username);
             NavigationService.Navigate(personalStatsPage);
         }
 
-        private void BtnLeaderboard_Click(object sender, RoutedEventArgs e)
+        private void BtnLeaderboard_OnClick(object sender, RoutedEventArgs e)
         {
             LeaderboardPage leaderboardPage = new LeaderboardPage();
             NavigationService.Navigate(leaderboardPage);
