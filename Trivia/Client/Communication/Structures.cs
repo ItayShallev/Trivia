@@ -83,6 +83,16 @@ namespace Client.Communication
         }
     }
 
+    public struct GetRoomStateRequest
+    {
+        [JsonPropertyName("roomId")] public uint RoomId { get; set; } = 0;
+
+        public GetRoomStateRequest(uint roomId)
+        {
+            RoomId = roomId;
+        }
+    }
+
 
     // ******************* RESPONSE STRUCTURES *******************
     public struct ErrorResponse
@@ -200,6 +210,24 @@ namespace Client.Communication
         public CheckIfUserExistsResponse(bool exists)
         {
             Exists = exists;
+        }
+    }
+
+    public struct GetRoomStateResponse
+    {
+        [JsonPropertyName("status")] public uint Status { get; set; } = 1;
+        [JsonPropertyName("hasGameBegan")] public bool HasGameBegan { get; set; } = false;
+        [JsonPropertyName("players")] public List<string> Players { get; set; } = new List<string>();
+        [JsonPropertyName("questionCount")] public uint QuestionCount { get; set; } = 0;
+        [JsonPropertyName("answerTimeout")] public uint AnswerTimeout { get; set; } = 0;
+
+        public GetRoomStateResponse(uint status, bool hasGameBegan, List<string> players, uint questionCount, uint answerTimeout)
+        {
+            Status = status;
+            HasGameBegan = hasGameBegan;
+            Players = players;
+            QuestionCount = questionCount;
+            AnswerTimeout = answerTimeout;
         }
     }
 

@@ -40,6 +40,11 @@ namespace Client
         public const string GetStatisticsRequestId = "08";
         public const string GetHighScoreRequestId = "09";
         public const string CheckIfUserExistsRequestId = "10";
+        public const string CloseRoomRequestId = "11";
+        public const string StartGameRequestId = "12";
+        public const string GetRoomStateRequestId = "13";
+        public const string LeaveRoomRequestId = "14";
+
 
         public const string LogoutResponseId = "00";
         public const string LoginResponseId = "01";

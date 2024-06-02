@@ -94,19 +94,19 @@ namespace Client.Pages
 
         private void UpdateUI(object state)
         {
-            // Sending a request to get the list of players in the room
-            Helper.SendRequest(Constants.GetPlayersInRoomRequestId, JsonSerializer.Serialize(new GetPlayersInRoomRequest()));
+            // Sending a request to get the room state
+            Helper.SendRequest(Constants.GetRoomStateRequestId, JsonSerializer.Serialize(new GetRoomStateRequest()));
 
             // Getting the response from the server
-            GetPlayersInRoomResponse response = Helper.GetResponse<GetPlayersInRoomResponse>();
+            GetRoomStateResponse getRoomStateResponse = Helper.GetResponse<GetRoomStateResponse>();
 
-            // Updating the users list and users count
+            // Updating the waiting room UI
             Application.Current.Dispatcher.Invoke(() =>     // To change the UI looks, the program needs to switch to the UI thread
             {
-                if (UsersCount != response.Players.Count)
+                if (UsersCount != getRoomStateResponse.Players.Count)
                 {
-                    UpdateUsersList(response.Players);
-                    UsersCount = (uint)response.Players.Count;
+                    UpdateUsersList(getRoomStateResponse.Players);
+                    UsersCount = (uint)getRoomStateResponse.Players.Count;
                 }
             });
         }
