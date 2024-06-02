@@ -6,13 +6,13 @@ class Room
 {
 private:
 	RoomData m_metadata;
-	vector<LoggedUser> m_users;
+	vector<LoggedUser*> m_users;
 
 public:
 	Room(uint id);
 	Room(const RoomData& metadata);
-	void addUser(LoggedUser& user);
-	void removeUser(LoggedUser user);
+	void addUser(LoggedUser* user);
+	void removeUser(LoggedUser* user);
 	vector<string> getAllUsers();
 
 
@@ -21,7 +21,7 @@ public:
 	void setMaxPlayers(const uint maxPlayers);
 	void setNumOfQuestions(const uint numOfQuestions);
 	void setTimePerQuestion(const uint timePerQuestion);
-	void setRoomState(const RoomState state);
+	void setRoomStatus(const RoomStatus state);
 
 	// getters
 	RoomData getRoomData();
@@ -30,7 +30,7 @@ public:
 	uint getMaxPlayers();
 	uint getNumOfQuestions();
 	uint getTimePerQuestion();
-	RoomState getRoomState();
+	RoomStatus getRoomStatus();
 
 };
 

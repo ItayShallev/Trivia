@@ -15,8 +15,6 @@ private:
 	LoggedUser m_user;
 	RequestHandlerFactory& m_handlerFactory;
 
-
-	RequestResult buildRequestResult(const Buffer& buff, IRequestHandler* newHandler);
 	RequestResult signout(RequestInfo reqInfo);
 	RequestResult getRooms(RequestInfo reqInfo);
 	RequestResult getPlayersInRoom(RequestInfo reqInfo);

@@ -113,6 +113,6 @@ void to_json(json& j, const RoomData& response)
 		{"maxPlayers", response.maxPlayers},
 		{"numOfQuestionsInGame", response.numOfQuestionsInGame},
 		{"timePerQuestion", response.timePerQuestion},
-		{"roomState", response.roomState}
+		{"roomStatus", response.roomStatus}
 	};
 }

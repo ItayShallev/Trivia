@@ -20,7 +20,11 @@ enum RequestId
 	JoinRoomRequestId,
 	GetStatisticsRequestId,
 	GetHighScoreRequestId,
-	CheckIfUserExistsRequestId
+	CheckIfUserExistsRequestId,
+	CloseRoomRequestId,
+	StartGameRequestId,
+	GetRoomStateRequestId,
+	LeaveRoomRequestId
 };
 
 
@@ -43,11 +47,11 @@ enum ResponseId
 	LeaveRoomResponseId
 };
 
-enum RoomState
+enum RoomStatus
 {
 	Waiting = 0,
-	Playing = 1,
-	Finished = 2 // future use?
+	Playing,
+	Closed
 };
 
 

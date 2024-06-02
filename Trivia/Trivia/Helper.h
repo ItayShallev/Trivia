@@ -15,4 +15,7 @@ public:
 	static int charToInt(const unsigned char& digit);
 	static RequestId convertCharsToRequestId(const unsigned char& first, const unsigned char& second);
 	static void setConsoleColor(unsigned int color);
+
+	static RequestResult buildRequestResult(const Buffer& buff, IRequestHandler* newHandler);
+	static GetRoomStateResponse buildRoomStateResponse(const RoomState& roomState);
 };

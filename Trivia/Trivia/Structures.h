@@ -25,7 +25,7 @@ struct RoomData
 	uint maxPlayers;
 	uint numOfQuestionsInGame;
 	uint timePerQuestion;
-	RoomState roomState;
+	RoomStatus roomStatus;
 };
 void to_json(json& j, const RoomData& response);
 
@@ -206,4 +206,12 @@ struct RequestResult
 {
 	Buffer response;
 	IRequestHandler* newHandler;
+};
+
+struct RoomState
+{
+	bool hasGameBegun;
+	vector<string> players;
+	uint questionCount;
+	uint answerTimeout;
 };
