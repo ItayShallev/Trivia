@@ -234,7 +234,7 @@ namespace Client.Communication
     public struct RoomData
     {
         [JsonPropertyName("id")] public uint Id { get; set; } = 0;
-        [JsonPropertyName("name")] public string Name { get; set; } = "lkdsnvlsdknfldsnlfnsdlfnlksdnflnkdslfknsdlnlk";
+        [JsonPropertyName("name")] public string Name { get; set; } = "";
         [JsonPropertyName("maxPlayers")] public uint MaxPlayers { get; set; } = 0;
         [JsonPropertyName("numOfQuestionsInGame")] public uint NumOfQuestionsInGame { get; set; } = 0;
         [JsonPropertyName("timePerQuestion")] public uint TimePerQuestion { get; set; } = 0;

@@ -419,9 +419,10 @@ vector<string> SqliteDatabase::getHighScores()
 	const string statement = R"(
 					BEGIN TRANSACTION;
 					
-					SELECT USERNAME,
-					(NUM_GAMES_WON / NUM_GAMES_PLAYED) * )" + to_string(WINS_WEIGHT) +
-					R"(((1 - (NUM_GAMES_WON / NUM_GAMES_PLAYED)) * (1 / AVERAGE_ANSWER_TIME) * )" + to_string(AVERAGE_ANSWER_TIME_WEIGHT) + R"( AS LeaderboardScore
+					SELECT
+					USERNAME,
+					(NUM_GAMES_WON / NUM_GAMES_PLAYED) * )" + to_string(WINS_WEIGHT) + R"( As WinRate,
+					(1 - (NUM_GAMES_WON / NUM_GAMES_PLAYED)) * (1.0 / AVERAGE_ANSWER_TIME) * )" + to_string(AVERAGE_ANSWER_TIME_WEIGHT) + R"( AS LeaderboardScore
 					FROM STATISTICS
 					WHERE NUM_GAMES_PLAYED >= )" + to_string(LEADERBOARD_MIN_GAMES_TO_QUALIFY) + R"(
 					GROUP BY USERNAME
