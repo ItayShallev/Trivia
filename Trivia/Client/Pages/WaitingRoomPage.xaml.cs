@@ -30,19 +30,6 @@ namespace Client.Pages
         private RoomData _roomData;
         private Timer _timer;
 
-        public uint MaxUsers
-        {
-            get { return _maxUsers; }
-            set
-            {
-                if (_maxUsers != value)
-                {
-                    _maxUsers = value;
-                    OnPropertyChanged();
-                }
-            }
-        }
-
         public uint UsersCount
         {
             get { return _usersCount; }
@@ -56,12 +43,34 @@ namespace Client.Pages
             }
         }
 
+        public uint MaxUsers
+        {
+            get { return _maxUsers; }
+            set
+            {
+                if (_maxUsers != value)
+                {
+                    _maxUsers = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        public RoomData RoomData
+        {
+            get { return _roomData; }
+            set
+            {
+                _roomData = value;
+            }
+        }
+
         public WaitingRoomPage(RoomData roomData)
         {
             InitializeComponent();
             DataContext = this;         // Setting the DataContext to the current instance
 
-            this._roomData = roomData;
+            RoomData = roomData;
             MaxUsers = roomData.MaxPlayers;
 
             _timer = new Timer(UpdateUI, null, 0, 3000);
