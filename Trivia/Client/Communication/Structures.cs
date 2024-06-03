@@ -11,6 +11,16 @@ namespace Client.Communication
 {
 
     // ******************* REQUESTS STRUCTURES *******************
+    public struct LogoutRequest
+    {
+        [JsonPropertyName("username")] public string Username { get; set; } = "";
+
+        public LogoutRequest(string username)
+        {
+            Username = username;
+        }
+    }
+
     public struct LoginRequest
     {
         [JsonPropertyName("username")] public string Username { get; set; } = "";

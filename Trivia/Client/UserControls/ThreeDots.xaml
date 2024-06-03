@@ -6,10 +6,16 @@
     xmlns:local="clr-namespace:Client.UserControls"
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    d:DesignHeight="1140"
-    d:DesignWidth="675"
+    Width="100"
+    Height="100"
+    HorizontalAlignment="Right"
+    d:DesignHeight="100"
+    d:DesignWidth="100"
     mc:Ignorable="d">
-    <Grid Width="100" Height="100" HorizontalAlignment="Right" >
+    <Grid
+        Width="100"
+        Height="100"
+        HorizontalAlignment="Right">
         <materialDesign:PopupBox
             Width="75"
             Height="75"

@@ -91,7 +91,7 @@ namespace Client.Pages
             txtAvgAnswerTime.Text = "Average Answer Time: " + txtValues[3];
         }
 
-        private void UIElement_OnMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        private void GoBackArrow_OnGoBackClicked(object sender, RoutedEventArgs e)
         {
             NavigationService.GoBack();
         }

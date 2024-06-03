@@ -47,5 +47,10 @@ namespace Client.Pages
                 NavigationService.Navigate(menuPage);
             }
         }
+
+        private void GoBackArrow_OnGoBackClicked(object sender, RoutedEventArgs e)
+        {
+            NavigationService.GoBack();
+        }
     }
 }

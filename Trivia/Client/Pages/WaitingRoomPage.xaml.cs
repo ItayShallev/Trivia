@@ -16,6 +16,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Client.Communication;
+using Client.UserControls;
 using static Client.Constants;
 
 namespace Client.Pages
@@ -83,12 +84,6 @@ namespace Client.Pages
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        private void UIElement_OnMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
-            // Leave Room
-            NavigationService.GoBack();
-        }
-
         private void UpdateUsersList(List<string> players)
         {
             LBUsersList.Items.Clear();      // Removing all players boxes from the players list
@@ -118,6 +113,13 @@ namespace Client.Pages
                     UsersCount = (uint)getRoomStateResponse.Players.Count;
                 }
             });
+        }
+
+        private void GoBackArrow_OnGoBackClicked(object sender, RoutedEventArgs e)
+        {
+            ////////// Send Leave Room Request //////////
+            
+            NavigationService.GoBack();
         }
     }
 }

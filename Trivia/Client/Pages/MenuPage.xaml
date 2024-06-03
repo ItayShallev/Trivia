@@ -50,7 +50,7 @@
                     </Grid>
 
                     <Grid VerticalAlignment="Top" Row="1">
-                        <!--  Go Back Button  -->
+                        <userControls:GoBackArrow GoBackClicked="GoBackArrow_OnGoBackClicked" />
                     </Grid>
 
                     <Grid HorizontalAlignment="Right" Row="2">
@@ -76,13 +76,13 @@
                             </Button>
 
                             <TextBlock
-                                Text="Personal Stats"
+                                Margin="10"
                                 HorizontalAlignment="Center"
                                 VerticalAlignment="Bottom"
-                                Margin="10"
                                 FontSize="12"
                                 FontWeight="Medium"
-                                Foreground="Red"/>
+                                Foreground="Red"
+                                Text="Personal Stats" />
                         </Grid>
 
                         <Grid Column="1">
@@ -103,13 +103,13 @@
                             </Button>
 
                             <TextBlock
-                                Text="Leaderboard"
+                                Margin="10"
                                 HorizontalAlignment="Center"
                                 VerticalAlignment="Bottom"
-                                Margin="10"
                                 FontSize="12"
                                 FontWeight="Medium"
-                                Foreground="Green"/>
+                                Foreground="Green"
+                                Text="Leaderboard" />
                         </Grid>
                     </Grid>
 

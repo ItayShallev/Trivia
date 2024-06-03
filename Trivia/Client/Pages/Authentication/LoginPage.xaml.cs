@@ -1,6 +1,7 @@
 ﻿using Client.Communication;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Text.Json;
@@ -14,6 +15,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Client.UserControls;
 
 namespace Client.Pages
 {
@@ -48,6 +50,11 @@ namespace Client.Pages
                 MenuPage menuPage = new MenuPage(this._username);
                 NavigationService.Navigate(menuPage);
             }
+        }
+
+        private void GoBackArrow_OnGoBackClicked(object sender, RoutedEventArgs e)
+        {
+            NavigationService.GoBack();
         }
     }
 }

@@ -5,8 +5,8 @@
     xmlns:UserControls="clr-namespace:Client.UserControls"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="clr-namespace:Client.Pages"
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     Title="PersonalStatsPage"
     d:DesignHeight="1140"
     d:DesignWidth="675"
@@ -46,16 +46,7 @@
                     </Grid>
 
                     <Grid VerticalAlignment="Top" Row="1">
-                        <!-- Go Back Button -->
-
-                        <Image
-                            Width="43"
-                            Height="39"
-                            Margin="15,60,0,0"
-                            HorizontalAlignment="Left"
-                            VerticalAlignment="Top"
-                            MouseLeftButtonDown="UIElement_OnMouseLeftButtonDown"
-                            Source="/Media/GoBackArrow.png" />
+                        <UserControls:GoBackArrow GoBackClicked="GoBackArrow_OnGoBackClicked" />
                     </Grid>
 
                     <Grid Row="2">

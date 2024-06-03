@@ -109,5 +109,15 @@ namespace Client.Pages
             WaitingRoomPage newWaitingRoomPage = new WaitingRoomPage(room);
             NavigationService.Navigate(newWaitingRoomPage);
         }
+
+        private void GoBackArrow_OnGoBackClicked(object sender, RoutedEventArgs e)
+        {
+            Helper.SendRequest(Constants.LogoutRequestId, JsonSerializer.Serialize(new LogoutRequest(Username)));
+            LogoutResponse logoutResponse = Helper.GetResponse<LogoutResponse>();
+
+            // Navigating the user to the authentication page
+            AuthenticationPage authenticationPage = new AuthenticationPage();
+            NavigationService.Navigate(authenticationPage);
+        }
     }
 }

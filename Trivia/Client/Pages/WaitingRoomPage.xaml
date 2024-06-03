@@ -34,7 +34,7 @@
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="1*" />
-                        <RowDefinition Height="0.6*" />
+                        <RowDefinition Height="0.8*" />
                         <RowDefinition Height="1*" />
                         <RowDefinition Height="2*" />
                         <RowDefinition Height="7*" />
@@ -60,16 +60,7 @@
                     </Grid>
 
                     <Grid VerticalAlignment="Top" Row="1">
-                        <!--  Go Back Button  -->
-
-                        <Image
-                            Width="43"
-                            Height="39"
-                            Margin="15,5,0,0"
-                            HorizontalAlignment="Left"
-                            VerticalAlignment="Top"
-                            MouseLeftButtonDown="UIElement_OnMouseLeftButtonDown"
-                            Source="/Media/GoBackArrow.png" />
+                        <userControls:GoBackArrow GoBackClicked="GoBackArrow_OnGoBackClicked" />
                     </Grid>
 
                     <Grid Grid.Row="2">
@@ -100,10 +91,8 @@
                                     <RowDefinition />
                                 </Grid.RowDefinitions>
 
-                                <Grid Row="0" Margin="10">
-                                    <TextBlock
-                                        FontSize="20"
-                                        FontWeight="Medium">
+                                <Grid Margin="10" Row="0">
+                                    <TextBlock FontSize="20" FontWeight="Medium">
                                         <TextBlock.Text>
                                             <MultiBinding StringFormat="Room name: {0}">
                                                 <Binding Path="RoomData.Name" />
@@ -112,10 +101,8 @@
                                     </TextBlock>
                                 </Grid>
 
-                                <Grid Row="1" Margin="10">
-                                    <TextBlock
-                                        FontSize="20"
-                                        FontWeight="Medium">
+                                <Grid Margin="10" Row="1">
+                                    <TextBlock FontSize="20" FontWeight="Medium">
                                         <TextBlock.Text>
                                             <MultiBinding StringFormat="Number of questions: {0}">
                                                 <Binding Path="RoomData.NumOfQuestionsInGame" />
@@ -124,10 +111,8 @@
                                     </TextBlock>
                                 </Grid>
 
-                                <Grid Row="2" Margin="10">
-                                    <TextBlock
-                                        FontSize="20"
-                                        FontWeight="Medium">
+                                <Grid Margin="10" Row="2">
+                                    <TextBlock FontSize="20" FontWeight="Medium">
                                         <TextBlock.Text>
                                             <MultiBinding StringFormat="Time Per Question: {0} seconds">
                                                 <Binding Path="RoomData.TimePerQuestion" />

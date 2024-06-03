@@ -115,7 +115,7 @@ namespace Client.Pages
         //    txtFifthPlayer.Text = "5th: " + txtValues[4];
         //}
 
-        private void UIElement_OnMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        private void GoBackArrow_OnGoBackClicked(object sender, RoutedEventArgs e)
         {
             NavigationService.GoBack();
         }

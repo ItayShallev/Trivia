@@ -46,7 +46,7 @@
                     </Grid>
 
                     <Grid VerticalAlignment="Top" Row="1">
-                        <!-- Go Back Button -->
+                        <UserControls:GoBackArrow GoBackClicked="GoBackArrow_OnGoBackClicked" />
                     </Grid>
 
                     <Grid Row="2">
@@ -55,9 +55,9 @@
                             Margin="10"
                             AutoGenerateColumns="False"
                             CanUserAddRows="False"
-                            CanUserResizeColumns="False"
+                            CanUserDeleteRows="False"
                             CanUserReorderColumns="False"
-                            CanUserDeleteRows="False">
+                            CanUserResizeColumns="False">
                             <DataGrid.Columns>
                                 <DataGridTextColumn
                                     Width="75"

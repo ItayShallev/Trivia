@@ -30,17 +30,18 @@
 
                     <Grid Row="0">
                         <userControls:ThreeDots />
+                        <userControls:GoBackArrow Margin="10" GoBackClicked="GoBackArrow_OnGoBackClicked" />
                     </Grid>
 
-                    <Grid Row="1" VerticalAlignment="Center">
+                    <Grid VerticalAlignment="Center" Row="1">
                         <userControls:Logo />
                     </Grid>
 
-                    <Grid Row="2" VerticalAlignment="Center">
+                    <Grid VerticalAlignment="Center" Row="2">
                         <TextBlock
-                            VerticalAlignment="Top"
-                            HorizontalAlignment="Center"
                             Margin="30"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Top"
                             FontSize="35"
                             FontWeight="Medium"
                             Text="We Found You in Our System!" />

@@ -27,14 +27,13 @@ namespace Client.Pages
             InitializeComponent();
         }
 
-
         private void BtnContinue_OnClick(object sender, RoutedEventArgs e)
         {
             // Checking if the user is known in the system before proceeding to the next page (Login / Signup)
             Helper.SendRequest(Constants.CheckIfUserExistsRequestId, JsonSerializer.Serialize(new CheckIfUserExistsRequest(UsernameTextBox.Text)));
             CheckIfUserExistsResponse checkIfUserExistsResponse = Helper.GetResponse<CheckIfUserExistsResponse>();      // Getting the server's response
 
-            // Navigating the user to the next authentication page
+            // Navigating the user back to the authentication page
             Page nextPage = (checkIfUserExistsResponse.Exists) ? new LoginPage(UsernameTextBox.Text) : new SignupPage(UsernameTextBox.Text);
             NavigationService.Navigate(nextPage);
         }

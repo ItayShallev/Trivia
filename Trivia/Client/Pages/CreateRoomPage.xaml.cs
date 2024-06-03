@@ -55,11 +55,9 @@ namespace Client.Pages
             }
         }
 
-        //private void GoBackArrow_Click(object sender, EventArgs e)
-        //{
-        //    // Handle the Click event here
-        //    MessageBox.Show("GoBackArrow clicked!");
-        //    // Add your navigation logic here if needed
-        //}
+        private void GoBackArrow_OnGoBackClicked(object sender, RoutedEventArgs e)
+        {
+            NavigationService.GoBack();
+        }
     }
 }
