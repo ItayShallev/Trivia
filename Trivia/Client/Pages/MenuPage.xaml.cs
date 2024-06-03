@@ -39,13 +39,13 @@ namespace Client.Pages
             UserGreetingTextBlock.Text = "Welcome " + this._username + "!";
         }
 
-        private void BtnPersonalStats_Click(object sender, RoutedEventArgs e)
+        private void BtnPersonalStats_OnClick(object sender, RoutedEventArgs e)
         {
             PersonalStatsPage personalStatsPage = new PersonalStatsPage(this._username);
             NavigationService.Navigate(personalStatsPage);
         }
 
-        private void BtnLeaderboard_Click(object sender, RoutedEventArgs e)
+        private void BtnLeaderboard_OnClick(object sender, RoutedEventArgs e)
         {
             LeaderboardPage leaderboardPage = new LeaderboardPage();
             NavigationService.Navigate(leaderboardPage);
@@ -108,6 +108,16 @@ namespace Client.Pages
             // Navigating the user to the waiting room
             WaitingRoomPage newWaitingRoomPage = new WaitingRoomPage(room);
             NavigationService.Navigate(newWaitingRoomPage);
+        }
+
+        private void GoBackArrow_OnGoBackClicked(object sender, RoutedEventArgs e)
+        {
+            Helper.SendRequest(Constants.LogoutRequestId, JsonSerializer.Serialize(new LogoutRequest(Username)));
+            LogoutResponse logoutResponse = Helper.GetResponse<LogoutResponse>();
+
+            // Navigating the user to the authentication page
+            AuthenticationPage authenticationPage = new AuthenticationPage();
+            NavigationService.Navigate(authenticationPage);
         }
     }
 }

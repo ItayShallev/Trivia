@@ -1,47 +1,82 @@
 ﻿<Page
+    x:Class="Client.Pages.LeaderboardPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-    xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+    xmlns:UserControls="clr-namespace:Client.UserControls"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="clr-namespace:Client.Pages"
-    xmlns:UserControls="clr-namespace:Client.UserControls" x:Class="Client.Pages.LeaderboardPage"
-    mc:Ignorable="d" 
-    d:DesignHeight="760"
-    d:DesignWidth="450"
+    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     Title="LeaderboardPage"
+    d:DesignHeight="1140"
+    d:DesignWidth="675"
     Loaded="LeaderboardPage_OnLoaded"
-    >
+    mc:Ignorable="d">
 
-    <Grid Background="White">
-        <Grid Grid.Row="0" VerticalAlignment="Top" Margin="0,10,0,0">
-            <Image
-                Width="40"
-                Height="40"
-                Margin="15,0,0,0"
-                HorizontalAlignment="Left"
-                Source="pack://siteoforigin:,,,/Media/TriviaLogo.png" />
+    <Grid>
+        <materialDesign:Card
+            Margin="25"
+            materialDesign:ShadowAssist.ShadowDepth="Depth4"
+            Background="{DynamicResource MaterialDesignPaper}"
+            UniformCornerRadius="15">
+            <materialDesign:DialogHost>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="1*" />
+                        <RowDefinition Height="1*" />
+                        <RowDefinition Height="10*" />
+                    </Grid.RowDefinitions>
 
+                    <Grid Row="0">
+                        <UserControls:Logo
+                            Width="70"
+                            Height="70"
+                            HorizontalAlignment="Left" />
 
-            <TextBlock
-                x:Name="LeaderboardHeader"
-                HorizontalAlignment="Center"
-                VerticalAlignment="Center"
-                FontFamily="Montserrat"
-                FontSize="18"
-                FontWeight="Bold"
-                Text="Leaderboard"/>
+                        <TextBlock
+                            x:Name="LeaderboardHeader"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            FontFamily="Montserrat"
+                            FontSize="24"
+                            FontWeight="Bold"
+                            Text="Leaderboard" />
 
-            <UserControls:ThreeDots />
-        </Grid>
-        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,-100,0,0">
-            <TextBlock x:Name="txtFirstPlayer" Text="1st: TBD" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="22"/>
-            <TextBlock x:Name="txtSecondPlayer" Text="2nd: TBD" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="22"/>
-            <TextBlock x:Name="txtThirdPlayer" Text="3rd: TBD" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="22"/>
-            <TextBlock x:Name="txtFourthPlayer" Text="4th: TBD" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="22"/>
-            <TextBlock x:Name="txtFifthPlayer" Text="5th: TBD" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="22"/>
-        </StackPanel>
-        <Image HorizontalAlignment="Left" Height="39" Margin="15,60,0,0" VerticalAlignment="Top" Width="43" Source="/Media/GoBackArrow.png" MouseLeftButtonDown="UIElement_OnMouseLeftButtonDown"/>
+                        <UserControls:ThreeDots />
+                    </Grid>
 
+                    <Grid VerticalAlignment="Top" Row="1">
+                        <UserControls:GoBackArrow GoBackClicked="GoBackArrow_OnGoBackClicked" />
+                    </Grid>
+
+                    <Grid Row="2">
+                        <DataGrid
+                            x:Name="LeaderboardDataGrid"
+                            Margin="10"
+                            AutoGenerateColumns="False"
+                            CanUserAddRows="False"
+                            CanUserDeleteRows="False"
+                            CanUserReorderColumns="False"
+                            CanUserResizeColumns="False">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn
+                                    Width="75"
+                                    Binding="{Binding Rank}"
+                                    Header="Rank" />
+                                <DataGridTextColumn
+                                    Width="*"
+                                    Binding="{Binding Name}"
+                                    Header="Name" />
+                                <DataGridTextColumn
+                                    Width="100"
+                                    Binding="{Binding Score}"
+                                    Header="Score" />
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </Grid>
+                </Grid>
+            </materialDesign:DialogHost>
+        </materialDesign:Card>
     </Grid>
 
 </Page>

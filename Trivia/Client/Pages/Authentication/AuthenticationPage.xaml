@@ -8,8 +8,8 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:userControls="clr-namespace:Client.UserControls"
     Title="AuthenticationPage"
-    d:DesignHeight="760"
-    d:DesignWidth="450"
+    d:DesignHeight="1140"
+    d:DesignWidth="675"
     mc:Ignorable="d">
 
     <Grid>
@@ -19,49 +19,64 @@
             Background="{DynamicResource MaterialDesignPaper}"
             UniformCornerRadius="15">
             <materialDesign:DialogHost x:Name="DialogHost" CloseOnClickAway="True">
-                <StackPanel>
-                    <userControls:ThreeDots />
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="1*" />
+                        <RowDefinition Height="2*" />
+                        <RowDefinition Height="3*" />
+                        <RowDefinition Height="3*" />
+                        <RowDefinition Height="3*" />
+                    </Grid.RowDefinitions>
 
-                    <Image
-                        Height="100"
-                        Margin="0,60,0,5"
-                        Source="pack://siteoforigin:,,,/Media/TriviaLogo.png" />
+                    <Grid Row="0">
+                        <userControls:ThreeDots />
+                    </Grid>
 
-                    <TextBlock
-                        Margin="0,25,0,5"
-                        HorizontalAlignment="Center"
-                        FontSize="28"
-                        FontWeight="Bold"
-                        Text="Welcome!" />
+                    <Grid VerticalAlignment="Center" Row="1">
+                        <userControls:Logo />
+                    </Grid>
 
-                    <TextBlock
-                        HorizontalAlignment="Center"
-                        FontSize="17"
-                        FontWeight="SemiBold"
-                        Text="Log Into Your Account" />
+                    <Grid VerticalAlignment="Center" Row="2">
+                        <TextBlock
+                            Margin="30"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            FontSize="50"
+                            FontWeight="Medium"
+                            Text="Welcome!" />
 
-                    <TextBox
-                        x:Name="UsernameTextBox"
-                        Width="300"
-                        Margin="0,50,0,0"
-                        materialDesign:HintAssist.Hint="Enter Username"
-                        BorderBrush="{DynamicResource MaterialDesignDivider}"
-                        BorderThickness="2"
-                        FontSize="18"
-                        Style="{StaticResource MaterialDesignOutlinedTextBox}" />
+                        <TextBlock
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Bottom"
+                            FontSize="25"
+                            FontWeight="Normal"
+                            Text="Log Into Your Account" />
+                    </Grid>
 
-                    <Button
-                        x:Name="BtnContinue"
-                        Width="300"
-                        Height="53"
-                        Margin="0,20,0,0"
-                        materialDesign:ButtonAssist.CornerRadius="10"
-                        materialDesign:ShadowAssist.ShadowDepth="Depth0"
-                        Click="BtnContinue_OnClick"
-                        Content="Continue"
-                        FontSize="18"
-                        Style="{StaticResource MaterialDesignFlatMidBgButton}" />
-                </StackPanel>
+                    <Grid Margin="40" Row="3">
+                        <TextBox
+                            x:Name="UsernameTextBox"
+                            Width="300"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Top"
+                            materialDesign:HintAssist.Hint="Enter Username"
+                            BorderBrush="{DynamicResource MaterialDesignDivider}"
+                            BorderThickness="2"
+                            FontSize="18"
+                            Style="{StaticResource MaterialDesignOutlinedTextBox}" />
+
+                        <Button
+                            x:Name="BtnContinue"
+                            Width="300"
+                            Height="53"
+                            materialDesign:ButtonAssist.CornerRadius="10"
+                            materialDesign:ShadowAssist.ShadowDepth="Depth0"
+                            Click="BtnContinue_OnClick"
+                            Content="Continue"
+                            FontSize="18"
+                            Style="{StaticResource MaterialDesignFlatMidBgButton}" />
+                    </Grid>
+                </Grid>
             </materialDesign:DialogHost>
         </materialDesign:Card>
     </Grid>

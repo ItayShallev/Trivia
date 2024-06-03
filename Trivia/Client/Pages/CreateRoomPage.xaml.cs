@@ -28,11 +28,6 @@ namespace Client.Pages
             InitializeComponent();
         }
 
-        private void UIElement_OnMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
-            NavigationService.GoBack();
-        }
-
         // Checks if the rooms settings are valid and ready for "CreateRoom" Request
         private bool AreRoomSettingsValid()
         {
@@ -45,7 +40,7 @@ namespace Client.Pages
             {
                 // Sending a create room request to the server
                 CreateRoomRequest createRoomRequest = new CreateRoomRequest(RoomNameTextBox.Text,
-                    uint.Parse(MaxPlayersComboBox.Text), 20, uint.Parse(QuetionTimoutLable.Content.ToString()));
+                    uint.Parse(MaxPlayersComboBox.Text), uint.Parse(QuestionCountLabel.Content.ToString()), uint.Parse(TimePerQuestionLabel.Content.ToString()));
                 Helper.SendRequest(Constants.CreateRoomRequestId, JsonSerializer.Serialize(createRoomRequest));
 
                 CreateRoomResponse createRoomResponse = Helper.GetResponse<CreateRoomResponse>();       // Getting the server's response
@@ -58,6 +53,11 @@ namespace Client.Pages
                     NavigationService.Navigate(waitingRoomPage);
                 }
             }
+        }
+
+        private void GoBackArrow_OnGoBackClicked(object sender, RoutedEventArgs e)
+        {
+            NavigationService.GoBack();
         }
     }
 }

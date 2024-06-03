@@ -16,6 +16,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Client.Communication;
+using Client.UserControls;
 using static Client.Constants;
 
 namespace Client.Pages
@@ -30,19 +31,6 @@ namespace Client.Pages
         private RoomData _roomData;
         private Timer _timer;
 
-        public uint MaxUsers
-        {
-            get { return _maxUsers; }
-            set
-            {
-                if (_maxUsers != value)
-                {
-                    _maxUsers = value;
-                    OnPropertyChanged();
-                }
-            }
-        }
-
         public uint UsersCount
         {
             get { return _usersCount; }
@@ -56,12 +44,34 @@ namespace Client.Pages
             }
         }
 
+        public uint MaxUsers
+        {
+            get { return _maxUsers; }
+            set
+            {
+                if (_maxUsers != value)
+                {
+                    _maxUsers = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        public RoomData RoomData
+        {
+            get { return _roomData; }
+            set
+            {
+                _roomData = value;
+            }
+        }
+
         public WaitingRoomPage(RoomData roomData)
         {
             InitializeComponent();
             DataContext = this;         // Setting the DataContext to the current instance
 
-            this._roomData = roomData;
+            RoomData = roomData;
             MaxUsers = roomData.MaxPlayers;
 
             _timer = new Timer(UpdateUI, null, 0, 3000);
@@ -72,12 +82,6 @@ namespace Client.Pages
         protected void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-
-        private void UIElement_OnMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
-            // Leave Room
-            NavigationService.GoBack();
         }
 
         private void UpdateUsersList(List<string> players)
@@ -109,6 +113,13 @@ namespace Client.Pages
                     UsersCount = (uint)getRoomStateResponse.Players.Count;
                 }
             });
+        }
+
+        private void GoBackArrow_OnGoBackClicked(object sender, RoutedEventArgs e)
+        {
+            ////////// Send Leave Room Request //////////
+            
+            NavigationService.GoBack();
         }
     }
 }

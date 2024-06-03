@@ -47,7 +47,7 @@ namespace Client.Pages
                 List<string> errorList = BuildErrorList(NUM_MAX_PLAYERS);
 
                 // set the text elements
-                SetTxtElements(errorList);
+                //SetTxtElements(errorList);
 
                 return;
             }
@@ -62,7 +62,7 @@ namespace Client.Pages
             MakeListXelements(players, NUM_MAX_PLAYERS);
 
             // set the txt boxes values accordingly
-            SetTxtElements(players);
+            //SetTxtElements(players);
 
         }
 
@@ -106,16 +106,16 @@ namespace Client.Pages
             return errorList;
         }
 
-        private void SetTxtElements(List<string> txtValues)
-        {
-            txtFirstPlayer.Text = "1st: " + txtValues[0];
-            txtSecondPlayer.Text = "2nd: " + txtValues[1];
-            txtThirdPlayer.Text = "3rd: " + txtValues[2];
-            txtFourthPlayer.Text = "4th: " + txtValues[3];
-            txtFifthPlayer.Text = "5th: " + txtValues[4];
-        }
+        //private void SetTxtElements(List<string> txtValues)
+        //{
+        //    txtFirstPlayer.Text = "1st: " + txtValues[0];
+        //    txtSecondPlayer.Text = "2nd: " + txtValues[1];
+        //    txtThirdPlayer.Text = "3rd: " + txtValues[2];
+        //    txtFourthPlayer.Text = "4th: " + txtValues[3];
+        //    txtFifthPlayer.Text = "5th: " + txtValues[4];
+        //}
 
-        private void UIElement_OnMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        private void GoBackArrow_OnGoBackClicked(object sender, RoutedEventArgs e)
         {
             NavigationService.GoBack();
         }
