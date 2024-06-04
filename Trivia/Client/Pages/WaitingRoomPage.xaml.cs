@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Reflection.Metadata;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Text.Json;
@@ -26,10 +27,17 @@ namespace Client.Pages
     /// </summary>
     public partial class WaitingRoomPage : Page, INotifyPropertyChanged
     {
+        private string _username;
         private uint _usersCount;
         private uint _maxUsers;
         private RoomData _roomData;
         private Timer _timer;
+
+        public string Username
+        {
+            get { return _username; }
+            set { _username = value; }
+        }
 
         public uint UsersCount
         {
@@ -66,13 +74,15 @@ namespace Client.Pages
             }
         }
 
-        public WaitingRoomPage(RoomData roomData)
+        public WaitingRoomPage(RoomData roomData, string username)
         {
             InitializeComponent();
             DataContext = this;         // Setting the DataContext to the current instance
 
             RoomData = roomData;
             MaxUsers = roomData.MaxPlayers;
+
+            Username = username;
 
             _timer = new Timer(UpdateUI, null, 0, 3000);
         }
@@ -117,12 +127,15 @@ namespace Client.Pages
 
         private void GoBackArrow_OnGoBackClicked(object sender, RoutedEventArgs e)
         {
-            ////////// Send Leave Room Request //////////
+            // Sending a LeaveRoom request
+            Helper.SendRequest(Constants.LeaveRoomRequestId, JsonSerializer.Serialize(new LeaveRoomRequest()));
+            LeaveRoomResponse leaveRoomResponse = Helper.GetResponse<LeaveRoomResponse>();
             
-            _timer.Dispose();       // Pausing the getRooms requests from being sent to the server
+            _timer.Dispose();       // Pausing the getRoomState requests from being sent to the server
 
-            NavigationService.GoBack();
-            //NavigationService.GoBack();
+            // Navigating the user back to the menu page
+            MenuPage menuPage = new MenuPage(Username);
+            NavigationService.Navigate(menuPage);
         }
     }
 }

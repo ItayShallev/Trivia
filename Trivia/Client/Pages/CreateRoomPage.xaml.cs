@@ -59,7 +59,7 @@ namespace Client.Pages
                 if (createRoomResponse.Status == 1)
                 {
                     // Navigating the user to the waiting room
-                    WaitingRoomPage waitingRoomPage = new WaitingRoomPage(createRoomResponse.RoomData);
+                    WaitingRoomPage waitingRoomPage = new WaitingRoomPage(createRoomResponse.RoomData, Username);
                     NavigationService.Navigate(waitingRoomPage);
                 }
             }
