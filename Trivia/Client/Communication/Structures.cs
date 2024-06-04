@@ -69,13 +69,15 @@ namespace Client.Communication
 
     public struct CreateRoomRequest
     {
+        [JsonPropertyName("admin")] public string Admin { get; set; } = "";
         [JsonPropertyName("roomName")] public string RoomName { get; set; } = "";
         [JsonPropertyName("maxPlayers")] public uint MaxPlayers { get; set; } = 0;
         [JsonPropertyName("questionCount")] public uint QuestionCount { get; set; } = 0;
         [JsonPropertyName("answerTimeout")] public uint AnswerTimeout { get; set; } = 0;
 
-        public CreateRoomRequest(string roomName, uint maxPlayers, uint questionCount, uint answerTimeout)
+        public CreateRoomRequest(string admin, string roomName, uint maxPlayers, uint questionCount, uint answerTimeout)
         {
+            Admin = admin;
             RoomName = roomName;
             MaxPlayers = maxPlayers;
             QuestionCount = questionCount;
@@ -245,16 +247,18 @@ namespace Client.Communication
     {
         [JsonPropertyName("id")] public uint Id { get; set; } = 0;
         [JsonPropertyName("name")] public string Name { get; set; } = "";
+        [JsonPropertyName("admin")] public string Admin { get; set; } = "";
         [JsonPropertyName("maxPlayers")] public uint MaxPlayers { get; set; } = 0;
         [JsonPropertyName("numOfQuestionsInGame")] public uint NumOfQuestionsInGame { get; set; } = 0;
         [JsonPropertyName("timePerQuestion")] public uint TimePerQuestion { get; set; } = 0;
         [JsonPropertyName("roomState")] public Constants.RoomState RoomState { get; set; } = Constants.RoomState.Waiting;
 
-        public RoomData(uint id, string name, uint maxPlayers, uint numOfQuestionsInGame, uint timePerQuestion,
+        public RoomData(uint id, string name, string admin, uint maxPlayers, uint numOfQuestionsInGame, uint timePerQuestion,
             Constants.RoomState roomState)
         {
             Id = id;
             //Name = name;
+            Admin = admin;
             MaxPlayers = maxPlayers;
             NumOfQuestionsInGame = numOfQuestionsInGame;
             RoomState = roomState;

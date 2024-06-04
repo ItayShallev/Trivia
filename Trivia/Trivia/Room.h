@@ -27,6 +27,7 @@ public:
 	RoomData getRoomData();
 	uint getID();
 	string getName();
+	string getAdmin();
 	uint getMaxPlayers();
 	uint getNumOfQuestions();
 	uint getTimePerQuestion();

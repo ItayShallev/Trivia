@@ -81,6 +81,7 @@ CreateRoomRequest JsonRequestPacketDeserializer::deserializeCreateRoomRequest(Bu
 
     // create the request
     CreateRoomRequest newCreateRoomRequest = {
+        data["admin"],
     	data["roomName"],
     	data["maxPlayers"] ,
     	data["questionCount"],

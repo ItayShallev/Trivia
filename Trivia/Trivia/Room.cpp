@@ -8,6 +8,7 @@ Room::Room(uint id)
 	this->m_metadata = {
 		id,
 		"",
+		"",
 		1,
 		1,
 		1,
@@ -90,6 +91,11 @@ uint Room::getID()
 string Room::getName()
 {
 	return this->m_metadata.name;
+}
+
+string Room::getAdmin()
+{
+	return this->m_metadata.admin;
 }
 
 uint Room::getMaxPlayers()

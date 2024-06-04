@@ -209,6 +209,7 @@ RequestResult MenuRequestHandler::createRoom(RequestInfo reqInfo)
 	RoomData newRoomData = {
 		roomId,
 		newRoomReq.roomName,
+		newRoomReq.admin,
 		newRoomReq.maxPlayers,
 		newRoomReq.questionCount,
 		newRoomReq.answerTimeout, // TODO: change when questions are implemented

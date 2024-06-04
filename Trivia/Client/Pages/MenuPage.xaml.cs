@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Text.Json;
@@ -15,6 +16,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Client.Communication;
+using Client.ViewModels;
 
 namespace Client.Pages
 {
@@ -24,6 +26,7 @@ namespace Client.Pages
     public partial class MenuPage : Page
     {
         private string _username;
+        private Timer _timer;
 
         public string Username
         {
@@ -36,78 +39,65 @@ namespace Client.Pages
             InitializeComponent();
             _username = username;
 
+            // MenuPage_Loaded started the timer...
+
             UserGreetingTextBlock.Text = "Welcome " + this._username + "!";
+        }
+
+        private void MenuPage_OnLoaded(object sender, RoutedEventArgs e)
+        {
+            _timer = new Timer(UpdateUI, null, 0, 3000);
         }
 
         private void BtnPersonalStats_OnClick(object sender, RoutedEventArgs e)
         {
             PersonalStatsPage personalStatsPage = new PersonalStatsPage(this._username);
+            _timer.Dispose();       // Pausing the getRooms requests from being sent to the server
             NavigationService.Navigate(personalStatsPage);
         }
 
         private void BtnLeaderboard_OnClick(object sender, RoutedEventArgs e)
         {
             LeaderboardPage leaderboardPage = new LeaderboardPage();
+            _timer.Dispose();       // Pausing the getRooms requests from being sent to the server
             NavigationService.Navigate(leaderboardPage);
         }
 
         private void BtnCreateRoom_Click(object sender, RoutedEventArgs e)
         {
-            CreateRoomPage createRoomPage = new CreateRoomPage();
+            CreateRoomPage createRoomPage = new CreateRoomPage(Username);
+            _timer.Dispose();       // Pausing the getRooms requests from being sent to the server
             NavigationService.Navigate(createRoomPage);
         }
 
-        private void MenuPage_OnLoaded(object sender, RoutedEventArgs e)
+        private void UpdateRoomsList(List<RoomData> rooms)
         {
-            // build and send the request
-            Helper.SendRequest(Constants.GetRoomsRequestId, "");
+            List<RoomEntry> roomEntries = new List<RoomEntry>();
 
-
-            ///////// TODO: DEBUG TO CHECK DESERIALIZER
-            // receive the response info
-            ResponseInfo respInfo = Helper.GetResponseInfo(Communicator.Connection.ReceiveMessage());
-
-            // if the response id is not the expected one
-            if (respInfo.ResponseId != Constants.GetRoomsResponseId)
+            // Iterating over the rooms list and creating a RoomEntry item for each one
+            foreach (RoomData roomData in rooms)
             {
-                // enable the error header and show the error
-                txtErrorHeader.Text = "ERROR WITH GET ROOMS REQUEST";
-                txtErrorHeader.Visibility = Visibility.Visible;
-                return;
+                RoomEntry newRoomEntry = new RoomEntry(roomData.Name, roomData.Admin, roomData.RoomState.ToString(),
+                    roomData.NumOfQuestionsInGame, roomData.TimePerQuestion, roomData);
+                roomEntries.Add(newRoomEntry);
             }
 
-            // get the rooms response
-            GetRoomsResponse roomsResp = JsonSerializer.Deserialize<GetRoomsResponse>(respInfo.Message);
-
-            // get the rooms
-            List<RoomData> rooms = roomsResp.Rooms;
-
-
-            foreach (RoomData room in rooms)
-            {
-                // add a room to the list
-                TextBlock txtBlock = new TextBlock();
-                txtBlock.Text = room.Name;
-                txtBlock.Tag = room;
-                txtBlock.Height = 50;
-                txtBlock.Width = 300;
-                txtBlock.MouseLeftButtonDown += TxtBlock_MouseLeftButtonDown;
-                lstRoomList.Items.Add(txtBlock);
-            }
-
+            RoomsListDataGrid.ItemsSource = roomEntries;
         }
 
-        private void TxtBlock_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        private void UpdateUI(object state)
         {
-            RoomData room = (RoomData)((TextBlock)sender).Tag;
+            Helper.SendRequest(Constants.GetRoomsRequestId, "");
+            GetRoomsResponse getRoomsResponse = Helper.GetResponse<GetRoomsResponse>();
 
-            // Sending a join room request
-            Helper.SendRequest(Constants.JoinRoomRequestId, JsonSerializer.Serialize(new JoinRoomRequest(room.Id)));
-            JoinRoomResponse joinRoomResponse = Helper.GetResponse<JoinRoomResponse>();
+            // Checking if there is a need to update the rooms list
+            if (getRoomsResponse.Rooms.Count == RoomsListDataGrid.Items.Count) { return; }
 
-            // Navigating the user to the waiting room
-            WaitingRoomPage newWaitingRoomPage = new WaitingRoomPage(room);
-            NavigationService.Navigate(newWaitingRoomPage);
+            // Updating the rooms list UI
+            Application.Current.Dispatcher.Invoke(() =>     // To change the UI looks, the program needs to switch to the UI thread
+            {
+                UpdateRoomsList(getRoomsResponse.Rooms);
+            });
         }
 
         private void GoBackArrow_OnGoBackClicked(object sender, RoutedEventArgs e)
@@ -115,9 +105,30 @@ namespace Client.Pages
             Helper.SendRequest(Constants.LogoutRequestId, JsonSerializer.Serialize(new LogoutRequest(Username)));
             LogoutResponse logoutResponse = Helper.GetResponse<LogoutResponse>();
 
-            // Navigating the user to the authentication page
+            // Navigating the user back to the authentication page
             AuthenticationPage authenticationPage = new AuthenticationPage();
             NavigationService.Navigate(authenticationPage);
+        }
+
+        private void RoomClicked(object sender, SelectionChangedEventArgs e)
+        {
+            // Validating that the RoomClicked event handler was necessary called
+            if (RoomsListDataGrid.SelectedItems.Count == 0) { return; }
+
+            // Getting the selected room entry
+            RoomEntry roomEntry = (RoomEntry)RoomsListDataGrid.SelectedItems[0];
+
+            // Sending a join room request
+            Helper.SendRequest(Constants.JoinRoomRequestId, JsonSerializer.Serialize(new JoinRoomRequest(roomEntry.RoomData.Id)));
+            JoinRoomResponse joinRoomResponse = Helper.GetResponse<JoinRoomResponse>();     // Getting the server's response
+
+            if (joinRoomResponse.Status == 1)
+            {
+                _timer.Dispose();       // Pausing the getRooms requests from being sent to the server
+                // Navigating the user to the waiting room
+                WaitingRoomPage newWaitingRoomPage = new WaitingRoomPage(roomEntry.RoomData);
+                NavigationService.Navigate(newWaitingRoomPage);
+            }
         }
     }
 }
