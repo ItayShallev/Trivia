@@ -110,6 +110,7 @@ void to_json(json& j, const RoomData& response)
 	j = json{
 		{"id", response.id},
 		{"name", response.name},
+		{"admin", response.admin},
 		{"maxPlayers", response.maxPlayers},
 		{"numOfQuestionsInGame", response.numOfQuestionsInGame},
 		{"timePerQuestion", response.timePerQuestion},

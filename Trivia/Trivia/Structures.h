@@ -22,6 +22,7 @@ struct RoomData
 {
 	uint id;
 	string name;
+	string admin;
 	uint maxPlayers;
 	uint numOfQuestionsInGame;
 	uint timePerQuestion;
@@ -60,6 +61,7 @@ struct JoinRoomRequest
 
 struct CreateRoomRequest
 {
+	string admin;
 	string roomName;
 	uint maxPlayers;
 	uint questionCount;
