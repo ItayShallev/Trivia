@@ -105,6 +105,10 @@ namespace Client.Communication
         }
     }
 
+    public struct LeaveRoomRequest
+    {
+    }
+
 
     // ******************* RESPONSE STRUCTURES *******************
     public struct ErrorResponse
@@ -240,6 +244,16 @@ namespace Client.Communication
             Players = players;
             QuestionCount = questionCount;
             AnswerTimeout = answerTimeout;
+        }
+    }
+
+    public struct LeaveRoomResponse
+    {
+        [JsonPropertyName("status")] public uint Status { get; set; } = 1;
+
+        public LeaveRoomResponse(uint status)
+        {
+            Status = status;
         }
     }
 

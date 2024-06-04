@@ -126,7 +126,7 @@ namespace Client.Pages
             {
                 _timer.Dispose();       // Pausing the getRooms requests from being sent to the server
                 // Navigating the user to the waiting room
-                WaitingRoomPage newWaitingRoomPage = new WaitingRoomPage(roomEntry.RoomData);
+                WaitingRoomPage newWaitingRoomPage = new WaitingRoomPage(roomEntry.RoomData, Username);
                 NavigationService.Navigate(newWaitingRoomPage);
             }
         }
