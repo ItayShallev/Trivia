@@ -33,7 +33,7 @@ namespace Client.Pages
             Helper.SendRequest(Constants.CheckIfUserExistsRequestId, JsonSerializer.Serialize(new CheckIfUserExistsRequest(UsernameTextBox.Text)));
             CheckIfUserExistsResponse checkIfUserExistsResponse = Helper.GetResponse<CheckIfUserExistsResponse>();      // Getting the server's response
 
-            // Navigating the user back to the authentication page
+            // Navigating the user to the next authentication page
             Page nextPage = (checkIfUserExistsResponse.Exists) ? new LoginPage(UsernameTextBox.Text) : new SignupPage(UsernameTextBox.Text);
             NavigationService.Navigate(nextPage);
         }

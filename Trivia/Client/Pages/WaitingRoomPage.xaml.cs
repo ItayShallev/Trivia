@@ -119,7 +119,10 @@ namespace Client.Pages
         {
             ////////// Send Leave Room Request //////////
             
+            _timer.Dispose();       // Pausing the getRooms requests from being sent to the server
+
             NavigationService.GoBack();
+            //NavigationService.GoBack();
         }
     }
 }

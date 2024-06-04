@@ -23,9 +23,19 @@ namespace Client.Pages
     /// </summary>
     public partial class CreateRoomPage : Page
     {
-        public CreateRoomPage()
+        private string _username;
+
+        public string Username
+        {
+            get { return _username; }
+            set { _username = value; }
+        }
+
+        public CreateRoomPage(string username)
         {
             InitializeComponent();
+
+            Username = username;
         }
 
         // Checks if the rooms settings are valid and ready for "CreateRoom" Request
@@ -39,7 +49,7 @@ namespace Client.Pages
             if (AreRoomSettingsValid())
             {
                 // Sending a create room request to the server
-                CreateRoomRequest createRoomRequest = new CreateRoomRequest(RoomNameTextBox.Text,
+                CreateRoomRequest createRoomRequest = new CreateRoomRequest(Username, RoomNameTextBox.Text,
                     uint.Parse(MaxPlayersComboBox.Text), uint.Parse(QuestionCountLabel.Content.ToString()), uint.Parse(TimePerQuestionLabel.Content.ToString()));
                 Helper.SendRequest(Constants.CreateRoomRequestId, JsonSerializer.Serialize(createRoomRequest));
 

@@ -35,13 +35,10 @@ namespace Client.Pages
             // Sending a signup request to the server
             Helper.SendRequest(Constants.SignupRequestId, JsonSerializer.Serialize(new SignupRequest(this._username, pswdPasswordBox.Password, txtMail.Text)));
 
-
-            ///////// TODO: DEBUG TO CHECK DESERIALIZER
             // receive the response
-            ResponseInfo respInfo = Helper.GetResponseInfo(Communicator.Connection.ReceiveMessage());
-            //SignupResponse signupResp = JsonSerializer.Deserialize<SignupResponse>(respInfo.Message);
+            SignupResponse signupResponse = Helper.GetResponse<SignupResponse>();
 
-            if (respInfo.ResponseId == Client.Constants.SignupResponseId)
+            if (signupResponse.Status == 1)
             {
                 MenuPage menuPage = new MenuPage(this._username);
                 NavigationService.Navigate(menuPage);
