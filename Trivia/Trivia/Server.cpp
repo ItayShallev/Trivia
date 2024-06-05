@@ -18,6 +18,6 @@ void Server::run()
 	}
 	catch (std::exception& e)
 	{
-		std::cout << "Error occured: " << e.what() << std::endl;
+		std::cout << "Error occured: " << e.what() << '\n';
 	}
 }

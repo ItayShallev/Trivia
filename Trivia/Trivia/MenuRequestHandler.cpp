@@ -5,9 +5,8 @@
 #include "JsonRequestPacketDeserializer.h"
 #include "JsonResponsePacketSerializer.h"
 
-MenuRequestHandler::MenuRequestHandler(const LoggedUser& user, RequestHandlerFactory* factory) : m_user(user), m_handlerFactory(*factory)
-{
-}
+MenuRequestHandler::MenuRequestHandler(std::shared_ptr<LoggedUser> user, RequestHandlerFactory* factory)
+	: m_user(user), m_handlerFactory(*factory) { }
 
 bool MenuRequestHandler::isRequestRelevant(RequestInfo reqInfo)
 {
@@ -31,46 +30,51 @@ RequestResult MenuRequestHandler::handleRequest(RequestInfo reqInfo)
 	case RequestId::CreateRoomRequestId:
 		return createRoom(reqInfo);
 		break;
+
 	case RequestId::GetRoomsRequestId:
 		return getRooms(reqInfo);
 		break;
+
 	case RequestId::GetPlayersInRoomRequestId:
 		return getPlayersInRoom(reqInfo);
 		break;
+
 	case RequestId::JoinRoomRequestId:
 		return joinRoom(reqInfo);
 		break;
+
 	case RequestId::GetStatisticsRequestId:
 		return getPersonalStats(reqInfo);
 		break;
+
 	case RequestId::GetHighScoreRequestId:
 		return getHighScore(reqInfo);
 		break;
+
 	case RequestId::LogoutRequestId:
 		return signout(reqInfo);
 		break;
+
 	default:
-		return Helper::buildRequestResult(JsonResponsePacketSerializer::serializeResponse(ErrorResponse()), this);
+		return Helper::buildRequestResult(JsonResponsePacketSerializer::serializeResponse(ErrorResponse()),
+			std::shared_ptr<MenuRequestHandler>(this, [](MenuRequestHandler*) {}));
 	}
-
-
-
 }
 
 RequestResult MenuRequestHandler::signout(RequestInfo reqInfo)
 {
 	// logout the user
-	bool success = m_handlerFactory.getLoginManager().logout(this->m_user.getUserName());
+	bool success = m_handlerFactory.getLoginManager().logout(this->m_user->getUserName());
 
 	if (!success)
 	{
-		// build an error result
-		return Helper::buildRequestResult(JsonResponsePacketSerializer::serializeResponse(ErrorResponse()), this);
+		// Building an error response, passing a shared pointer with a custom empty deleter that will ensure that 'this' will not be tried to be deleted
+		return Helper::buildRequestResult(JsonResponsePacketSerializer::serializeResponse(ErrorResponse()),
+			std::shared_ptr<MenuRequestHandler>(this, [](MenuRequestHandler*) {}));
 	}
 
 	// build and return the result
 	return Helper::buildRequestResult(JsonResponsePacketSerializer::serializeResponse(LogoutResponse()), m_handlerFactory.createLoginRequestHandler());
-
 }
 
 
@@ -86,7 +90,8 @@ RequestResult MenuRequestHandler::getRooms(RequestInfo reqInfo)
 
 
 	// build and return the result
-	return Helper::buildRequestResult(JsonResponsePacketSerializer::serializeResponse(roomResp), this);
+	return (Helper::buildRequestResult(JsonResponsePacketSerializer::serializeResponse(roomResp),
+		std::shared_ptr<MenuRequestHandler>(this, [](MenuRequestHandler*) {})));
 }
 
 RequestResult MenuRequestHandler::getPlayersInRoom(RequestInfo reqInfo)
@@ -121,20 +126,21 @@ RequestResult MenuRequestHandler::getPlayersInRoom(RequestInfo reqInfo)
 	GetPlayersInRoomResponse playersInRoomResp = GetPlayersInRoomResponse{ players };
 
 	// build and return the result
-	return Helper::buildRequestResult(JsonResponsePacketSerializer::serializeResponse(playersInRoomResp), this);
+	return (Helper::buildRequestResult(JsonResponsePacketSerializer::serializeResponse(playersInRoomResp),
+		std::shared_ptr<MenuRequestHandler>(this, [](MenuRequestHandler*) {})));
 }
 
 RequestResult MenuRequestHandler::getPersonalStats(RequestInfo reqInfo)
 {
 	// get the user statistics
-	vector<string> userStats = this->m_handlerFactory.getStatisticsManager().getUserStatistics(this->m_user.getUserName());
+	vector<string> userStats = this->m_handlerFactory.getStatisticsManager().getUserStatistics(this->m_user->getUserName());
 
 	//  build the response
 	GetPersonalStatsResponse personalStatsResp = GetPersonalStatsResponse{ 1, userStats };
 
 	// build and return the result
-	return Helper::buildRequestResult(JsonResponsePacketSerializer::serializeResponse(personalStatsResp), this);
-
+	return (Helper::buildRequestResult(JsonResponsePacketSerializer::serializeResponse(personalStatsResp),
+		std::shared_ptr<MenuRequestHandler>(this, [](MenuRequestHandler*) {})));
 }
 
 RequestResult MenuRequestHandler::getHighScore(RequestInfo reqInfo)
@@ -146,7 +152,8 @@ RequestResult MenuRequestHandler::getHighScore(RequestInfo reqInfo)
 	GetHighScoreResponse highScoreResp = GetHighScoreResponse{ 1, highScore };
 
 	// build and return the result
-	return Helper::buildRequestResult(JsonResponsePacketSerializer::serializeResponse(highScoreResp), this);
+	return (Helper::buildRequestResult(JsonResponsePacketSerializer::serializeResponse(highScoreResp),
+		std::shared_ptr<MenuRequestHandler>(this, [](MenuRequestHandler*) {})));
 }
 
 RequestResult MenuRequestHandler::joinRoom(RequestInfo reqInfo)
@@ -169,7 +176,7 @@ RequestResult MenuRequestHandler::joinRoom(RequestInfo reqInfo)
 			Room& currRoom = this->m_handlerFactory.getRoomManager().getRoom(currRoomData.id);
 
 			// join the room
-			currRoom.addUser(&this->m_user);
+			currRoom.addUser(this->m_user);
 
 			// set the wanted room
 			wantedRoom = &currRoom;
@@ -182,14 +189,13 @@ RequestResult MenuRequestHandler::joinRoom(RequestInfo reqInfo)
 	// something went wrong
 	if (wantedRoom == nullptr)
 	{
-		Helper::buildRequestResult(JsonResponsePacketSerializer::serializeResponse(ErrorResponse()), this);
+		Helper::buildRequestResult(JsonResponsePacketSerializer::serializeResponse(ErrorResponse()), 
+			std::shared_ptr<MenuRequestHandler>(this, [](MenuRequestHandler*) {}));
 	}
 
-
-
 	//  build and return the result
-	return Helper::buildRequestResult(JsonResponsePacketSerializer::serializeResponse(JoinRoomResponse()), \
-																							this->m_handlerFactory.createRoomMemberRequestHandler(this->m_user, *wantedRoom));
+	return (Helper::buildRequestResult(JsonResponsePacketSerializer::serializeResponse(JoinRoomResponse()),
+		this->m_handlerFactory.createRoomMemberRequestHandler(this->m_user, *wantedRoom)));
 }
 
 RequestResult MenuRequestHandler::createRoom(RequestInfo reqInfo)
@@ -197,10 +203,11 @@ RequestResult MenuRequestHandler::createRoom(RequestInfo reqInfo)
 	// create a new create-room request
 	CreateRoomRequest newRoomReq = JsonRequestPacketDeserializer::deserializeCreateRoomRequest(reqInfo.buffer);
 
-	// if the player chose an invalid max-players value
+	// returning an ErrorResponse if the player chose an invalid max-players value
 	if (newRoomReq.maxPlayers <= 0 || newRoomReq.maxPlayers > LIMIT_OF_MAX_PLAYERS_IN_ROOM)
 	{
-		Helper::buildRequestResult(JsonResponsePacketSerializer::serializeResponse(ErrorResponse()), this);
+		Helper::buildRequestResult(JsonResponsePacketSerializer::serializeResponse(ErrorResponse()),
+			std::shared_ptr<MenuRequestHandler>(this, [](MenuRequestHandler*) {}));
 	}
 
 	// build the room metadata
@@ -216,15 +223,15 @@ RequestResult MenuRequestHandler::createRoom(RequestInfo reqInfo)
 		RoomStatus::Waiting
 	};
 
-	// create the room
+	// Creating the room
 	this->m_handlerFactory.getRoomManager().createRoom(this->m_user, newRoomData);
 
-	// get the room
+	// get the created room
 	Room& room = this->m_handlerFactory.getRoomManager().getRoom(roomId);
 
 	// build and return the result
 	CreateRoomResponse createRoomResponse = CreateRoomResponse{ 1, newRoomData };
-	return Helper::buildRequestResult( \
-										JsonResponsePacketSerializer::serializeResponse(createRoomResponse), \
-										this->m_handlerFactory.createRoomAdminRequestHandler(this->m_user, room));
+
+	return Helper::buildRequestResult(JsonResponsePacketSerializer::serializeResponse(createRoomResponse),
+		this->m_handlerFactory.createRoomAdminRequestHandler(this->m_user, room));
 }

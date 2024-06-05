@@ -1,4 +1,5 @@
 #include "Room.h"
+#include <iostream>
 
 using std::find;
 
@@ -21,7 +22,7 @@ Room::Room(const RoomData& metadata)
 	this->m_metadata = metadata;
 }
 
-void Room::addUser(LoggedUser* user)
+void Room::addUser(std::shared_ptr<LoggedUser> user)
 {
 	// if there is room to add users
 	if (m_users.size() < getMaxPlayers())
@@ -30,7 +31,7 @@ void Room::addUser(LoggedUser* user)
 	}
 }
 
-void Room::removeUser(LoggedUser* user)
+void Room::removeUser(std::shared_ptr<LoggedUser> user)
 {
 	// remove the user from the vector
 	auto userIndex = find(m_users.begin(), m_users.end(), user);
@@ -43,9 +44,9 @@ vector<string> Room::getAllUsers()
 	vector<string> retVector;
 
 	// iterate through the users
-	for (LoggedUser* currUser : m_users)
+	for (std::shared_ptr<LoggedUser> currUser : m_users)
 	{
-		// add the user name to the vector
+		// add the username to the vector
 		retVector.push_back(currUser->getUserName());
 	}
 

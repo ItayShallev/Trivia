@@ -24,7 +24,7 @@ Buffer Helper::turnStringIntoBuffer(const char* pCh)
 char* Helper::turnBufferToCharArr(const Buffer& buff)
 {
 	// get the buffer size
-	int buffSize = buff.size();
+	size_t buffSize = buff.size();
 
 	// init a char array
 	char* retCharArr = new char[buffSize + 1];
@@ -41,7 +41,6 @@ char* Helper::turnBufferToCharArr(const Buffer& buff)
 
 	// return the char array
 	return retCharArr;
-
 }
 
 
@@ -94,10 +93,9 @@ void Helper::setConsoleColor(unsigned int color)
 	SetConsoleTextAttribute(hConsole, color);
 }
 
-RequestResult Helper::buildRequestResult(const Buffer& buff, IRequestHandler* newHandler)
+RequestResult Helper::buildRequestResult(const Buffer& buff, std::shared_ptr<IRequestHandler> handler)
 {
-	return { buff, newHandler };
-
+	return {buff, handler };
 }
 
 GetRoomStateResponse Helper::buildRoomStateResponse(const RoomState& roomState)
