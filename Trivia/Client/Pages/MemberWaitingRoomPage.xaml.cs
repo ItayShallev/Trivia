@@ -128,16 +128,16 @@ namespace Client.Pages
             // Getting the response from the server
             GetRoomStateResponse getRoomStateResponse = Helper.GetResponse<GetRoomStateResponse>();
 
-            // Checking if the room status has changed
-            if (getRoomStateResponse.RoomStatus == Constants.RoomStatus.Closed)     // Checking if the admin closed the room
-            {
-                LeaveRoom();
-            }
 
             // Updating the waiting room UI
             Application.Current.Dispatcher.Invoke(() =>     // To change the UI looks, the program needs to switch to the UI thread
             {
-                if (UsersCount != getRoomStateResponse.Players.Count)
+                // Checking if the room status has changed
+                if (getRoomStateResponse.RoomStatus == Constants.RoomStatus.Closed)     // Checking if the admin closed the room
+                {
+                    LeaveRoom();
+                }
+                else if (UsersCount != getRoomStateResponse.Players.Count)
                 {
                     UpdateUsersList(getRoomStateResponse.Players);
                     UsersCount = (uint)getRoomStateResponse.Players.Count;
