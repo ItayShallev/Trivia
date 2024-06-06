@@ -91,10 +91,11 @@ void to_json(json& j, const GetRoomStateResponse& response)
 {
 	j = json{
 		{"status", response.status},
-		{"hasGameBegan", response.hasGameBegan},
-		{"players", response.players},
-		{"questionCount", response.questionCount},
-		{"answerTimeout", response.answerTimeout}
+		{"hasGameBegan", response.roomState.hasGameBegan},
+		{"players", response.roomState.players},
+		{"questionCount", response.roomState.questionCount},
+		{"answerTimeout", response.roomState.answerTimeout},
+		{"roomStatus", response.roomState.roomStatus}
 	};
 }
 

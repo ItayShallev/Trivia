@@ -10,6 +10,7 @@
     Title="MenuPage"
     d:DesignHeight="1140"
     d:DesignWidth="675"
+    
     Loaded="MenuPage_OnLoaded"
     mc:Ignorable="d">
 
@@ -224,9 +225,9 @@
                                                 Header="Admin" />
                                             <DataGridTextColumn
                                                 Width="*"
-                                                Binding="{Binding State}"
+                                                Binding="{Binding RoomStatus}"
                                                 ElementStyle="{StaticResource CenterAlignedTextBlock}"
-                                                Header="State" />
+                                                Header="Status" />
                                             <DataGridTextColumn
                                                 Width="*"
                                                 Binding="{Binding QuestionCount}"

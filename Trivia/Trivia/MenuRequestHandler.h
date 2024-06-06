@@ -22,6 +22,5 @@ private:
 	RequestResult getHighScore(RequestInfo reqInfo);
 	RequestResult joinRoom(RequestInfo reqInfo);
 	RequestResult createRoom(RequestInfo reqInfo);
-	
 };
 

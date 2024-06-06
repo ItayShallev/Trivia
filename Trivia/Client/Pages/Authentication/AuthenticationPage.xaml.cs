@@ -25,6 +25,9 @@ namespace Client.Pages
         public AuthenticationPage()
         {
             InitializeComponent();
+
+            // Focusing on the textBox
+            UsernameTextBox.Focus();
         }
 
         private void BtnContinue_OnClick(object sender, RoutedEventArgs e)

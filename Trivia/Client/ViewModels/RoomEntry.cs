@@ -11,16 +11,16 @@ namespace Client.ViewModels
     {
         public string Name { get; set; }
         public string Admin { get; set; }
-        public string State { get; set; }
+        public string RoomStatus { get; set; }
         public uint QuestionCount { get; set; }
         public uint QuestionTimeout { get; set; }
         public RoomData RoomData { get; set; }
 
-        public RoomEntry(string name, string admin, string state, uint questionCount, uint questionTimeout, RoomData roomData)
+        public RoomEntry(string name, string admin, string roomStatus, uint questionCount, uint questionTimeout, RoomData roomData)
         {
             Name = name;
             Admin = admin;
-            State = state;
+            RoomStatus = roomStatus;
             QuestionCount = questionCount;
             QuestionTimeout = questionTimeout;
             RoomData = roomData;

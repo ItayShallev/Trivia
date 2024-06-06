@@ -73,7 +73,7 @@ Buffer JsonResponsePacketSerializer::serializeResponse(const GetHighScoreRespons
 
 Buffer JsonResponsePacketSerializer::serializeResponse(const GetPersonalStatsResponse& getPersonalStatsResponse)
 {
-	return buildResponse(ResponseId::GetPersonalStatsResponseId, getPersonalStatsResponse);
+	return buildResponse(ResponseId::GetPersonalStatisticsResponseId, getPersonalStatsResponse);
 }
 
 

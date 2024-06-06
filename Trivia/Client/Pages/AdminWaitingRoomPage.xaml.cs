@@ -23,9 +23,9 @@ using static Client.Constants;
 namespace Client.Pages
 {
     /// <summary>
-    /// Interaction logic for WaitingRoomPage.xaml
+    /// Interaction logic for AdminWaitingRoomPage.xaml
     /// </summary>
-    public partial class WaitingRoomPage : Page, INotifyPropertyChanged
+    public partial class AdminWaitingRoomPage : Page, INotifyPropertyChanged
     {
         private string _username;
         private uint _usersCount;
@@ -74,7 +74,7 @@ namespace Client.Pages
             }
         }
 
-        public WaitingRoomPage(RoomData roomData, string username)
+        public AdminWaitingRoomPage(RoomData roomData, string username)
         {
             InitializeComponent();
             DataContext = this;         // Setting the DataContext to the current instance
@@ -127,15 +127,23 @@ namespace Client.Pages
 
         private void GoBackArrow_OnGoBackClicked(object sender, RoutedEventArgs e)
         {
-            // Sending a LeaveRoom request
-            Helper.SendRequest(Constants.LeaveRoomRequestId, JsonSerializer.Serialize(new LeaveRoomRequest()));
-            LeaveRoomResponse leaveRoomResponse = Helper.GetResponse<LeaveRoomResponse>();
-            
-            _timer.Dispose();       // Pausing the getRoomState requests from being sent to the server
+            ///// Send a CloseRoom request /////
+            Helper.SendRequest(Constants.CloseRoomRequestId, JsonSerializer.Serialize(new CloseRoomRequest()));
+            CloseRoomResponse closeRoomResponse = Helper.GetResponse<CloseRoomResponse>();
 
-            // Navigating the user back to the menu page
-            MenuPage menuPage = new MenuPage(Username);
-            NavigationService.Navigate(menuPage);
+            if (closeRoomResponse.Status == 1)
+            {
+                _timer.Dispose();       // Pausing the getRoomState requests from being sent to the server
+
+                // Navigating the user back to the menu page
+                MenuPage menuPage = new MenuPage(Username);
+                NavigationService.Navigate(menuPage);
+            }
+        }
+
+        private void BtnStartGame_Click(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }

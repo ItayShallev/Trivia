@@ -11,40 +11,39 @@
 enum RequestId
 {
 	LogoutRequestId = 0,
-	LoginRequestId,
-	SignupRequestId,
-	MenuRequestId,
-	CreateRoomRequestId,
-	GetRoomsRequestId,
-	GetPlayersInRoomRequestId,
-	JoinRoomRequestId,
-	GetStatisticsRequestId,
-	GetHighScoreRequestId,
-	CheckIfUserExistsRequestId,
-	CloseRoomRequestId,
-	StartGameRequestId,
-	GetRoomStateRequestId,
-	LeaveRoomRequestId
+	LoginRequestId = 1,
+	SignupRequestId = 2,
+	CreateRoomRequestId = 3,
+	GetRoomsRequestId = 4,
+	GetPlayersInRoomRequestId = 5,
+	JoinRoomRequestId = 6,
+	GetPersonalStatisticsRequestId = 7,
+	GetHighScoreRequestId = 8,
+	CheckIfUserExistsRequestId = 9,
+	CloseRoomRequestId = 10,
+	LeaveRoomRequestId = 11,
+	StartGameRequestId = 12,
+	GetRoomStateRequestId = 13
 };
 
 
 enum ResponseId
 {
 	LogoutResponseId = 0,
-	LoginResponseId,
-	SignupResponseId,
-	ErrorResponseId,
-	GetRoomsResponseId,
-	GetPlayersInRoomResponseId,
-	GetHighScoreResponseId,
-	GetPersonalStatsResponseId,
-	JoinRoomResponseId,
-	CreateRoomResponseId,
-	CheckIfUserExistsResponseId,
-	CloseRoomResponseId,
-	StartGameResponseId,
-	GetRoomStateResponseId,
-	LeaveRoomResponseId
+	LoginResponseId = 1,
+	SignupResponseId = 2,
+	CreateRoomResponseId = 3,
+	GetRoomsResponseId = 4,
+	GetPlayersInRoomResponseId = 5,
+	JoinRoomResponseId = 6,
+	GetPersonalStatisticsResponseId = 7,
+	GetHighScoreResponseId = 8,
+	CheckIfUserExistsResponseId = 9,
+	CloseRoomResponseId = 10,
+	LeaveRoomResponseId = 11,
+	StartGameResponseId = 12,
+	GetRoomStateResponseId = 13,
+	ErrorResponseId = 14
 };
 
 enum RoomStatus

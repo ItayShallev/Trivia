@@ -55,5 +55,19 @@ namespace Client.Communication
 
             return responseInfo;
         }
+
+        public static Constants.RoomStatus StringStatusToRoomStatus(string status)
+        {
+            if (status == "Waiting") return Constants.RoomStatus.Waiting;
+            if (status == "Playing") return Constants.RoomStatus.Playing;
+            return Constants.RoomStatus.Closed;
+        }
+
+        public static string RoomStatusToStringStatus(Constants.RoomStatus roomStatus)
+        {
+            if (roomStatus == Constants.RoomStatus.Waiting) return "Waiting";
+            if (roomStatus == Constants.RoomStatus.Playing) return "Playing";
+            return "Closed";
+        }
     }
 }

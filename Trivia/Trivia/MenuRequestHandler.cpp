@@ -16,7 +16,7 @@ bool MenuRequestHandler::isRequestRelevant(RequestInfo reqInfo)
 		reqId == RequestId::GetRoomsRequestId ||
 		reqId == RequestId::GetPlayersInRoomRequestId ||
 		reqId == RequestId::JoinRoomRequestId ||
-		reqId == RequestId::GetStatisticsRequestId ||
+		reqId == RequestId::GetPersonalStatisticsRequestId ||
 		reqId == RequestId::GetHighScoreRequestId ||
 		reqId == RequestId::LogoutRequestId;
 
@@ -43,7 +43,7 @@ RequestResult MenuRequestHandler::handleRequest(RequestInfo reqInfo)
 		return joinRoom(reqInfo);
 		break;
 
-	case RequestId::GetStatisticsRequestId:
+	case RequestId::GetPersonalStatisticsRequestId:
 		return getPersonalStats(reqInfo);
 		break;
 
