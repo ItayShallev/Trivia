@@ -13,14 +13,9 @@
     TextElement.Foreground="{DynamicResource MaterialDesignBody}"
     WindowStartupLocation="CenterScreen"
     WindowStyle="None"
-    WindowState="Maximized"
 
     mc:Ignorable="d">
     <Grid>
         <Frame x:Name="MainFrame" NavigationUIVisibility="Hidden" />
-
-        <Grid.LayoutTransform>
-            <ScaleTransform ScaleX="0.6" ScaleY="0.6" />
-        </Grid.LayoutTransform>
     </Grid>
 </Window>

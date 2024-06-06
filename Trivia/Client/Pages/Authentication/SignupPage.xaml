@@ -90,6 +90,7 @@
                                 Click="BtnSignup_OnClick"
                                 Content="Signup"
                                 FontSize="18"
+                                IsDefault="True"
                                 Style="{StaticResource MaterialDesignFlatMidBgButton}" />
                         </StackPanel>
                     </Grid>
