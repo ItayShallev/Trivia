@@ -1,12 +1,10 @@
 #include "LoginRequestHandler.h"
-
 #include "Helper.h"
 #include "JsonRequestPacketDeserializer.h"
 #include "JsonResponsePacketSerializer.h"
 
 RequestResult LoginRequestHandler::login(RequestInfo reqInfo)
 {
-
 	// get the manager
 	LoginManager manager = m_handlerFactory.getLoginManager();
 	
@@ -19,11 +17,17 @@ RequestResult LoginRequestHandler::login(RequestInfo reqInfo)
 	// if signing failed
 	if (!success)
 	{
-		Helper::buildRequestResult(JsonResponsePacketSerializer::serializeResponse(ErrorResponse()), this);
+		Helper::buildRequestResult(JsonResponsePacketSerializer::serializeResponse(ErrorResponse()),
+			std::shared_ptr<LoginRequestHandler>(this, [](LoginRequestHandler*) {}));
 	}
 
+	// IMPORTANT: creating a new shared pointer to a LoggedUser object, unique for the current user
+	// (This LoggedUser will be referenced throughout the program and will be one and only)
+	std::shared_ptr<LoggedUser> thisUser = std::make_shared<LoggedUser>(loginReq.username);
+
 	// return the login response
-	return Helper::buildRequestResult(JsonResponsePacketSerializer::serializeResponse(LoginResponse()), this->m_handlerFactory.createMenuRequestHandler(LoggedUser(loginReq.username)));
+	return Helper::buildRequestResult(JsonResponsePacketSerializer::serializeResponse(LoginResponse()),
+		this->m_handlerFactory.createMenuRequestHandler(thisUser));
 }
 
 RequestResult LoginRequestHandler::signup(RequestInfo reqInfo)
@@ -43,11 +47,17 @@ RequestResult LoginRequestHandler::signup(RequestInfo reqInfo)
 	// if signing failed
 	if (!success)
 	{
-		Helper::buildRequestResult(JsonResponsePacketSerializer::serializeResponse(ErrorResponse()), this);
+		Helper::buildRequestResult(JsonResponsePacketSerializer::serializeResponse(ErrorResponse()),
+			std::shared_ptr<LoginRequestHandler>(this, [](LoginRequestHandler*) {}));
 	}
 
+	// IMPORTANT: creating a new shared pointer to a LoggedUser object, unique for the current user
+	// (This LoggedUser will be referenced throughout the program and will be one and only)
+	std::shared_ptr<LoggedUser> thisUser = std::make_shared<LoggedUser>(signupReq.username);
+
 	// return the signup response
-	return Helper::buildRequestResult(JsonResponsePacketSerializer::serializeResponse(LoginResponse()), this->m_handlerFactory.createMenuRequestHandler(LoggedUser(signupReq.username)));
+	return Helper::buildRequestResult(JsonResponsePacketSerializer::serializeResponse(LoginResponse()),
+		this->m_handlerFactory.createMenuRequestHandler(thisUser));
 }
 
 RequestResult LoginRequestHandler::continueAuthentication(RequestInfo reqInfo)
@@ -68,7 +78,8 @@ RequestResult LoginRequestHandler::continueAuthentication(RequestInfo reqInfo)
 	CheckIfUserExistsResponse response(doesUserExist);
 
 	// return the authentication response
-	return Helper::buildRequestResult(JsonResponsePacketSerializer::serializeResponse(response), this);
+	return Helper::buildRequestResult(JsonResponsePacketSerializer::serializeResponse(response), 
+	std::shared_ptr<LoginRequestHandler>(this, [](LoginRequestHandler*){}));
 }
 
 LoginRequestHandler::LoginRequestHandler(RequestHandlerFactory* factory) : m_handlerFactory(*factory)
@@ -101,7 +112,7 @@ RequestResult LoginRequestHandler::handleRequest(RequestInfo reqInfo)
 	default:
 
 		// create error response
-		return Helper::buildRequestResult(JsonResponsePacketSerializer::serializeResponse(ErrorResponse()), this);
+		return Helper::buildRequestResult(JsonResponsePacketSerializer::serializeResponse(ErrorResponse()),
+			std::shared_ptr<LoginRequestHandler>(this, [](LoginRequestHandler*) {}));
 	}
-
 }

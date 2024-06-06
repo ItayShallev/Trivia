@@ -7,12 +7,12 @@ class RequestHandlerFactory;
 class MenuRequestHandler : public IRequestHandler
 {
 public:
-	MenuRequestHandler(const LoggedUser& user, RequestHandlerFactory* factory);
+	MenuRequestHandler(std::shared_ptr<LoggedUser> user, RequestHandlerFactory* factory);
 	virtual bool isRequestRelevant(RequestInfo reqInfo) override;
 	virtual RequestResult handleRequest(RequestInfo reqInfo) override;
 
 private:
-	LoggedUser m_user;
+	std::shared_ptr<LoggedUser> m_user;
 	RequestHandlerFactory& m_handlerFactory;
 
 	RequestResult signout(RequestInfo reqInfo);

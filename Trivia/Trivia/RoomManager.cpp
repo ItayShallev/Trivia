@@ -16,16 +16,16 @@ uint RoomManager::generateRoomID()
 	return retRoomID;
 }
 
-void RoomManager::createRoom(LoggedUser& host, RoomData& roomMetadata)
+void RoomManager::createRoom(std::shared_ptr<LoggedUser> host, RoomData& roomMetadata)
 {
 	// create a new room with the metadata
-	Room* newRoom = new Room(roomMetadata);
+	std::unique_ptr<Room> newRoom = std::make_unique<Room>(roomMetadata);
 
 	// add the host
-	newRoom->addUser(&host);
+	newRoom->addUser(host);
 
-	// insert the room into the map
-	this->m_rooms.insert(pair<uint, Room*>(roomMetadata.id, newRoom));
+	// inserting the room into the map, transferring the room ownership to m_rooms
+	this->m_rooms.insert(std::make_pair(roomMetadata.id, std::move(newRoom)));
 }
 
 void RoomManager::deleteRoom(uint roomId)

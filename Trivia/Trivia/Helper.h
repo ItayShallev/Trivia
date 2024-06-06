@@ -16,6 +16,6 @@ public:
 	static RequestId convertCharsToRequestId(const unsigned char& first, const unsigned char& second);
 	static void setConsoleColor(unsigned int color);
 
-	static RequestResult buildRequestResult(const Buffer& buff, IRequestHandler* newHandler);
+	static RequestResult buildRequestResult(const Buffer& buff, std::shared_ptr<IRequestHandler> handler);
 	static GetRoomStateResponse buildRoomStateResponse(const RoomState& roomState);
 };

@@ -6,13 +6,13 @@ class Room
 {
 private:
 	RoomData m_metadata;
-	vector<LoggedUser*> m_users;
+	vector<std::shared_ptr<LoggedUser>> m_users;
 
 public:
 	Room(uint id);
 	Room(const RoomData& metadata);
-	void addUser(LoggedUser* user);
-	void removeUser(LoggedUser* user);
+	void addUser(std::shared_ptr<LoggedUser> user);
+	void removeUser(std::shared_ptr<LoggedUser> user);
 	vector<string> getAllUsers();
 
 

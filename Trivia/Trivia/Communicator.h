@@ -20,7 +20,7 @@ public:
 private:
 	// members
 	SOCKET m_serverSocket;
-	map<SOCKET, IRequestHandler*> m_clients;
+	map<SOCKET, std::shared_ptr<IRequestHandler>> m_clients;
 	RequestHandlerFactory m_handlerFactory;	
 
 	// methods

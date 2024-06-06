@@ -3,9 +3,8 @@
 #include "Helper.h"
 #include "JsonResponsePacketSerializer.h"
 
-RoomAdminRequestHandler::RoomAdminRequestHandler(Room& room, LoggedUser& user, RoomManager& roomManager, RequestHandlerFactory* handlerFactory) : m_room(room), m_user(user), m_roomManager(roomManager), m_handlerFactory(handlerFactory)  
-{
-}
+RoomAdminRequestHandler::RoomAdminRequestHandler(Room& room, std::shared_ptr<LoggedUser> user, RoomManager& roomManager, RequestHandlerFactory* handlerFactory)
+	: m_room(room), m_user(user), m_roomManager(roomManager), m_handlerFactory(handlerFactory) { }
 
 bool RoomAdminRequestHandler::isRequestRelevant(RequestInfo reqInfo)
 {
@@ -30,7 +29,8 @@ RequestResult RoomAdminRequestHandler::handleRequest(RequestInfo reqInfo)
         return getRoomState(reqInfo);
         break;
     default:
-        return Helper::buildRequestResult(JsonResponsePacketSerializer::serializeResponse(ErrorResponse()), this);
+        return Helper::buildRequestResult(JsonResponsePacketSerializer::serializeResponse(ErrorResponse()),
+            std::shared_ptr<RoomAdminRequestHandler>(this, [](RoomAdminRequestHandler*) {}));
     }
 
 }
@@ -50,8 +50,7 @@ RequestResult RoomAdminRequestHandler::closeRoom(RequestInfo reqInfo)
     GetRoomStateResponse roomStateResp = Helper::buildRoomStateResponse(currRoomState);
 
     // create the new handler
-    IRequestHandler* newHandler = this->m_handlerFactory->createMenuRequestHandler(this->m_user);
-
+    std::shared_ptr<MenuRequestHandler> newHandler = this->m_handlerFactory->createMenuRequestHandler(this->m_user);
 
     // build and return the request result
     return Helper::buildRequestResult(JsonResponsePacketSerializer::serializeResponse(roomStateResp), newHandler);
@@ -72,9 +71,8 @@ RequestResult RoomAdminRequestHandler::startGame(RequestInfo reqInfo)
     GetRoomStateResponse roomStateResp = Helper::buildRoomStateResponse(currRoomState);
 
     // build and return the request result
-    return Helper::buildRequestResult(JsonResponsePacketSerializer::serializeResponse(roomStateResp), this);
-
-
+    return Helper::buildRequestResult(JsonResponsePacketSerializer::serializeResponse(roomStateResp),
+        std::shared_ptr<RoomAdminRequestHandler>(this, [](RoomAdminRequestHandler*) {}));
 }
 
 RequestResult RoomAdminRequestHandler::getRoomState(RequestInfo reqInfo)
@@ -86,5 +84,6 @@ RequestResult RoomAdminRequestHandler::getRoomState(RequestInfo reqInfo)
     GetRoomStateResponse roomStateResp = Helper::buildRoomStateResponse(currRoomState);
 
     // build and return the request result
-    return Helper::buildRequestResult(JsonResponsePacketSerializer::serializeResponse(roomStateResp), this);
+    return Helper::buildRequestResult(JsonResponsePacketSerializer::serializeResponse(roomStateResp),
+        std::shared_ptr<RoomAdminRequestHandler>(this, [](RoomAdminRequestHandler*) {}));
 }
