@@ -17,7 +17,7 @@ RequestResult LoginRequestHandler::login(RequestInfo reqInfo)
 	// if signing failed
 	if (!success)
 	{
-		Helper::buildRequestResult(JsonResponsePacketSerializer::serializeResponse(ErrorResponse()),
+		return Helper::buildRequestResult(JsonResponsePacketSerializer::serializeResponse(ErrorResponse()),
 			std::shared_ptr<LoginRequestHandler>(this, [](LoginRequestHandler*) {}));
 	}
 

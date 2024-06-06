@@ -74,6 +74,7 @@
                             Click="BtnContinue_OnClick"
                             Content="Continue"
                             FontSize="18"
+                            IsDefault="True"
                             Style="{StaticResource MaterialDesignFlatMidBgButton}" />
                     </Grid>
                 </Grid>

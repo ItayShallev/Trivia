@@ -39,13 +39,13 @@ namespace Client.Pages
             UserStatsHeader.Text = _username + "'s Personal Stats";
 
             // build and send the request
-            Helper.SendRequest(Constants.GetStatisticsRequestId, "");
+            Helper.SendRequest(Constants.GetPersonalStatisticsRequestId, "");
 
 
             ///////// TODO: DEBUG TO CHECK DESERIALIZER
             // receive the response
             ResponseInfo respInfo  = Helper.GetResponseInfo(Communicator.Connection.ReceiveMessage());
-            if (respInfo.ResponseId != Client.Constants.GetPersonalStatsResponseId)
+            if (respInfo.ResponseId != Client.Constants.GetPersonalStatisticsResponseId)
             {
                 // build an error list
                 List<string> errorList = BuildErrorList(4);
@@ -57,7 +57,7 @@ namespace Client.Pages
             }
 
             // extract the personal stats from the response info
-            GetPersonalStatsResponse statsResp = JsonSerializer.Deserialize<GetPersonalStatsResponse>(respInfo.Message);
+            GetPersonalStatisticsResponse statsResp = JsonSerializer.Deserialize<GetPersonalStatisticsResponse>(respInfo.Message);
 
             // get the personal stats 
             List<string> stats = statsResp.Statistics;

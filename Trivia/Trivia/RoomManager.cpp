@@ -44,7 +44,8 @@ RoomState RoomManager::getRoomState(uint roomId)
 		room.getRoomStatus() == RoomStatus::Playing,
 		room.getAllUsers(),
 		room.getNumOfQuestions(),
-		room.getTimePerQuestion()
+		room.getTimePerQuestion(),
+		room.getRoomStatus()
 	};
 }
 
@@ -55,7 +56,8 @@ RoomState RoomManager::getRoomState(Room& room)
 		room.getRoomStatus() == RoomStatus::Playing,
 		room.getAllUsers(),
 		room.getNumOfQuestions(),
-		room.getTimePerQuestion()
+		room.getTimePerQuestion(),
+		room.getRoomStatus()
 	};
 }
 
