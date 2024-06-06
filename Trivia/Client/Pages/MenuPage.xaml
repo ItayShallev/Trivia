@@ -8,11 +8,22 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:userControls="clr-namespace:Client.UserControls"
     Title="MenuPage"
-    d:DesignHeight="760"
-    d:DesignWidth="450"
-    mc:Ignorable="d"
+    d:DesignHeight="1140"
+    d:DesignWidth="675"
+    
     Loaded="MenuPage_OnLoaded"
-    >
+    mc:Ignorable="d">
+
+    <Page.Resources>
+        <Style x:Key="TriviaListBox" TargetType="ListBoxItem">
+            <Setter Property="Foreground" Value="Black" />
+            <Setter Property="FontSize" Value="25" />
+            <Setter Property="FontWeight" Value="Normal" />
+            <Setter Property="Margin" Value="2" />
+            <Setter Property="Height" Value="35" />
+            <Setter Property="Focusable" Value="False" />
+        </Style>
+    </Page.Resources>
 
     <Grid>
         <materialDesign:Card
@@ -23,84 +34,244 @@
             <materialDesign:DialogHost>
                 <Grid>
                     <Grid.RowDefinitions>
-                        <RowDefinition Height=".1*" />
-                        <RowDefinition Height=".2*" />
-                        <RowDefinition Height=".6*" />
+                        <RowDefinition Height="1*" />
+                        <RowDefinition Height="0.7*" />
+                        <RowDefinition Height="1.3*" />
+                        <RowDefinition Height="7*" />
+                        <RowDefinition Height="1*" />
                     </Grid.RowDefinitions>
 
-                    <Grid Grid.Row="0" VerticalAlignment="Center">
-                        <Image
-                            Width="40"
-                            Height="40"
-                            Margin="15,0,0,0"
-                            HorizontalAlignment="Left"
-                            Source="pack://siteoforigin:,,,/Media/TriviaLogo.png" />
+                    <Grid Row="0">
+                        <userControls:Logo
+                            Width="70"
+                            Height="70"
+                            HorizontalAlignment="Left" />
 
                         <TextBlock
-                            Name="UserGreetingTextBlock"
+                            x:Name="UserGreetingTextBlock"
                             HorizontalAlignment="Center"
                             VerticalAlignment="Center"
                             FontFamily="Montserrat"
-                            FontSize="18"
+                            FontSize="24"
                             FontWeight="Bold"
                             Text="Welcome USER" />
 
-                        <userControls:ThreeDots />
+                        <Grid HorizontalAlignment="Right">
+                            <userControls:ThreeDots />
+                        </Grid>
                     </Grid>
 
-                    <Grid Grid.Row="1" VerticalAlignment="Center">
-                        <Button
-                            x:Name="BtnPersonalStats"
-                            Width="120"
-                            Height="50"
-                            Margin="30,0,10,0"
-                            HorizontalAlignment="Left"
-                            materialDesign:ButtonAssist.CornerRadius="5"
-                            materialDesign:ShadowAssist.ShadowDepth="Depth2"
-                            Content="Personal Stats"
-                            FontSize="14"
-                            Style="{StaticResource MaterialDesignFlatMidBgButton}" Click="BtnPersonalStats_Click" />
+                    <Grid VerticalAlignment="Top" Row="1">
+                        <userControls:GoBackArrow GoBackClicked="GoBackArrow_OnGoBackClicked" />
+                    </Grid>
 
+                    <Grid HorizontalAlignment="Right" Row="2">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+                        <Grid Column="0">
+                            <Button
+                                x:Name="BtnPersonalStats"
+                                Width="70"
+                                Height="70"
+                                Margin="10"
+                                materialDesign:ButtonAssist.CornerRadius="10"
+                                materialDesign:ShadowAssist.ShadowDepth="Depth0"
+                                Background="Red"
+                                BorderThickness="0"
+                                Click="BtnPersonalStats_OnClick">
+                                <materialDesign:PackIcon
+                                    Width="30"
+                                    Height="30"
+                                    Kind="Fire" />
+                            </Button>
+
+                            <TextBlock
+                                Margin="10"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Bottom"
+                                FontSize="12"
+                                FontWeight="Medium"
+                                Foreground="Red"
+                                Text="Personal Stats" />
+                        </Grid>
+
+                        <Grid Column="1">
+                            <Button
+                                x:Name="BtnLeaderboard"
+                                Width="70"
+                                Height="70"
+                                Margin="10"
+                                materialDesign:ButtonAssist.CornerRadius="10"
+                                materialDesign:ShadowAssist.ShadowDepth="Depth0"
+                                Background="Green"
+                                BorderThickness="0"
+                                Click="BtnLeaderboard_OnClick">
+                                <materialDesign:PackIcon
+                                    Width="30"
+                                    Height="30"
+                                    Kind="Podium" />
+                            </Button>
+
+                            <TextBlock
+                                Margin="10"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Bottom"
+                                FontSize="12"
+                                FontWeight="Medium"
+                                Foreground="Green"
+                                Text="Leaderboard" />
+                        </Grid>
+                    </Grid>
+
+                    <Grid Margin="15" Row="3">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="1*" />
+                            <RowDefinition Height="9*" />
+                        </Grid.RowDefinitions>
+
+                        <Grid Row="0">
+                            <TextBlock
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                FontSize="35"
+                                FontWeight="Medium"
+                                Text="Rooms List" />
+                        </Grid>
+
+                        <Grid Row="1">
+                            <Border
+                                BorderBrush="Gray"
+                                BorderThickness="2"
+                                CornerRadius="15">
+
+                                <StackPanel>
+                                    <DataGrid
+                                        x:Name="RoomsListDataGrid"
+                                        Margin="10"
+                                        AutoGenerateColumns="False"
+                                        CanUserAddRows="False"
+                                        CanUserDeleteRows="False"
+                                        CanUserReorderColumns="False"
+                                        CanUserResizeColumns="False"
+                                        CanUserSortColumns="True"
+                                        GridLinesVisibility="All"
+                                        IsReadOnly="True"
+                                        SelectionChanged="RoomClicked"
+                                        SelectionMode="Single"
+                                        SelectionUnit="FullRow">
+
+                                        <DataGrid.Resources>
+                                            <Style x:Key="CenterAlignedTextBlock" TargetType="TextBlock">
+                                                <Setter Property="HorizontalAlignment" Value="Center" />
+                                                <Setter Property="VerticalAlignment" Value="Center" />
+                                            </Style>
+                                        </DataGrid.Resources>
+
+                                        <DataGrid.ColumnHeaderStyle>
+                                            <Style TargetType="DataGridColumnHeader">
+                                                <Setter Property="Height" Value="50" />
+                                                <Setter Property="HorizontalContentAlignment" Value="Center" />
+                                                <Setter Property="FontSize" Value="14" />
+                                                <Setter Property="FontWeight" Value="SemiBold" />
+                                                <Setter Property="Margin" Value="0,0,0,5" />
+                                                <Setter Property="Padding" Value="5,5,10,5" />
+                                                <Setter Property="BorderBrush" Value="Transparent" />
+                                                <Setter Property="BorderThickness" Value="0,0,0,0" />
+                                                <Setter Property="Cursor" Value="Arrow" />
+
+                                                <Style.Triggers>
+                                                    <Trigger Property="IsMouseOver" Value="True">
+                                                        <Setter Property="BorderThickness" Value="0,0,0,4" />
+                                                        <Setter Property="BorderBrush" Value="CornflowerBlue" />
+                                                    </Trigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </DataGrid.ColumnHeaderStyle>
+
+                                        <DataGrid.RowStyle>
+                                            <Style TargetType="DataGridRow">
+                                                <Setter Property="Background" Value="White" />
+                                                <Setter Property="Foreground" Value="Black" />
+                                                <Setter Property="BorderBrush" Value="LightGray" />
+                                                <Setter Property="BorderThickness" Value="0,0,0,2" />
+                                                <Setter Property="Margin" Value="0,2" />
+                                                <Setter Property="MinHeight" Value="48" />
+                                                <Setter Property="HorizontalContentAlignment" Value="Center" />
+                                                <Setter Property="VerticalAlignment" Value="Center" />
+                                                <Setter Property="Cursor" Value="Hand" />
+                                                <Setter Property="FontSize" Value="14" />
+                                                <Setter Property="FontWeight" Value="SemiBold" />
+                                                <Style.Triggers>
+                                                    <Trigger Property="IsMouseOver" Value="True">
+                                                        <Setter Property="BorderThickness" Value="0,0,0,4" />
+                                                        <Setter Property="BorderBrush" Value="DarkOrange" />
+                                                    </Trigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </DataGrid.RowStyle>
+
+                                        <DataGrid.Columns>
+                                            <DataGridTextColumn
+                                                Width="*"
+                                                Binding="{Binding Name}"
+                                                ElementStyle="{StaticResource CenterAlignedTextBlock}"
+                                                Header="Room Name" />
+                                            <DataGridTextColumn
+                                                Width="*"
+                                                Binding="{Binding Admin}"
+                                                ElementStyle="{StaticResource CenterAlignedTextBlock}"
+                                                Header="Admin" />
+                                            <DataGridTextColumn
+                                                Width="*"
+                                                Binding="{Binding RoomStatus}"
+                                                ElementStyle="{StaticResource CenterAlignedTextBlock}"
+                                                Header="Status" />
+                                            <DataGridTextColumn
+                                                Width="*"
+                                                Binding="{Binding QuestionCount}"
+                                                ElementStyle="{StaticResource CenterAlignedTextBlock}"
+                                                Header="Question Count" />
+                                            <DataGridTextColumn
+                                                Width="*"
+                                                Binding="{Binding QuestionTimeout}"
+                                                ElementStyle="{StaticResource CenterAlignedTextBlock}"
+                                                Header="Timeout" />
+                                        </DataGrid.Columns>
+                                    </DataGrid>
+                                </StackPanel>
+
+                            </Border>
+                        </Grid>
+                    </Grid>
+
+                    <Grid Row="4">
                         <Button
-                            x:Name="BtnLeaderboard"
-                            Width="120"
+                            x:Name="BtnCreateRoom"
+                            Width="200"
                             Height="50"
-                            Margin="100,0,30,0"
-                            HorizontalAlignment="Right"
+                            Margin="0,10,0,20"
                             materialDesign:ButtonAssist.CornerRadius="5"
                             materialDesign:ShadowAssist.ShadowDepth="Depth2"
-                            Content="Leaderboard"
+                            Click="BtnCreateRoom_Click"
+                            Content="Create Room"
                             FontSize="15"
-                            Style="{StaticResource MaterialDesignFlatMidBgButton}" Click="BtnLeaderboard_Click" />
+                            Style="{StaticResource MaterialDesignFlatMidBgButton}" />
+
+                        <TextBlock
+                            x:Name="txtErrorHeader"
+                            Width="102"
+                            Height="26"
+                            Margin="0,7,0,0"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Top"
+                            FontSize="20"
+                            Text="TextBlock"
+                            TextAlignment="Center"
+                            TextWrapping="Wrap"
+                            Visibility="Hidden" />
                     </Grid>
-
-
-                    <StackPanel
-                        Grid.Row="2"
-                        Margin="5,5,5,5"
-                        HorizontalAlignment="Stretch"
-                        VerticalAlignment="Stretch"
-                        Orientation="Vertical">
-
-                        <Border BorderBrush="Black" BorderThickness="1">
-                            <StackPanel>
-                                <Button
-                                    x:Name="BtnCreateRoom"
-                                    Width="120"
-                                    Height="50"
-                                    Margin="0,10,0,20"
-                                    materialDesign:ButtonAssist.CornerRadius="5"
-                                    materialDesign:ShadowAssist.ShadowDepth="Depth2"
-                                    Content="Create Room"
-                                    FontSize="15"
-                                    Style="{StaticResource MaterialDesignFlatMidBgButton}" Click="BtnCreateRoom_Click" />
-
-                                <ListBox x:Name="lstRoomList" Height="300">
-                                </ListBox>
-                            </StackPanel>
-                        </Border>
-                    </StackPanel>
-                    <TextBlock x:Name="txtErrorHeader" HorizontalAlignment="Center" Margin="0,7,0,0" Grid.Row="1" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Top" Height="26" Width="102" TextAlignment="Center" FontSize="20" Visibility="Hidden"/>
                 </Grid>
             </materialDesign:DialogHost>
         </materialDesign:Card>

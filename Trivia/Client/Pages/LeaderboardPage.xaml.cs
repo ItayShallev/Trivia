@@ -33,8 +33,7 @@ namespace Client.Pages
             const int NUM_MAX_PLAYERS = 5;
             
             // build and send the request
-            string message = Helper.BuildRequest(Client.Constants.GetHighScoreRequestId, "");
-            Communicator.Connection.SendMessage(message);
+            Helper.SendRequest(Constants.GetHighScoreRequestId, "");
 
 
             ///////// TODO: DEBUG TO CHECK DESERIALIZER
@@ -42,13 +41,13 @@ namespace Client.Pages
             ResponseInfo respInfo = Helper.GetResponseInfo(Communicator.Connection.ReceiveMessage());
 
             // if the response is not the wanted response
-            if (respInfo.ResponseId != Client.Constants.GetHighScoreResponseId)
+            if (respInfo.ResponseId != Constants.GetHighScoreResponseId)
             {
                 // build an error list
                 List<string> errorList = BuildErrorList(NUM_MAX_PLAYERS);
 
                 // set the text elements
-                SetTxtElements(errorList);
+                //SetTxtElements(errorList);
 
                 return;
             }
@@ -63,7 +62,7 @@ namespace Client.Pages
             MakeListXelements(players, NUM_MAX_PLAYERS);
 
             // set the txt boxes values accordingly
-            SetTxtElements(players);
+            //SetTxtElements(players);
 
         }
 
@@ -107,16 +106,16 @@ namespace Client.Pages
             return errorList;
         }
 
-        private void SetTxtElements(List<string> txtValues)
-        {
-            txtFirstPlayer.Text = "1st: " + txtValues[0];
-            txtSecondPlayer.Text = "2nd: " + txtValues[1];
-            txtThirdPlayer.Text = "3rd: " + txtValues[2];
-            txtFourthPlayer.Text = "4th: " + txtValues[3];
-            txtFifthPlayer.Text = "5th: " + txtValues[4];
-        }
+        //private void SetTxtElements(List<string> txtValues)
+        //{
+        //    txtFirstPlayer.Text = "1st: " + txtValues[0];
+        //    txtSecondPlayer.Text = "2nd: " + txtValues[1];
+        //    txtThirdPlayer.Text = "3rd: " + txtValues[2];
+        //    txtFourthPlayer.Text = "4th: " + txtValues[3];
+        //    txtFifthPlayer.Text = "5th: " + txtValues[4];
+        //}
 
-        private void UIElement_OnMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        private void GoBackArrow_OnGoBackClicked(object sender, RoutedEventArgs e)
         {
             NavigationService.GoBack();
         }

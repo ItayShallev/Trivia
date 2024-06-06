@@ -14,4 +14,8 @@ public:
 	static string padNumWith0(int num, int wantedLength = DATA_BYTE_LENGTH);
 	static int charToInt(const unsigned char& digit);
 	static RequestId convertCharsToRequestId(const unsigned char& first, const unsigned char& second);
+	static void setConsoleColor(unsigned int color);
+
+	static RequestResult buildRequestResult(const Buffer& buff, std::shared_ptr<IRequestHandler> handler);
+	static GetRoomStateResponse buildRoomStateResponse(const RoomState& roomState);
 };

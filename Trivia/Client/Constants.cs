@@ -21,36 +21,44 @@ namespace Client
         
         public const int NUM_ZEROS_TO_PAD = 4;
 
-        public enum RoomState
+        public enum RoomStatus
         {
             Waiting = 0,
             Playing = 1,
-            Finished = 2 // future use?
+            Closed = 2 // future use?
         };
 
         // ************************** REQUEST & RESPONSE ID'S *************************
         public const string LogoutRequestId = "00";
         public const string LoginRequestId = "01";
         public const string SignupRequestId = "02";
-        public const string MenuRequestId = "03";
-        public const string CreateRoomRequestId = "04";
-        public const string GetRoomsRequestId = "05";
-        public const string GetPlayersInRoomRequestId = "06";
-        public const string JoinRoomRequestId = "07";
-        public const string GetStatisticsRequestId = "08";
-        public const string GetHighScoreRequestId = "09";
-        public const string CheckIfUserExistsRequestId = "10";
+        public const string CreateRoomRequestId = "03";
+        public const string GetRoomsRequestId = "04";
+        public const string GetPlayersInRoomRequestId = "05";
+        public const string JoinRoomRequestId = "06";
+        public const string GetPersonalStatisticsRequestId = "07";
+        public const string GetHighScoreRequestId = "08";
+        public const string CheckIfUserExistsRequestId = "09";
+        public const string CloseRoomRequestId = "10";
+        public const string LeaveRoomRequestId = "11";
+        public const string StartGameRequestId = "12";
+        public const string GetRoomStateRequestId = "13";
+
 
         public const string LogoutResponseId = "00";
         public const string LoginResponseId = "01";
         public const string SignupResponseId = "02";
-        public const string ErrorResponseId = "03";
+        public const string CreateRoomResponseId = "03";
         public const string GetRoomsResponseId = "04";
         public const string GetPlayersInRoomResponseId = "05";
-        public const string GetHighScoreResponseId = "06";
-        public const string GetPersonalStatsResponseId = "07";
-        public const string JoinRoomResponseId = "08";
-        public const string CreateRoomResponseId = "09";
-        public const string CheckIfUserExistsResponseId = "10";
+        public const string JoinRoomResponseId = "06";
+        public const string GetPersonalStatisticsResponseId = "07";
+        public const string GetHighScoreResponseId = "08";
+        public const string CheckIfUserExistsResponseId = "09";
+        public const string CloseRoomResponseId = "10";
+        public const string LeaveRoomResponseId = "11";
+        public const string StartGameResponseId = "12";
+        public const string GetRoomStateResponseId = "13";
+        public const string ErrorResponseId = "14";
     }
 }

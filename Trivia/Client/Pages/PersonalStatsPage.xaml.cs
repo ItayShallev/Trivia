@@ -39,14 +39,13 @@ namespace Client.Pages
             UserStatsHeader.Text = _username + "'s Personal Stats";
 
             // build and send the request
-            string message = Helper.BuildRequest(Client.Constants.GetStatisticsRequestId, "");
-            Communicator.Connection.SendMessage(message);
+            Helper.SendRequest(Constants.GetPersonalStatisticsRequestId, "");
 
 
             ///////// TODO: DEBUG TO CHECK DESERIALIZER
             // receive the response
             ResponseInfo respInfo  = Helper.GetResponseInfo(Communicator.Connection.ReceiveMessage());
-            if (respInfo.ResponseId != Client.Constants.GetPersonalStatsResponseId)
+            if (respInfo.ResponseId != Client.Constants.GetPersonalStatisticsResponseId)
             {
                 // build an error list
                 List<string> errorList = BuildErrorList(4);
@@ -58,7 +57,7 @@ namespace Client.Pages
             }
 
             // extract the personal stats from the response info
-            GetPersonalStatsResponse statsResp = JsonSerializer.Deserialize<GetPersonalStatsResponse>(respInfo.Message);
+            GetPersonalStatisticsResponse statsResp = JsonSerializer.Deserialize<GetPersonalStatisticsResponse>(respInfo.Message);
 
             // get the personal stats 
             List<string> stats = statsResp.Statistics;
@@ -84,7 +83,6 @@ namespace Client.Pages
             return errorList;
         }
 
-
         private void SetTxtElements(List<string> txtValues)
         {
             txtTotalScore.Text = "Total Score: " + txtValues[0];
@@ -93,8 +91,7 @@ namespace Client.Pages
             txtAvgAnswerTime.Text = "Average Answer Time: " + txtValues[3];
         }
 
-
-        private void UIElement_OnMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        private void GoBackArrow_OnGoBackClicked(object sender, RoutedEventArgs e)
         {
             NavigationService.GoBack();
         }

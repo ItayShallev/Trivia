@@ -73,11 +73,35 @@ Buffer JsonResponsePacketSerializer::serializeResponse(const GetHighScoreRespons
 
 Buffer JsonResponsePacketSerializer::serializeResponse(const GetPersonalStatsResponse& getPersonalStatsResponse)
 {
-	return buildResponse(ResponseId::GetPersonalStatsResponseId, getPersonalStatsResponse);
+	return buildResponse(ResponseId::GetPersonalStatisticsResponseId, getPersonalStatsResponse);
 }
 
 
 Buffer JsonResponsePacketSerializer::serializeResponse(const CheckIfUserExistsResponse& checkIfUserExistsResponse)
 {
 	return buildResponse(ResponseId::CheckIfUserExistsResponseId, checkIfUserExistsResponse);
+}
+
+
+Buffer JsonResponsePacketSerializer::serializeResponse(const CloseRoomResponse& closeRoomResponse)
+{
+	return buildResponse(ResponseId::CloseRoomResponseId, closeRoomResponse);
+}
+
+
+Buffer JsonResponsePacketSerializer::serializeResponse(const StartGameResponse& startGameResponse)
+{
+	return buildResponse(ResponseId::StartGameResponseId, startGameResponse);
+}
+
+
+Buffer JsonResponsePacketSerializer::serializeResponse(const GetRoomStateResponse& getRoomStateResponse)
+{
+	return buildResponse(ResponseId::GetRoomStateResponseId, getRoomStateResponse);
+}
+
+
+Buffer JsonResponsePacketSerializer::serializeResponse(const LeaveRoomResponse& leaveRoomResponse)
+{
+	return buildResponse(ResponseId::LeaveRoomResponseId, leaveRoomResponse);
 }

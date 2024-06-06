@@ -1,4 +1,5 @@
 #include "Room.h"
+#include <iostream>
 
 using std::find;
 
@@ -8,10 +9,11 @@ Room::Room(uint id)
 	this->m_metadata = {
 		id,
 		"",
+		"",
 		1,
 		1,
 		1,
-		RoomState::Waiting
+		RoomStatus::Waiting
 	};
 }
 
@@ -20,12 +22,16 @@ Room::Room(const RoomData& metadata)
 	this->m_metadata = metadata;
 }
 
-void Room::addUser(LoggedUser& user)
+void Room::addUser(std::shared_ptr<LoggedUser> user)
 {
-	m_users.push_back(user);
+	// if there is room to add users
+	if (m_users.size() < getMaxPlayers())
+	{
+		m_users.push_back(user);
+	}
 }
 
-void Room::removeUser(LoggedUser user)
+void Room::removeUser(std::shared_ptr<LoggedUser> user)
 {
 	// remove the user from the vector
 	auto userIndex = find(m_users.begin(), m_users.end(), user);
@@ -38,10 +44,10 @@ vector<string> Room::getAllUsers()
 	vector<string> retVector;
 
 	// iterate through the users
-	for (LoggedUser& currUser : m_users)
+	for (std::shared_ptr<LoggedUser> currUser : m_users)
 	{
-		// add the user name to the vector
-		retVector.push_back(currUser.getUserName());
+		// add the username to the vector
+		retVector.push_back(currUser->getUserName());
 	}
 
 	// return the vector
@@ -68,9 +74,9 @@ void Room::setTimePerQuestion(const uint timePerQuestion)
 	this->m_metadata.timePerQuestion = timePerQuestion;
 }
 
-void Room::setRoomState(const RoomState state)
+void Room::setRoomStatus(const RoomStatus state)
 {
-	this->m_metadata.roomState = state;
+	this->m_metadata.roomStatus = state;
 }
 
 RoomData Room::getRoomData()
@@ -88,6 +94,11 @@ string Room::getName()
 	return this->m_metadata.name;
 }
 
+string Room::getAdmin()
+{
+	return this->m_metadata.admin;
+}
+
 uint Room::getMaxPlayers()
 {
 	return this->m_metadata.maxPlayers;
@@ -103,7 +114,7 @@ uint Room::getTimePerQuestion()
 	return this->m_metadata.timePerQuestion;
 }
 
-RoomState Room::getRoomState()
+RoomStatus Room::getRoomStatus()
 {
-	return this->m_metadata.roomState;
+	return this->m_metadata.roomStatus;
 }

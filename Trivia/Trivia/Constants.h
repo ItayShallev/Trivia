@@ -11,39 +11,46 @@
 enum RequestId
 {
 	LogoutRequestId = 0,
-	LoginRequestId,
-	SignupRequestId,
-	MenuRequestId,
-	CreateRoomRequestId,
-	GetRoomsRequestId,
-	GetPlayersInRoomRequestId,
-	JoinRoomRequestId,
-	GetStatisticsRequestId,
-	GetHighScoreRequestId,
-	CheckIfUserExistsRequestId
+	LoginRequestId = 1,
+	SignupRequestId = 2,
+	CreateRoomRequestId = 3,
+	GetRoomsRequestId = 4,
+	GetPlayersInRoomRequestId = 5,
+	JoinRoomRequestId = 6,
+	GetPersonalStatisticsRequestId = 7,
+	GetHighScoreRequestId = 8,
+	CheckIfUserExistsRequestId = 9,
+	CloseRoomRequestId = 10,
+	LeaveRoomRequestId = 11,
+	StartGameRequestId = 12,
+	GetRoomStateRequestId = 13
 };
 
 
 enum ResponseId
 {
 	LogoutResponseId = 0,
-	LoginResponseId,
-	SignupResponseId,
-	ErrorResponseId,
-	GetRoomsResponseId,
-	GetPlayersInRoomResponseId,
-	GetHighScoreResponseId,
-	GetPersonalStatsResponseId,
-	JoinRoomResponseId,
-	CreateRoomResponseId,
-	CheckIfUserExistsResponseId
+	LoginResponseId = 1,
+	SignupResponseId = 2,
+	CreateRoomResponseId = 3,
+	GetRoomsResponseId = 4,
+	GetPlayersInRoomResponseId = 5,
+	JoinRoomResponseId = 6,
+	GetPersonalStatisticsResponseId = 7,
+	GetHighScoreResponseId = 8,
+	CheckIfUserExistsResponseId = 9,
+	CloseRoomResponseId = 10,
+	LeaveRoomResponseId = 11,
+	StartGameResponseId = 12,
+	GetRoomStateResponseId = 13,
+	ErrorResponseId = 14
 };
 
-enum RoomState
+enum RoomStatus
 {
 	Waiting = 0,
-	Playing = 1,
-	Finished = 2 // future use?
+	Playing,
+	Closed
 };
 
 
@@ -106,3 +113,10 @@ FOREIGN KEY (USERNAME) REFERENCES USERS(USERNAME));)"
 #define LEADERBOARD_MIN_GAMES_TO_QUALIFY 5
 #define WINS_WEIGHT 2
 #define AVERAGE_ANSWER_TIME_WEIGHT 1
+
+
+// ************************** Console Colors *************************
+#define GREEN	2
+#define WHITE	15
+#define CYAN	3
+#define GREY	7

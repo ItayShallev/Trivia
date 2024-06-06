@@ -1,17 +1,26 @@
 #include "RequestHandlerFactory.h"
 
-RequestHandlerFactory::RequestHandlerFactory(IDatabase* database) : m_database(database), m_loginManger(database, *(new vector<LoggedUser>)), m_StatisticsManager(database)
+RequestHandlerFactory::RequestHandlerFactory(IDatabase* database)
+	: m_database(database), m_loginManger(database, vector<LoggedUser>()), m_StatisticsManager(database) { }
+
+std::shared_ptr<LoginRequestHandler> RequestHandlerFactory::createLoginRequestHandler()
 {
+	return std::make_shared<LoginRequestHandler>(this);
 }
 
-LoginRequestHandler* RequestHandlerFactory::createLoginRequestHandler()
+std::shared_ptr<MenuRequestHandler> RequestHandlerFactory::createMenuRequestHandler(std::shared_ptr<LoggedUser> user)
 {
-	return new LoginRequestHandler(this);
+	return std::make_shared<MenuRequestHandler>(user, this);
 }
 
-MenuRequestHandler* RequestHandlerFactory::createMenuRequestHandler(const LoggedUser& user)
+std::shared_ptr<RoomAdminRequestHandler> RequestHandlerFactory::createRoomAdminRequestHandler(std::shared_ptr<LoggedUser> user, Room& room)
 {
-	return new MenuRequestHandler(user, this);
+	return std::make_shared<RoomAdminRequestHandler>(room, user, this->m_roomManager, this);
+}
+
+std::shared_ptr<RoomMemberRequestHandler> RequestHandlerFactory::createRoomMemberRequestHandler(std::shared_ptr<LoggedUser> user, Room& room)
+{
+	return std::make_shared<RoomMemberRequestHandler>(room, user, this->m_roomManager, this);
 }
 
 LoginManager& RequestHandlerFactory::getLoginManager()

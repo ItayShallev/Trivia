@@ -25,38 +25,20 @@ namespace Client.Pages
         public AuthenticationPage()
         {
             InitializeComponent();
-        }
 
+            // Focusing on the textBox
+            UsernameTextBox.Focus();
+        }
 
         private void BtnContinue_OnClick(object sender, RoutedEventArgs e)
         {
-            // Redirecting the user to the LoginPage or to the SignupPage depending if the user exists on the DB
+            // Checking if the user is known in the system before proceeding to the next page (Login / Signup)
+            Helper.SendRequest(Constants.CheckIfUserExistsRequestId, JsonSerializer.Serialize(new CheckIfUserExistsRequest(UsernameTextBox.Text)));
+            CheckIfUserExistsResponse checkIfUserExistsResponse = Helper.GetResponse<CheckIfUserExistsResponse>();      // Getting the server's response
 
-            string messageContent = JsonSerializer.Serialize(new CheckIfUserExistsRequest(UsernameTextBox.Text));
-            Communicator.Connection.SendMessage(Helper.BuildRequest(Constants.CheckIfUserExistsRequestId, messageContent));
-
-            ResponseInfo responseInfo = Helper.GetResponseInfo(Communicator.Connection.ReceiveMessage());
-
-            // Checking the response code
-            if (responseInfo.ResponseId == Constants.CheckIfUserExistsResponseId)           // If the server returned valid response...
-            {
-                CheckIfUserExistsResponse response = JsonSerializer.Deserialize<CheckIfUserExistsResponse>(responseInfo.Message);
-
-                if (response.Exists)
-                {
-                    LoginPage loginPage = new LoginPage(UsernameTextBox.Text);
-                    NavigationService.Navigate(loginPage);
-                }
-                else
-                {
-                    SignupPage signupPage = new SignupPage(UsernameTextBox.Text);
-                    NavigationService.Navigate(signupPage);
-                }
-            }
-            else if (responseInfo.ResponseId == Constants.CheckIfUserExistsResponseId)      // If the server returned an Error...
-            {
-                throw new Exception(responseInfo.Message);
-            }
+            // Navigating the user to the next authentication page
+            Page nextPage = (checkIfUserExistsResponse.Exists) ? new LoginPage(UsernameTextBox.Text) : new SignupPage(UsernameTextBox.Text);
+            NavigationService.Navigate(nextPage);
         }
     }
 }

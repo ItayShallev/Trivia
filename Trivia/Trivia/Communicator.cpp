@@ -28,7 +28,7 @@ void Communicator::startHandleRequests()
 
 }
 
-Communicator::Communicator(RequestHandlerFactory* handlerFactory) : m_handlerFactory(*handlerFactory)
+Communicator::Communicator(RequestHandlerFactory* handlerFactory) : m_serverSocket(INVALID_SOCKET), m_handlerFactory(*handlerFactory)
 {
 }
 
@@ -52,17 +52,14 @@ void Communicator::bindAndListen()
 	// wait for clients
 	thread waitForClientsThread(&Communicator::waitForClients, this);
 	waitForClientsThread.join(); // join the thread
-
-	
 }
 
-void Communicator::handleNewClient(SOCKET clientSoc)
+void Communicator::handleNewClient(SOCKET clientSoc, int id)
 {
 	try
 	{
 		while (true)
 		{
-
 			// status
  			cout << endl << "waiting for message ..." << endl;
 
@@ -73,10 +70,16 @@ void Communicator::handleNewClient(SOCKET clientSoc)
 				cout << "client quit, closing socket" << endl;
 				throw exception("client quit");
 			}
+
+			// Printing the request of the client
+			Helper::setConsoleColor(CYAN);
+			cout << "CLIENT: " << id << ":\n";
 			for (int i = 0; i < buff.size(); i++)
 			{
 				cout << buff[i];
 			}
+			cout << "\n";
+			Helper::setConsoleColor(WHITE);
 
 			// get the current time
             time_t now = time(nullptr);
@@ -85,7 +88,7 @@ void Communicator::handleNewClient(SOCKET clientSoc)
 			RequestInfo reqInfo = { buff, Helper::convertCharsToRequestId(buff[0], buff[1]),now};
 
 			// get the client request handler 
-			IRequestHandler* clientRequestHandler = m_clients[clientSoc];
+			IRequestHandler* clientRequestHandler = m_clients[clientSoc].get();
 
 			// check whether the request is relevant
 			bool isReqRelevant = clientRequestHandler->isRequestRelevant(reqInfo);
@@ -99,24 +102,33 @@ void Communicator::handleNewClient(SOCKET clientSoc)
 			// get the request result
 			RequestResult reqResult = clientRequestHandler->handleRequest(reqInfo);
 
-			// set the new handler
-			m_clients[clientSoc] = reqResult.newHandler;
+			// Checking if the handler has been changed
+			if (m_clients[clientSoc] != reqResult.newHandler)
+			{
+				// Resetting the old handler (Calls the handler's destructor)
+				m_clients[clientSoc].reset();
 
-			for (int i = 0; i < reqResult.response.size(); i++)
+				// Assigning the client the new handler
+				m_clients[clientSoc] = std::shared_ptr<IRequestHandler>(reqResult.newHandler);
+			}
+
+			// Printing the server's response
+			Helper::setConsoleColor(GREEN);
+			for(int i = 0; i < reqResult.response.size(); i++)
 			{
 				cout << reqResult.response[i];
 			}
+			Helper::setConsoleColor(WHITE);
 
 			// send the response to the client
 			sendDataToSocket(clientSoc, reqResult.response);
-
 		}
 	}
 	catch (const exception& e)
 	{
+		cout << e.what() << 'n';
 		closesocket(clientSoc);
 	}
-
 }
 
 void Communicator::initSocket()
@@ -149,15 +161,16 @@ void Communicator::acceptClient(SOCKET serverSoc)
 	// we got a client, print status
 	cout << "Client accepted. Server and client can speak" << endl;
 
-	// add the client to the clients map
-	// TODO: Weird info showing in debug
-	IRequestHandler* newLoginRequest = this->m_handlerFactory.createLoginRequestHandler() ;
-	auto newClientInfo = pair<SOCKET, IRequestHandler*>(clientSoc, newLoginRequest);
+	// Creating a shared pointer to a LoginRequestHandler
+	std::shared_ptr<IRequestHandler> newLoginRequestHandler = this->m_handlerFactory.createLoginRequestHandler();
+	auto newClientInfo = std::make_pair(clientSoc, newLoginRequestHandler);
+
+	// adding the <Socket,Handler> pair to the clients map
 	this->m_clients.insert(newClientInfo);
 
 	// open a thread for the new client
-	thread clientThread(&Communicator::handleNewClient, this, clientSoc);
-	clientThread.detach(); // detach the thread
+	thread clientThread(&Communicator::handleNewClient, this, clientSoc, this->m_clients.size());
+	clientThread.detach();		// detach the thread
 }
 
 Buffer Communicator::receiveDataFromSocket(SOCKET clientSoc)
@@ -193,13 +206,15 @@ Buffer Communicator::receiveDataFromSocket(SOCKET clientSoc)
 
 void Communicator::sendDataToSocket(SOCKET clientSoc, Buffer data)
 {
-	// convert the Buffer object into sendable data
+	// convert the Buffer object into sendable data (dynamically allocated memory)
 	char* sendableData = Helper::turnBufferToCharArr(data);
 
 	// send the data 
 	if (send(clientSoc, sendableData, data.size(), 0) == INVALID_SOCKET)
 	{
-		// throw exception if failed
-		throw exception("Error while sending message to client");
+		delete[] sendableData;
+		throw exception("Error while sending message to client");		// throwing an exception if failed
 	}
+
+	delete[] sendableData;
 }

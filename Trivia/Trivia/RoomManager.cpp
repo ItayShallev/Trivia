@@ -16,16 +16,16 @@ uint RoomManager::generateRoomID()
 	return retRoomID;
 }
 
-void RoomManager::createRoom(LoggedUser& host, RoomData& roomMetadata)
+void RoomManager::createRoom(std::shared_ptr<LoggedUser> host, RoomData& roomMetadata)
 {
 	// create a new room with the metadata
-	Room* newRoom = new Room(roomMetadata);
+	std::unique_ptr<Room> newRoom = std::make_unique<Room>(roomMetadata);
 
 	// add the host
 	newRoom->addUser(host);
 
-	// insert the room into the map
-	this->m_rooms.insert(pair<uint, Room*>(roomMetadata.id, newRoom));
+	// inserting the room into the map, transferring the room ownership to m_rooms
+	this->m_rooms.insert(std::make_pair(roomMetadata.id, std::move(newRoom)));
 }
 
 void RoomManager::deleteRoom(uint roomId)
@@ -36,8 +36,35 @@ void RoomManager::deleteRoom(uint roomId)
 
 RoomState RoomManager::getRoomState(uint roomId)
 {
-	// return the room state
-	return m_rooms[roomId]->getRoomState();
+	// get the room
+	Room& room = getRoom(roomId);
+
+	// build and return the room state
+	return {
+		room.getRoomStatus() == RoomStatus::Playing,
+		room.getAllUsers(),
+		room.getNumOfQuestions(),
+		room.getTimePerQuestion(),
+		room.getRoomStatus()
+	};
+}
+
+RoomState RoomManager::getRoomState(Room& room)
+{
+	// build and return the room state
+	return {
+		room.getRoomStatus() == RoomStatus::Playing,
+		room.getAllUsers(),
+		room.getNumOfQuestions(),
+		room.getTimePerQuestion(),
+		room.getRoomStatus()
+	};
+}
+
+RoomStatus RoomManager::getRoomStatus(uint roomId)
+{
+	// return the room status
+	return m_rooms[roomId]->getRoomStatus();
 }
 
 vector<RoomData> RoomManager::getRooms()

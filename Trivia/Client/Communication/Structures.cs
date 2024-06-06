@@ -11,6 +11,16 @@ namespace Client.Communication
 {
 
     // ******************* REQUESTS STRUCTURES *******************
+    public struct LogoutRequest
+    {
+        [JsonPropertyName("username")] public string Username { get; set; } = "";
+
+        public LogoutRequest(string username)
+        {
+            Username = username;
+        }
+    }
+
     public struct LoginRequest
     {
         [JsonPropertyName("username")] public string Username { get; set; } = "";
@@ -37,6 +47,26 @@ namespace Client.Communication
         }
     }
 
+    public struct CreateRoomRequest
+    {
+        [JsonPropertyName("admin")] public string Admin { get; set; } = "";
+        [JsonPropertyName("roomName")] public string RoomName { get; set; } = "";
+        [JsonPropertyName("maxPlayers")] public uint MaxPlayers { get; set; } = 0;
+        [JsonPropertyName("questionCount")] public uint QuestionCount { get; set; } = 0;
+        [JsonPropertyName("answerTimeout")] public uint AnswerTimeout { get; set; } = 0;
+
+        public CreateRoomRequest(string admin, string roomName, uint maxPlayers, uint questionCount, uint answerTimeout)
+        {
+            Admin = admin;
+            RoomName = roomName;
+            MaxPlayers = maxPlayers;
+            QuestionCount = questionCount;
+            AnswerTimeout = answerTimeout;
+        }
+    }
+
+    public struct GetRoomsRequest { }
+
     public struct GetPlayersInRoomRequest
     {
         [JsonPropertyName("roomId")] public uint RoomId { get; set; } = 0;
@@ -57,21 +87,9 @@ namespace Client.Communication
         }
     }
 
-    public struct CreateRoomRequest
-    {
-        [JsonPropertyName("roomName")] public string RoomName { get; set; } = "";
-        [JsonPropertyName("maxPlayers")] public uint MaxPlayers { get; set; } = 0;
-        [JsonPropertyName("questionCount")] public uint QuestionCount { get; set; } = 0;
-        [JsonPropertyName("answerTimeout")] public uint AnswerTimeout { get; set; } = 0;
+    public struct GetPersonalStatisticsRequest { }
 
-        public CreateRoomRequest(string roomName, uint maxPlayers, uint questionCount, uint answerTimeout)
-        {
-            RoomName = roomName;
-            MaxPlayers = maxPlayers;
-            QuestionCount = questionCount;
-            AnswerTimeout = answerTimeout;
-        }
-    }
+    public struct GetHighScoreRequest { }
 
     public struct CheckIfUserExistsRequest
     {
@@ -83,15 +101,41 @@ namespace Client.Communication
         }
     }
 
+    public struct CloseRoomRequest
+    {
+        [JsonPropertyName("roomId")] public uint RoomId { get; set; } = 0;
+
+        public CloseRoomRequest(uint roomId)
+        {
+            RoomId = roomId;
+        }
+    }
+
+    public struct LeaveRoomRequest { }
+    
+    public struct StartGameRequestId { }
+
+
+    public struct GetRoomStateRequest
+    {
+        [JsonPropertyName("roomId")] public uint RoomId { get; set; } = 0;
+
+        public GetRoomStateRequest(uint roomId)
+        {
+            RoomId = roomId;
+        }
+    }
+
 
     // ******************* RESPONSE STRUCTURES *******************
-    public struct ErrorResponse
-    {
-        [JsonPropertyName("message")] public string Message { get; set; } = "";
 
-        public ErrorResponse(string message)
+    public struct LogoutResponse
+    {
+        [JsonPropertyName("status")] public uint Status { get; set; } = 1;
+
+        public LogoutResponse(uint status)
         {
-            Message = message;
+            Status = status;
         }
     }
 
@@ -115,13 +159,15 @@ namespace Client.Communication
         }
     }
 
-    public struct LogoutResponse
+    public struct CreateRoomResponse
     {
-        [JsonPropertyName("status")] public uint Status { get; set; } = 1;
+        [JsonPropertyName("status")] public uint Status { get; set; } = 5;
+        [JsonPropertyName("roomData")] public RoomData RoomData { get; set; }
 
-        public LogoutResponse(uint status)
+        public CreateRoomResponse(uint status, RoomData roomData)
         {
             Status = status;
+            RoomData = roomData;
         }
     }
 
@@ -147,30 +193,6 @@ namespace Client.Communication
         }
     }
 
-    public struct GetHighScoreResponse
-    {
-        [JsonPropertyName("status")] public uint Status { get; set; } = 1;
-        [JsonPropertyName("statistics")] public List<string> Statistics { get; set; } = new List<string>();
-
-        public GetHighScoreResponse(uint status, List<string> statistics)
-        {
-            Status = status;
-            Statistics = statistics;
-        }
-    }
-
-    public struct GetPersonalStatsResponse
-    {
-        [JsonPropertyName("status")] public uint Status { get; set; } = 1;
-        [JsonPropertyName("statistics")] public List<string> Statistics { get; set; } = new List<string>();
-
-        public GetPersonalStatsResponse(uint status, List<string> statistics)
-        {
-            Status = status;
-            Statistics = statistics;
-        }
-    }
-
     public struct JoinRoomResponse
     {
         [JsonPropertyName("status")] public uint Status { get; set; } = 1;
@@ -181,15 +203,27 @@ namespace Client.Communication
         }
     }
 
-    public struct CreateRoomResponse
+    public struct GetPersonalStatisticsResponse
     {
-        [JsonPropertyName("status")] public uint Status { get; set; } = 5;
-        [JsonPropertyName("roomData")] public RoomData RoomData { get; set; }
+        [JsonPropertyName("status")] public uint Status { get; set; } = 1;
+        [JsonPropertyName("statistics")] public List<string> Statistics { get; set; } = new List<string>();
 
-        public CreateRoomResponse(uint status, RoomData roomData)
+        public GetPersonalStatisticsResponse(uint status, List<string> statistics)
         {
             Status = status;
-            RoomData = roomData;
+            Statistics = statistics;
+        }
+    }
+
+    public struct GetHighScoreResponse
+    {
+        [JsonPropertyName("status")] public uint Status { get; set; } = 1;
+        [JsonPropertyName("statistics")] public List<string> Statistics { get; set; } = new List<string>();
+
+        public GetHighScoreResponse(uint status, List<string> statistics)
+        {
+            Status = status;
+            Statistics = statistics;
         }
     }
 
@@ -203,23 +237,79 @@ namespace Client.Communication
         }
     }
 
+    public struct CloseRoomResponse
+    {
+        [JsonPropertyName("status")] public uint Status { get; set; } = 1;
+
+        public CloseRoomResponse(uint status)
+        {
+            Status = status;
+        }
+    }
+
+    public struct LeaveRoomResponse
+    {
+        [JsonPropertyName("status")] public uint Status { get; set; } = 1;
+
+        public LeaveRoomResponse(uint status)
+        {
+            Status = status;
+        }
+    }
+
+    public struct StartGameResponse { }
+
+    public struct GetRoomStateResponse
+    {
+        [JsonPropertyName("status")] public uint Status { get; set; } = 1;
+        [JsonPropertyName("hasGameBegan")] public bool HasGameBegan { get; set; } = false;
+        [JsonPropertyName("players")] public List<string> Players { get; set; } = new List<string>();
+        [JsonPropertyName("questionCount")] public uint QuestionCount { get; set; } = 0;
+        [JsonPropertyName("answerTimeout")] public uint AnswerTimeout { get; set; } = 0;
+        [JsonPropertyName("roomStatus")] public Constants.RoomStatus RoomStatus { get; set; } = 0;
+
+        public GetRoomStateResponse(uint status, bool hasGameBegan, List<string> players, uint questionCount, uint answerTimeout, Constants.RoomStatus roomStatus)
+        {
+            Status = status;
+            HasGameBegan = hasGameBegan;
+            Players = players;
+            QuestionCount = questionCount;
+            AnswerTimeout = answerTimeout;
+            RoomStatus = roomStatus;
+        }
+    }
+
+    public struct ErrorResponse
+    {
+        [JsonPropertyName("message")] public string Message { get; set; } = "";
+
+        public ErrorResponse(string message)
+        {
+            Message = message;
+        }
+    }
+
+
+    // ******************* OTHERS *******************
     public struct RoomData
     {
         [JsonPropertyName("id")] public uint Id { get; set; } = 0;
-        [JsonPropertyName("name")] public string Name { get; set; } = "lkdsnvlsdknfldsnlfnsdlfnlksdnflnkdslfknsdlnlk";
+        [JsonPropertyName("name")] public string Name { get; set; } = "";
+        [JsonPropertyName("admin")] public string Admin { get; set; } = "";
         [JsonPropertyName("maxPlayers")] public uint MaxPlayers { get; set; } = 0;
         [JsonPropertyName("numOfQuestionsInGame")] public uint NumOfQuestionsInGame { get; set; } = 0;
         [JsonPropertyName("timePerQuestion")] public uint TimePerQuestion { get; set; } = 0;
-        [JsonPropertyName("roomState")] public Constants.RoomState RoomState { get; set; } = Constants.RoomState.Waiting;
+        [JsonPropertyName("roomStatus")] public Constants.RoomStatus RoomStatus { get; set; } = Constants.RoomStatus.Playing;
 
-        public RoomData(uint id, string name, uint maxPlayers, uint numOfQuestionsInGame, uint timePerQuestion,
-            Constants.RoomState roomState)
+        public RoomData(uint id, string name, string admin, uint maxPlayers, uint numOfQuestionsInGame, uint timePerQuestion,
+            Constants.RoomStatus roomStatus)
         {
             Id = id;
-            //Name = name;
+            Name = name;
+            Admin = admin;
             MaxPlayers = maxPlayers;
             NumOfQuestionsInGame = numOfQuestionsInGame;
-            RoomState = roomState;
+            RoomStatus = roomStatus;
         }
     }
 

@@ -1,3 +1,4 @@
+#include <Windows.h>
 #include "Helper.h"
 
 
@@ -23,7 +24,7 @@ Buffer Helper::turnStringIntoBuffer(const char* pCh)
 char* Helper::turnBufferToCharArr(const Buffer& buff)
 {
 	// get the buffer size
-	int buffSize = buff.size();
+	size_t buffSize = buff.size();
 
 	// init a char array
 	char* retCharArr = new char[buffSize + 1];
@@ -40,7 +41,6 @@ char* Helper::turnBufferToCharArr(const Buffer& buff)
 
 	// return the char array
 	return retCharArr;
-
 }
 
 
@@ -83,3 +83,27 @@ RequestId Helper::convertCharsToRequestId(const unsigned char& first, const unsi
 {
 	return static_cast<RequestId>((Helper::charToInt(first) * DOZEN_MULTIPLIER) + Helper::charToInt(second));
 }
+
+
+void Helper::setConsoleColor(unsigned int color)
+{
+	HANDLE hConsole;
+
+	hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+	SetConsoleTextAttribute(hConsole, color);
+}
+
+RequestResult Helper::buildRequestResult(const Buffer& buff, std::shared_ptr<IRequestHandler> handler)
+{
+	return {buff, handler };
+}
+
+GetRoomStateResponse Helper::buildRoomStateResponse(const RoomState& roomState)
+{
+	// build and return the room state response
+	return {
+		1,
+		roomState
+	};
+}
+

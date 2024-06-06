@@ -7,16 +7,14 @@ class RequestHandlerFactory;
 class MenuRequestHandler : public IRequestHandler
 {
 public:
-	MenuRequestHandler(const LoggedUser& user, RequestHandlerFactory* factory);
+	MenuRequestHandler(std::shared_ptr<LoggedUser> user, RequestHandlerFactory* factory);
 	virtual bool isRequestRelevant(RequestInfo reqInfo) override;
 	virtual RequestResult handleRequest(RequestInfo reqInfo) override;
 
 private:
-	LoggedUser m_user;
+	std::shared_ptr<LoggedUser> m_user;
 	RequestHandlerFactory& m_handlerFactory;
 
-
-	RequestResult buildRequestResult(const Buffer& buff, IRequestHandler* newHandler);
 	RequestResult signout(RequestInfo reqInfo);
 	RequestResult getRooms(RequestInfo reqInfo);
 	RequestResult getPlayersInRoom(RequestInfo reqInfo);
@@ -24,6 +22,5 @@ private:
 	RequestResult getHighScore(RequestInfo reqInfo);
 	RequestResult joinRoom(RequestInfo reqInfo);
 	RequestResult createRoom(RequestInfo reqInfo);
-	
 };
 

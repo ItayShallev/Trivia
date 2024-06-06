@@ -18,14 +18,44 @@ using nlohmann::json;
 typedef unsigned int uint;
 
 
+// ************************** OTHERS *************************
+typedef vector<unsigned char> Buffer;
+
+
+struct RequestInfo
+{
+	Buffer buffer;
+	RequestId id;
+	time_t ReceivalTime;
+};
+
+
+struct RequestResult
+{
+	Buffer response;
+	std::shared_ptr<IRequestHandler> newHandler;
+};
+
+
+struct RoomState
+{
+	bool hasGameBegan;
+	vector<string> players;
+	uint questionCount;
+	uint answerTimeout;
+	RoomStatus roomStatus;
+};
+
+
 struct RoomData
 {
 	uint id;
 	string name;
+	string admin;
 	uint maxPlayers;
 	uint numOfQuestionsInGame;
 	uint timePerQuestion;
-	RoomState roomState;
+	RoomStatus roomStatus;
 };
 void to_json(json& j, const RoomData& response);
 
@@ -60,6 +90,7 @@ struct JoinRoomRequest
 
 struct CreateRoomRequest
 {
+	string admin;
 	string roomName;
 	uint maxPlayers;
 	uint questionCount;
@@ -70,6 +101,12 @@ struct CreateRoomRequest
 struct CheckIfUserExistsRequest
 {
 	string username;
+};
+
+
+struct CloseRoomRequest
+{
+	uint roomId;
 };
 
 
@@ -158,21 +195,34 @@ struct CheckIfUserExistsResponse
 void to_json(json& j, const CheckIfUserExistsResponse& response);
 
 
-
-// ************************** OTHERS *************************
-typedef vector<unsigned char> Buffer;
-
-
-struct RequestInfo
+struct CloseRoomResponse
 {
-	Buffer buffer;
-	RequestId id;
-	time_t ReceivalTime;
+	uint status = 1;
 };
+void to_json(json& j, const CloseRoomResponse& response);
 
 
-struct RequestResult
+struct StartGameResponse
 {
-	Buffer response;
-	IRequestHandler* newHandler;
+	uint status = 1;
 };
+void to_json(json& j, const StartGameResponse& response);
+
+
+struct GetRoomStateResponse
+{
+	uint status = 1;
+	RoomState roomState;
+	//bool hasGameBegan = false;
+	//vector<string> players;
+	//uint questionCount = 0;
+	//uint answerTimeout = 0;
+};
+void to_json(json& j, const GetRoomStateResponse& response);
+
+
+struct LeaveRoomResponse
+{
+	uint status = 1;
+};
+void to_json(json& j, const LeaveRoomResponse& response);
