@@ -28,6 +28,9 @@ namespace Client.Pages
         {
             this._username = username;
             InitializeComponent();
+
+            // Focusing on the password box
+            pswdPasswordBox.Focus();
         }
 
         private void BtnSignup_OnClick(object sender, RoutedEventArgs e)

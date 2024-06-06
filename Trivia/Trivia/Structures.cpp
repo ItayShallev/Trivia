@@ -5,6 +5,32 @@
 #include "Structures.h"
 
 
+// RoomData
+void to_json(json& j, const RoomData& response)
+{
+	j = json{
+		{"id", response.id},
+		{"name", response.name},
+		{"admin", response.admin},
+		{"maxPlayers", response.maxPlayers},
+		{"numOfQuestionsInGame", response.numOfQuestionsInGame},
+		{"timePerQuestion", response.timePerQuestion},
+		{"roomStatus", response.roomStatus}
+	};
+}
+
+// PlayerResults
+void to_json(json& j, const PlayerResults& response)
+{
+	j = json{
+		{"username", response.username},
+		{"correctAnswerCount", response.correctAnswerCount},
+		{"wrongAnswerCount", response.wrongAnswerCount},
+		{"averageAnswerTime", response.averageAnswerTime}
+	};
+}
+
+
 // ErrorResponse
 void to_json(json& j, const ErrorResponse& response)
 {
@@ -105,16 +131,36 @@ void to_json(json& j, const LeaveRoomResponse& response)
 	j = json{ {"status", response.status} };
 }
 
-// RoomData
-void to_json(json& j, const RoomData& response)
+// LeaveGameResponse
+void to_json(json& j, const LeaveGameResponse& response)
+{
+	j = json{ {"status", response.status} };
+}
+
+// GetQuestionResponse
+void to_json(json& j, const GetQuestionResponse& response)
 {
 	j = json{
-		{"id", response.id},
-		{"name", response.name},
-		{"admin", response.admin},
-		{"maxPlayers", response.maxPlayers},
-		{"numOfQuestionsInGame", response.numOfQuestionsInGame},
-		{"timePerQuestion", response.timePerQuestion},
-		{"roomStatus", response.roomStatus}
+		{"status", response.status},
+		{"question", response.question},
+		{"answers", response.answers}
+	};
+}
+
+// SubmitAnswerResponse
+void to_json(json& j, const SubmitAnswerResponse& response)
+{
+	j = json{
+	{"status", response.status},
+	{"correctAnswerId", response.correctAnswerId},
+	};
+}
+
+// GetGameResultResponse
+void to_json(json& j, const GetGameResultResponse& response)
+{
+	j = json{
+		{"status", response.status},
+		{"playerResults", response.results}
 	};
 }

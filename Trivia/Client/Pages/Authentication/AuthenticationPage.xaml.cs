@@ -26,7 +26,7 @@ namespace Client.Pages
         {
             InitializeComponent();
 
-            // Focusing on the textBox
+            // Focusing on the username textBox
             UsernameTextBox.Focus();
         }
 

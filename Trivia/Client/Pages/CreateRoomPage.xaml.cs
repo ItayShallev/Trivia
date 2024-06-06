@@ -36,6 +36,9 @@ namespace Client.Pages
             InitializeComponent();
 
             Username = username;
+
+            // Focusing on the room name text box
+            RoomNameTextBox.Focus();
         }
 
         // Checks if the rooms settings are valid and ready for "CreateRoom" Request

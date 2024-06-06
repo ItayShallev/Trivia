@@ -74,6 +74,7 @@
                             Click="BtnLogin_OnClick"
                             Content="Login"
                             FontSize="18"
+                            IsDefault="True"
                             Style="{StaticResource MaterialDesignFlatMidBgButton}" />
                     </Grid>
 
