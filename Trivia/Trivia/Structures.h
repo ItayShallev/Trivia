@@ -109,6 +109,11 @@ struct CloseRoomRequest
 	uint roomId;
 };
 
+struct SubmitAnswerRequest
+{
+	uint answerId;
+};
+
 
 
 // ******************* RESPONSE STRUCTURES *******************

@@ -109,6 +109,23 @@ CheckIfUserExistsRequest JsonRequestPacketDeserializer::deserializeCheckIfUserEx
     return newCheckIfUserExistsRequest;
 }
 
+SubmitAnswerRequest JsonRequestPacketDeserializer::deserializeSubmitAnswerRequest(Buffer buff)
+{
+    // get the message part of the buffer
+    string message = getMessageFromBuffer(buff);
+
+    // get the json data
+    json data = json::parse(message);
+
+    // create the request
+    SubmitAnswerRequest newSubmitAnswerRequest = {
+        data["answerId"]
+    };
+
+    // return the request
+    return newSubmitAnswerRequest;
+}
+
 string JsonRequestPacketDeserializer::getMessageFromBuffer(Buffer buff)
 {
     string dataLenStr = "";
