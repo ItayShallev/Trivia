@@ -237,6 +237,7 @@
                             Click="BtnCreateRoom_Click"
                             Content="Create Room"
                             FontSize="18"
+                            IsDefault="True"
                             Style="{StaticResource MaterialDesignFlatMidBgButton}" />
                     </Grid>
                 </Grid>
