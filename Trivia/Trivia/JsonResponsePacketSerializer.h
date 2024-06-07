@@ -29,4 +29,8 @@ public:
 	static Buffer serializeResponse(const StartGameResponse& startGameResponse);
 	static Buffer serializeResponse(const GetRoomStateResponse& getRoomStateResponse);
 	static Buffer serializeResponse(const LeaveRoomResponse& leaveRoomResponse);
+	static Buffer serializeResponse(const GetGameResultResponse& getGameResultResponse);
+	static Buffer serializeResponse(const SubmitAnswerResponse& submitAnswerResponse);
+	static Buffer serializeResponse(const GetQuestionResponse& getQuestionResponse);
+	static Buffer serializeResponse(const LeaveGameResponse& leaveGameResponse);
 };

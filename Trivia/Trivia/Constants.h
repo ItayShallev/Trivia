@@ -16,7 +16,7 @@ enum RequestId
 	CreateRoomRequestId,
 	GetRoomsRequestId,
 	GetPlayersInRoomRequestId,
-	JoinRoomRequestId ,
+	JoinRoomRequestId,
 	GetPersonalStatisticsRequestId,
 	GetHighScoreRequestId,
 	CheckIfUserExistsRequestId,
@@ -26,28 +26,32 @@ enum RequestId
 	GetRoomStateRequestId,
 	SubmitAnswerRequestId,
 	LeaveGameRequestId,
-	GetQuestionId,
-	GetGameResultId
+	GetQuestionRequestId,
+	GetGameResultRequestId
 };
 
 
 enum ResponseId
 {
 	LogoutResponseId = 0,
-	LoginResponseId = 1,
-	SignupResponseId = 2,
-	CreateRoomResponseId = 3,
-	GetRoomsResponseId = 4,
-	GetPlayersInRoomResponseId = 5,
-	JoinRoomResponseId = 6,
-	GetPersonalStatisticsResponseId = 7,
-	GetHighScoreResponseId = 8,
-	CheckIfUserExistsResponseId = 9,
-	CloseRoomResponseId = 10,
-	LeaveRoomResponseId = 11,
-	StartGameResponseId = 12,
-	GetRoomStateResponseId = 13,
-	ErrorResponseId = 14
+	LoginResponseId,
+	SignupResponseId,
+	CreateRoomResponseId,
+	GetRoomsResponseId,
+	GetPlayersInRoomResponseId,
+	JoinRoomResponseId,
+	GetPersonalStatisticsResponseId,
+	GetHighScoreResponseId,
+	CheckIfUserExistsResponseId,
+	CloseRoomResponseId,
+	LeaveRoomResponseId,
+	StartGameResponseId,
+	GetRoomStateResponseId,
+	SubmitAnswerResponseId,
+	LeaveGameResponseId,
+	GetQuestionResponseId,
+	GetGameResultResponseId,
+	ErrorResponseId
 };
 
 enum RoomStatus

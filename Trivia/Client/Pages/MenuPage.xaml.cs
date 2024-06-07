@@ -80,15 +80,20 @@ namespace Client.Pages
 
         private bool IsRoomsListUpdateNeeded(List<RoomData> rooms)
         {
-            // If a room was added/closed
-            if (rooms.Count != RoomsListDataGrid.Items.Count) { return true; }
+            // If a room was added
+            if (rooms.Count != RoomsListDataGrid.Items.Count)
+            {
+                return true;
+            }
 
             if (rooms.Count != 0)      // If the room count isn't 0
             {
-                // Checking if some room status has changed
                 List<RoomEntry> roomEntries = RoomsListDataGrid.ItemsSource as List<RoomEntry>;     // The rooms that appear on the rooms list
+
+                // Iterating over the GUI rooms list comparing it to the one that the server responded with
                 for (int i = 0; ((i < roomEntries.Count) && (i < rooms.Count)); i++)
                 {
+                    // Checking if some room status has changed
                     if (Helper.StringStatusToRoomStatus(roomEntries[i].RoomStatus) != rooms[i].RoomStatus)
                     {
                         return true;
@@ -126,13 +131,14 @@ namespace Client.Pages
             GetRoomsResponse getRoomsResponse = Helper.GetResponse<GetRoomsResponse>();
 
             // Checking if there is a need to update the rooms list
-            //if (!IsRoomsListUpdateNeeded(getRoomsResponse.Rooms)) { return; }
-
-            // Updating the rooms list UI
-            Application.Current.Dispatcher.Invoke(() =>     // To change the UI looks, the program needs to switch to the UI thread
+            if (IsRoomsListUpdateNeeded(getRoomsResponse.Rooms))
             {
-                UpdateRoomsList(getRoomsResponse.Rooms);
-            });
+                // Updating the rooms list UI
+                Application.Current.Dispatcher.Invoke(() =>     // To change the UI looks, the program needs to switch to the UI thread
+                {
+                    UpdateRoomsList(getRoomsResponse.Rooms);
+                });
+            }
         }
 
 

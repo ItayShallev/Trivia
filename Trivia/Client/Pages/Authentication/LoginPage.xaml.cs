@@ -30,6 +30,9 @@ namespace Client.Pages
         {
             this._username = username;
             InitializeComponent();
+
+            // Focusing on the password box
+            pswdPasswordBox.Focus();
         }
         
 

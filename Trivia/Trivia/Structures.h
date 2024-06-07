@@ -13,6 +13,7 @@ class IRequestHandler;
 
 using std::string;
 using std::vector;
+using std::map;
 using nlohmann::json;
 
 typedef unsigned int uint;
@@ -58,6 +59,16 @@ struct RoomData
 	RoomStatus roomStatus;
 };
 void to_json(json& j, const RoomData& response);
+
+
+struct PlayerResults
+{
+	string username;
+	uint correctAnswerCount;
+	uint wrongAnswerCount;
+	uint averageAnswerTime;
+};
+void to_json(json& j, const PlayerResults& response);
 
 
 // ******************* REQUESTS STRUCTURES *******************
@@ -218,10 +229,6 @@ struct GetRoomStateResponse
 {
 	uint status = 1;
 	RoomState roomState;
-	//bool hasGameBegan = false;
-	//vector<string> players;
-	//uint questionCount = 0;
-	//uint answerTimeout = 0;
 };
 void to_json(json& j, const GetRoomStateResponse& response);
 
@@ -231,3 +238,35 @@ struct LeaveRoomResponse
 	uint status = 1;
 };
 void to_json(json& j, const LeaveRoomResponse& response);
+
+
+struct LeaveGameResponse
+{
+	uint status = 1;
+};
+void to_json(json& j, const LeaveGameResponse& response);
+
+
+struct GetQuestionResponse
+{
+	uint status = 1;
+	string question;
+	map<uint, string> answers;
+};
+void to_json(json& j, const GetQuestionResponse& response);
+
+
+struct SubmitAnswerResponse
+{
+	uint status = 1;
+	uint correctAnswerId = 0;
+};
+void to_json(json& j, const SubmitAnswerResponse& response);
+
+
+struct GetGameResultResponse
+{
+	uint status;
+	vector<PlayerResults> results;
+};
+void to_json(json& j, const GetGameResultResponse& response);
