@@ -123,6 +123,7 @@ struct CloseRoomRequest
 struct SubmitAnswerRequest
 {
 	uint answerId;
+	double answerTime;
 };
 
 
