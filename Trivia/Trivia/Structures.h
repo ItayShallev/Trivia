@@ -74,7 +74,7 @@ void to_json(json& j, const PlayerResults& response);
 
 struct GameData
 {
-	Question currentQuestion;
+	Question currentQuestion = Question("", vector<string>(), 0);
 	uint correctAnswerCount = 0;
 	uint wrongAnswerCount = 0;
 	double averageAnswerTime = 0.0;

@@ -1,7 +1,10 @@
 #pragma once
 
+#include <set>
 #include "Structures.h"
 #include "Constants.h"
+
+using std::set;
 
 
 class Helper
@@ -18,4 +21,9 @@ public:
 
 	static RequestResult buildRequestResult(const Buffer& buff, std::shared_ptr<IRequestHandler> handler);
 	static GetRoomStateResponse buildRoomStateResponse(const RoomState& roomState);
+
+	static int generateRandomNumber(const int& minValue, const int& maxValue);
+	static set<int> generateRandomNumbersSet(const int& setSize, const int& minValue, const int& maxValue);
+
+	static int shuffleAnswers(vector<string>& possibleAnswers, const string& correctAnswer);
 };

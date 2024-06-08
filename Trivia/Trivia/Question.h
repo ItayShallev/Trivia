@@ -12,10 +12,16 @@ using std::vector;
 class Question
 {
 public:
+	Question();
 	Question(const string& question, const vector<string>& possibleAnswers, const uint& answerId);
+
 	string getQuestion() const;
 	vector<string> getPossibleAnswers() const;
 	uint getCorrectAnswerId() const;
+
+	void setQuestion(const string& question);
+	void setPossibleAnswers(const vector<string>& possibleAnswers);
+	void setCorrectAnswerId(uint answerId);
 
 
 private:
