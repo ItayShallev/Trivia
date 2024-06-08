@@ -79,42 +79,47 @@ void Room::setRoomStatus(const RoomStatus state)
 	this->m_metadata.roomStatus = state;
 }
 
-RoomData Room::getRoomData()
+vector<std::shared_ptr<LoggedUser>> Room::getUsers() const
+{
+	return this->m_users;
+}
+
+RoomData Room::getRoomData() const
 {
 	return this->m_metadata;
 }
 
-uint Room::getID()
+uint Room::getID() const
 {
 	return this->m_metadata.id;
 }
 
-string Room::getName()
+string Room::getName() const
 {
 	return this->m_metadata.name;
 }
 
-string Room::getAdmin()
+string Room::getAdmin() const
 {
 	return this->m_metadata.admin;
 }
 
-uint Room::getMaxPlayers()
+uint Room::getMaxPlayers() const
 {
 	return this->m_metadata.maxPlayers;
 }
 
-uint Room::getNumOfQuestions()
+uint Room::getNumOfQuestions() const
 {
 	return this->m_metadata.numOfQuestionsInGame;
 }
 
-uint Room::getTimePerQuestion()
+uint Room::getTimePerQuestion() const
 {
 	return this->m_metadata.timePerQuestion;
 }
 
-RoomStatus Room::getRoomStatus()
+RoomStatus Room::getRoomStatus() const
 {
 	return this->m_metadata.roomStatus;
 }

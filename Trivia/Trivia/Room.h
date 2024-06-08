@@ -24,14 +24,15 @@ public:
 	void setRoomStatus(const RoomStatus state);
 
 	// getters
-	RoomData getRoomData();
-	uint getID();
-	string getName();
-	string getAdmin();
-	uint getMaxPlayers();
-	uint getNumOfQuestions();
-	uint getTimePerQuestion();
-	RoomStatus getRoomStatus();
+	vector<std::shared_ptr<LoggedUser>> getUsers() const;
+	RoomData getRoomData() const;
+	uint getID() const;
+	string getName() const;
+	string getAdmin() const;
+	uint getMaxPlayers() const;
+	uint getNumOfQuestions() const;
+	uint getTimePerQuestion() const;
+	RoomStatus getRoomStatus() const;
 
 };
 

@@ -1,5 +1,12 @@
 #include <Windows.h>
+#include <random>
 #include "Helper.h"
+
+
+using std::shuffle;
+using std::find;
+using std::distance;
+using std::default_random_engine;
 
 
 /**
@@ -50,13 +57,13 @@ char* Helper::turnBufferToCharArr(const Buffer& buff)
  * \param		wantedLength	The wanted string length to return
  * \return		The given number padded with enough zeros to reach the wantedLength
  */
-string Helper::padNumWith0(int num, int wantedLength)
+string Helper::padNumWith0(size_t num, int wantedLength)
 {
 	// get the num string
 	string numStr = std::to_string(num);
 
 	// get the num of zeroes to add to the number
-	int zerosToPad = wantedLength - numStr.length();
+	size_t zerosToPad = wantedLength - numStr.length();
 
 	// there are zeroes to add
 	if (zerosToPad > 0)
@@ -107,3 +114,42 @@ GetRoomStateResponse Helper::buildRoomStateResponse(const RoomState& roomState)
 	};
 }
 
+int Helper::generateRandomNumber(const int& minValue, const int& maxValue)
+{
+	srand((unsigned)time(NULL));
+	int range = maxValue - minValue + 1;
+
+	return rand() % range + minValue;
+}
+
+set<int> Helper::generateRandomNumbersSet(const int& setSize, const int& minValue, const int& maxValue)
+{
+	set<int> randomNumbers;
+
+	while (randomNumbers.size() < setSize)
+	{
+		int randomNumber = Helper::generateRandomNumber(minValue, maxValue);
+
+		// Trying to insert the random number only if it wasn't generated already
+		if (randomNumbers.find(randomNumber) == randomNumbers.end())
+		{
+			randomNumbers.insert(randomNumber);
+		}
+	}
+
+	return randomNumbers;
+}
+
+int Helper::shuffleAnswers(vector<string>& possibleAnswers, const string& correctAnswer)
+{
+	auto rng = default_random_engine { };
+
+	// Shuffling the possible answers vector
+	shuffle(possibleAnswers.begin(), possibleAnswers.end(), rng);
+
+	// Finding the index of the correct answer
+	auto it = find(possibleAnswers.begin(), possibleAnswers.end(), correctAnswer);
+
+	// Returning the index of the correct answer
+	return distance(possibleAnswers.begin(), it);
+}

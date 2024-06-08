@@ -1,10 +1,13 @@
 #include "SqliteDatabase.h"
 #include "Constants.h"
+#include "Helper.h"
 #include <iostream>
 #include <io.h>
+#include <set>
 
 
 using std::string;
+using std::set;
 using std::to_string;
 using std::cout;
 using std::stoi;
@@ -436,4 +439,73 @@ vector<string> SqliteDatabase::getHighScores()
 	executeSqlStatement(statement, getHighScoresCallback, &highScores);
 
 	return highScores;
+}
+
+
+/**
+ * @brief	Callback function for getting a question from the database
+ * @return	0 (indicates success)
+ */
+int SqliteDatabase::getQuestionCallback(void* data, int argc, char** argv, char** azColName)
+{
+	Question* question = static_cast<Question*>(data);
+
+	// Setting the question text
+	question->setQuestion(argv[0]);
+
+	// Shuffling the possible answers
+	vector<string> possibleAnswers{ argv[CORRECT_ANSWER_INDEX],argv[INCORRECT_ANSWER_1_INDEX],
+									argv[INCORRECT_ANSWER_2_INDEX], argv[INCORRECT_ANSWER_3_INDEX] };
+	int correctAnswerId = Helper::shuffleAnswers(possibleAnswers, argv[CORRECT_ANSWER_INDEX]);
+
+	// Setting the possible answers
+	question->setPossibleAnswers(possibleAnswers);
+
+	// Setting the correct answerId
+	question->setCorrectAnswerId(correctAnswerId);
+
+	return 0;
+}
+
+
+/**
+ * @brief	Returns the question with the given id from the database
+ * @param	questionId		The id of the question to retrieve from the database
+ * @return	The question with the given question id
+ */
+Question SqliteDatabase::getQuestion(const int& questionId)
+{
+	const string statement = R"(
+					BEGIN TRANSACTION;
+					
+					SELECT QUESTION, CORRECT_ANSWER, INCORRECT_ANSWER_1, INCORRECT_ANSWER_2, INCORRECT_ANSWER_3
+					FROM QUESTIONS
+					WHERE ID = )" + to_string(questionId) + R"(;
+					
+					END TRANSACTION;
+					)";
+
+	Question question;
+	executeSqlStatement(statement, getQuestionCallback, &question);
+
+	return question;
+}
+
+
+/**
+ * @brief	Returns a vector of random and unique questions from the database
+ * @param	numberOfQuestions		The amount of questions to get from the database
+ * @return	A vector with the wanted amount of questions
+ */
+vector<Question> SqliteDatabase::getRandomQuestions(const int& numberOfQuestions)
+{
+	set<int> questionsIds = Helper::generateRandomNumbersSet(numberOfQuestions, QUESTIONS_TABLE_STARTING_ID, NUM_OF_QUESTIONS_IN_DB);
+
+	vector<Question> questions;
+	for (int questionId : questionsIds)
+	{
+		questions.push_back(this->getQuestion(questionId));
+	}
+
+	return questions;
 }
