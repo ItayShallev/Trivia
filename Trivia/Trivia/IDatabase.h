@@ -30,5 +30,5 @@ public:
 	virtual vector<string> getHighScores() = 0;
 
 	virtual Question getQuestion(const int& questionId) = 0;
-	virtual vector<Question> getRandomQuestions(const uint& numberOfQuestions) = 0;
+	virtual vector<Question> getRandomQuestions(const int& numberOfQuestions) = 0;
 };

@@ -70,6 +70,12 @@ bool Game::isGameEnded() const
 }
 
 
+uint Game::getGameId() const
+{
+	return this->m_gameId;
+}
+
+
 map<std::shared_ptr<LoggedUser>, GameData> Game::getPlayers() const
 {
 	return this->m_players;

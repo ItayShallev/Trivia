@@ -17,7 +17,10 @@ public:
 	void submitAnswer(const std::shared_ptr<LoggedUser>& user, const uint& answerId, const double& answerTime);
 	void removeUser(const std::shared_ptr<LoggedUser>& user);
 	bool isGameEnded() const;
+
+	uint getGameId() const;
 	map<std::shared_ptr<LoggedUser>, GameData> getPlayers() const;
+
 
 private:
 	uint m_gameId;

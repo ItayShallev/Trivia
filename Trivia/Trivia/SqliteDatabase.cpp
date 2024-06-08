@@ -497,7 +497,7 @@ Question SqliteDatabase::getQuestion(const int& questionId)
  * @param	numberOfQuestions		The amount of questions to get from the database
  * @return	A vector with the wanted amount of questions
  */
-vector<Question> SqliteDatabase::getRandomQuestions(const uint& numberOfQuestions)
+vector<Question> SqliteDatabase::getRandomQuestions(const int& numberOfQuestions)
 {
 	set<int> questionsIds = Helper::generateRandomNumbersSet(numberOfQuestions, QUESTIONS_TABLE_STARTING_ID, NUM_OF_QUESTIONS_IN_DB);
 

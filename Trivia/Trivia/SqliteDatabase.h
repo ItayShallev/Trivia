@@ -47,7 +47,7 @@ public:
 	// ************************************************* GAME queries *************************************************
 	static int getQuestionCallback(void* data, int argc, char** argv, char** azColName);						   // *
 	virtual Question getQuestion(const int& questionId) override;												   // *
-	virtual vector<Question> getRandomQuestions(const uint& numberOfQuestions) override;						   // *
+	virtual vector<Question> getRandomQuestions(const int& numberOfQuestions) override;							   // *
 	// ****************************************************************************************************************
 
 

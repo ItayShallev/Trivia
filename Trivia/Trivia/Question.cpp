@@ -4,7 +4,7 @@
 Question::Question() : m_question(""), m_possibleAnswers(vector<string>()), m_answerId(0) { }
 
 
-Question::Question(const string& question, const vector<string>& possibleAnswers, const uint& answerId)
+Question::Question(const string& question, const vector<string>& possibleAnswers, const int& answerId)
 	: m_question(question), m_possibleAnswers(possibleAnswers), m_answerId(answerId) { }
 
 
@@ -20,7 +20,7 @@ vector<string> Question::getPossibleAnswers() const
 }
 
 
-uint Question::getCorrectAnswerId() const
+int Question::getCorrectAnswerId() const
 {
 	return this->m_answerId;
 }
@@ -38,7 +38,7 @@ void Question::setPossibleAnswers(const vector<string>& possibleAnswers)
 }
 
 
-void Question::setCorrectAnswerId(uint answerId)
+void Question::setCorrectAnswerId(int answerId)
 {
 	this->m_answerId = answerId;
 }
