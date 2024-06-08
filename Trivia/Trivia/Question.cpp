@@ -1,6 +1,10 @@
 #include "Question.h"
 
 
+Question::Question(const string& question, const vector<string>& possibleAnswers, const uint& answerId)
+	: m_question(question), m_possibleAnswers(possibleAnswers), m_answerId(answerId) { }
+
+
 string Question::getQuestion() const
 {
 	return this->m_question;
@@ -13,7 +17,7 @@ vector<string> Question::getPossibleAnswers() const
 }
 
 
-int Question::getCorrectAnswerId() const
+uint Question::getCorrectAnswerId() const
 {
-	return 0;	// Always returns 0, since when a question is initialized, the correct answer is always being pushed first...
+	return this->m_answerId;
 }
