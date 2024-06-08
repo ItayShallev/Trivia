@@ -119,7 +119,8 @@ SubmitAnswerRequest JsonRequestPacketDeserializer::deserializeSubmitAnswerReques
 
     // create the request
     SubmitAnswerRequest newSubmitAnswerRequest = {
-        data["answerId"]
+        data["answerId"],
+        data["answerTime"]
     };
 
     // return the request
