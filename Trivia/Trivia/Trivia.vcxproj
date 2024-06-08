@@ -129,6 +129,7 @@
   <ItemGroup>
     <ClInclude Include="Communicator.h" />
     <ClInclude Include="Constants.h" />
+    <ClInclude Include="Question.h" />
     <ClInclude Include="Helper.h" />
     <ClInclude Include="IDatabase.h" />
     <ClInclude Include="IRequestHandler.h" />
@@ -160,6 +161,7 @@
     <ClCompile Include="LoginManager.cpp" />
     <ClCompile Include="LoginRequestHandler.cpp" />
     <ClCompile Include="MenuRequestHandler.cpp" />
+    <ClCompile Include="Question.cpp" />
     <ClCompile Include="RequestHandlerFactory.cpp" />
     <ClCompile Include="Room.cpp" />
     <ClCompile Include="RoomAdminRequestHandler.cpp" />
