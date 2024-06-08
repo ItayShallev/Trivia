@@ -3,7 +3,8 @@ import json
 import html
 import sqlite3
 
-QUESTIONS_URL = "https://opentdb.com/api.php?amount=50&type=multiple"
+NUMBER_OF_QUESTIONS_TO_FETCH = 50
+QUESTIONS_URL = "https://opentdb.com/api.php?amount=" + str(NUMBER_OF_QUESTIONS_TO_FETCH) + "&type=multiple"
 SUCCESS_CODE = 0
 
 

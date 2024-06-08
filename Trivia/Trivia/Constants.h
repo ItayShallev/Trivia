@@ -112,15 +112,24 @@ NUM_ROOMS_CREATED INTEGER NOT NULL,
 NUM_ROOMS_JOINED INTEGER NOT NULL,
 FOREIGN KEY (USERNAME) REFERENCES USERS(USERNAME));)"
 
+#define QUESTIONS_TABLE_STARTING_ID 1
+#define NUM_OF_QUESTIONS_IN_DB		50
+
+#define CORRECT_ANSWER_INDEX		1
+#define INCORRECT_ANSWER_1_INDEX	2
+#define INCORRECT_ANSWER_2_INDEX	3
+#define INCORRECT_ANSWER_3_INDEX	4
+
+
 
 
 
 // ************************** Game *************************
 // Leaderboard
-#define LEADERBOARD_SIZE 5
-#define LEADERBOARD_MIN_GAMES_TO_QUALIFY 5
-#define WINS_WEIGHT 2
-#define AVERAGE_ANSWER_TIME_WEIGHT 1
+#define LEADERBOARD_SIZE					5
+#define LEADERBOARD_MIN_GAMES_TO_QUALIFY	5
+#define WINS_WEIGHT							2
+#define AVERAGE_ANSWER_TIME_WEIGHT			1
 
 
 // ************************** Console Colors *************************

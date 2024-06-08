@@ -6,6 +6,7 @@
 #include "Constants.h"
 #include "IRequestHandler.h"
 #include "json.hpp"
+#include "Question.h"
 
 // Forward declarations
 struct RoomData;
@@ -71,6 +72,15 @@ struct PlayerResults
 void to_json(json& j, const PlayerResults& response);
 
 
+struct GameData
+{
+	Question currentQuestion;
+	uint correctAnswerCount = 0;
+	uint wrongAnswerCount = 0;
+	double averageAnswerTime = 0.0;
+};
+
+
 // ******************* REQUESTS STRUCTURES *******************
 struct LoginRequest
 {
@@ -119,6 +129,7 @@ struct CloseRoomRequest
 {
 	uint roomId;
 };
+
 
 struct SubmitAnswerRequest
 {
