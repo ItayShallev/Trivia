@@ -84,9 +84,14 @@ RequestResult RoomAdminRequestHandler::startGame(RequestInfo reqInfo)
     // create the room state response
     GetRoomStateResponse roomStateResp = Helper::buildRoomStateResponse(currRoomState);
 
+    // create the game
+    std::shared_ptr<Game> game = this->m_handlerFactory->getGameManager().createGame(this->m_room);
+
+    // create a new game handler
+    std::shared_ptr<GameRequestHandler> newGameHandler = this->m_handlerFactory->createGameRequestHandler(game, this->m_user);
+
     // build and return the request result
-    return Helper::buildRequestResult(JsonResponsePacketSerializer::serializeResponse(roomStateResp),
-        std::shared_ptr<RoomAdminRequestHandler>(this, [](RoomAdminRequestHandler*) {}));
+    return Helper::buildRequestResult(JsonResponsePacketSerializer::serializeResponse(roomStateResp),newGameHandler);
 }
 
 RequestResult RoomAdminRequestHandler::getRoomState(RequestInfo reqInfo)

@@ -48,8 +48,24 @@ RequestResult RoomMemberRequestHandler::getRoomState(RequestInfo reqInfo)
 	// get the room state
 	RoomState currRoomState = this->m_roomManager.getRoomState(this->m_room);
 
+
 	// create the room state response
 	GetRoomStateResponse roomStateResp = Helper::buildRoomStateResponse(currRoomState);
+
+
+	// if the room has started playing
+	if(currRoomState.roomStatus == RoomStatus::Playing)
+	{
+		// get the room
+		std::shared_ptr<Game> game = this->m_handlerFactory->getGameManager().createGame(this->m_room);
+
+		// create the new game handler
+		std::shared_ptr<GameRequestHandler> gameHandler = this->m_handlerFactory->createGameRequestHandler(game, this->m_user);
+
+		// build and return the request result
+		return Helper::buildRequestResult(JsonResponsePacketSerializer::serializeResponse(roomStateResp), gameHandler);
+
+	}
 
 	// build and return the request result
 	return (Helper::buildRequestResult(JsonResponsePacketSerializer::serializeResponse(roomStateResp),
