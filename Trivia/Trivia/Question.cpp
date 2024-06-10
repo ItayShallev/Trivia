@@ -1,10 +1,10 @@
 #include "Question.h"
 
 
-Question::Question() : m_question(""), m_possibleAnswers(vector<string>()), m_answerId(0) { }
+Question::Question() : m_question(""), m_possibleAnswers(map<uint, string>()), m_answerId(0) { }
 
 
-Question::Question(const string& question, const vector<string>& possibleAnswers, const int& answerId)
+Question::Question(const string& question, const map<uint, string>& possibleAnswers, const uint& answerId)
 	: m_question(question), m_possibleAnswers(possibleAnswers), m_answerId(answerId) { }
 
 
@@ -14,13 +14,13 @@ string Question::getQuestion() const
 }
 
 
-vector<string> Question::getPossibleAnswers() const
+map<uint, string> Question::getPossibleAnswers() const
 {
 	return this->m_possibleAnswers;
 }
 
 
-int Question::getCorrectAnswerId() const
+uint Question::getCorrectAnswerId() const
 {
 	return this->m_answerId;
 }
@@ -32,13 +32,13 @@ void Question::setQuestion(const string& question)
 }
 
 
-void Question::setPossibleAnswers(const vector<string>& possibleAnswers)
+void Question::setPossibleAnswers(const map<uint, string>& possibleAnswers)
 {
 	this->m_possibleAnswers = possibleAnswers;
 }
 
 
-void Question::setCorrectAnswerId(int answerId)
+void Question::setCorrectAnswerId(const uint& answerId)
 {
 	this->m_answerId = answerId;
 }

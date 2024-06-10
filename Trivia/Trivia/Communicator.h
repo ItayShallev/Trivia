@@ -1,11 +1,10 @@
 #pragma once
 
 #include  "IRequestHandler.h"
+#include "RequestHandlerFactory.h"
 #include <WinSock2.h>
 #include <map>
 #include <string>
-
-#include "RequestHandlerFactory.h"
 
 using std::map;
 using std::string;

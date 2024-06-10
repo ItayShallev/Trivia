@@ -32,8 +32,8 @@ public:
 	std::shared_ptr<RoomAdminRequestHandler> createRoomAdminRequestHandler(std::shared_ptr<LoggedUser> user, Room& room);
 	std::shared_ptr<RoomMemberRequestHandler> createRoomMemberRequestHandler(std::shared_ptr<LoggedUser> user, Room& room);
 	std::shared_ptr<GameRequestHandler> createGameRequestHandler(std::shared_ptr<Game> game, std::shared_ptr<LoggedUser> user);
-	GameManager& getGameManager();
 
+	GameManager& getGameManager();
 	LoginManager& getLoginManager();
 	RoomManager& getRoomManager();
 	StatisticsManager& getStatisticsManager();

@@ -33,10 +33,10 @@ public:
 
 	// ******************************************* STATISTICS table queries *******************************************
 	virtual float getPlayerAverageAnswerTime(const string& username) override;									   // *
-	virtual int getNumOfCorrectAnswers(const string& username) override;										   // *
-	virtual int getNumOfTotalAnswers(const string& username) override;											   // *
-	virtual int getNumOfPlayerGames(const string& username) override;											   // *
-	virtual int getPlayerScore(const string& username) override;												   // *
+	virtual uint getNumOfCorrectAnswers(const string& username) override;										   // *
+	virtual uint getNumOfTotalAnswers(const string& username) override;											   // *
+	virtual uint getNumOfPlayerGames(const string& username) override;											   // *
+	virtual uint getPlayerScore(const string& username) override;												   // *
 																												   // *
 	virtual vector<string> getUserStatistics(const string& username) override;									   // *
 																												   // *
@@ -46,8 +46,8 @@ public:
 
 	// ************************************************* GAME queries *************************************************
 	static int getQuestionCallback(void* data, int argc, char** argv, char** azColName);						   // *
-	virtual Question getQuestion(const int& questionId) override;												   // *
-	virtual vector<Question> getRandomQuestions(const int& numberOfQuestions) override;							   // *
+	virtual Question getQuestion(const uint& questionId) override;												   // *
+	virtual vector<Question> getRandomQuestions(const uint& numberOfQuestions) override;							   // *
 	// ****************************************************************************************************************
 
 

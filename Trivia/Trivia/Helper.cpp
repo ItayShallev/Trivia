@@ -57,7 +57,7 @@ char* Helper::turnBufferToCharArr(const Buffer& buff)
  * \param		wantedLength	The wanted string length to return
  * \return		The given number padded with enough zeros to reach the wantedLength
  */
-string Helper::padNumWith0(size_t num, int wantedLength)
+string Helper::padNumWith0(size_t num, uint wantedLength)
 {
 	// get the num string
 	string numStr = std::to_string(num);
@@ -140,16 +140,16 @@ set<int> Helper::generateRandomNumbersSet(const int& setSize, const int& minValu
 	return randomNumbers;
 }
 
-int Helper::shuffleAnswers(vector<string>& possibleAnswers, const string& correctAnswer)
-{
-	auto rng = default_random_engine { };
-
-	// Shuffling the possible answers vector
-	shuffle(possibleAnswers.begin(), possibleAnswers.end(), rng);
-
-	// Finding the index of the correct answer
-	auto it = find(possibleAnswers.begin(), possibleAnswers.end(), correctAnswer);
-
-	// Returning the index of the correct answer
-	return distance(possibleAnswers.begin(), it);
-}
+//int Helper::shuffleAnswers(vector<string>& possibleAnswers, const string& correctAnswer)
+//{
+//	auto rng = default_random_engine { };
+//
+//	// Shuffling the possible answers vector
+//	shuffle(possibleAnswers.begin(), possibleAnswers.end(), rng);
+//
+//	// Finding the index of the correct answer
+//	auto it = find(possibleAnswers.begin(), possibleAnswers.end(), correctAnswer);
+//
+//	// Returning the index of the correct answer
+//	return distance(possibleAnswers.begin(), it);
+//}

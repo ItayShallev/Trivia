@@ -61,20 +61,20 @@ void Communicator::handleNewClient(SOCKET clientSoc, int id)
 		while (true)
 		{
 			// status
- 			cout << endl << "waiting for message ..." << endl;
+ 			cout << '\n' << "waiting for message ..." << '\n';
 
 			// get the data message
 			Buffer buff = receiveDataFromSocket(clientSoc);
 			if (buff.size() == 0) // might imply the user quit
 			{
-				cout << "client quit, closing socket" << endl;
+				cout << "client quit, closing socket" << '\n';
 				throw exception("client quit");
 			}
 
 			// Printing the request of the client
 			Helper::setConsoleColor(CYAN);
 			cout << "CLIENT: " << id << ":\n";
-			for (int i = 0; i < buff.size(); i++)
+			for (size_t i = 0; i < buff.size(); i++)
 			{
 				cout << buff[i];
 			}
@@ -114,7 +114,7 @@ void Communicator::handleNewClient(SOCKET clientSoc, int id)
 
 			// Printing the server's response
 			Helper::setConsoleColor(GREEN);
-			for(int i = 0; i < reqResult.response.size(); i++)
+			for(size_t i = 0; i < reqResult.response.size(); i++)
 			{
 				cout << reqResult.response[i];
 			}
