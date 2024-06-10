@@ -300,7 +300,7 @@ float SqliteDatabase::getPlayerAverageAnswerTime(const string& username)
  * param	username	The username of the user to get its number of correct answers
  * return	The number of correct answers of the given user
  */
-int SqliteDatabase::getNumOfCorrectAnswers(const string& username)
+uint SqliteDatabase::getNumOfCorrectAnswers(const string& username)
 {
 	const string statement = R"(
 					BEGIN TRANSACTION;
@@ -323,7 +323,7 @@ int SqliteDatabase::getNumOfCorrectAnswers(const string& username)
  * param	username	The username of the user to get its number of total answers
  * return	The number of total answers the given user has answered
  */
-int SqliteDatabase::getNumOfTotalAnswers(const string& username)
+uint SqliteDatabase::getNumOfTotalAnswers(const string& username)
 {
 	const string statement = R"(
 					BEGIN TRANSACTION;
@@ -345,7 +345,7 @@ int SqliteDatabase::getNumOfTotalAnswers(const string& username)
  * param	username	The username of the user to get its number of played games
  * return	The number of games the given user has played
  */
-int SqliteDatabase::getNumOfPlayerGames(const string& username)
+uint SqliteDatabase::getNumOfPlayerGames(const string& username)
 {
 	const string statement = R"(
 					BEGIN TRANSACTION;
@@ -369,7 +369,7 @@ int SqliteDatabase::getNumOfPlayerGames(const string& username)
  * param	username	The username of the user to get its score
  * return	The score of the given user
  */
-int SqliteDatabase::getPlayerScore(const string& username)
+uint SqliteDatabase::getPlayerScore(const string& username)
 {
 	const string statement = R"(
 					BEGIN TRANSACTION;
@@ -454,15 +454,18 @@ int SqliteDatabase::getQuestionCallback(void* data, int argc, char** argv, char*
 	question->setQuestion(argv[0]);
 
 	// Shuffling the possible answers
-	vector<string> possibleAnswers{ argv[CORRECT_ANSWER_INDEX],argv[INCORRECT_ANSWER_1_INDEX],
-									argv[INCORRECT_ANSWER_2_INDEX], argv[INCORRECT_ANSWER_3_INDEX] };
-	int correctAnswerId = Helper::shuffleAnswers(possibleAnswers, argv[CORRECT_ANSWER_INDEX]);
+	map<uint, string> possibleAnswers = {
+		{0, argv[CORRECT_ANSWER_INDEX]},
+		{1, argv[INCORRECT_ANSWER_1_INDEX]},
+		{2, argv[INCORRECT_ANSWER_2_INDEX]},
+		{3, argv[INCORRECT_ANSWER_3_INDEX]}
+	};
 
 	// Setting the possible answers
 	question->setPossibleAnswers(possibleAnswers);
 
 	// Setting the correct answerId
-	question->setCorrectAnswerId(correctAnswerId);
+	question->setCorrectAnswerId(0);
 
 	return 0;
 }
@@ -473,7 +476,7 @@ int SqliteDatabase::getQuestionCallback(void* data, int argc, char** argv, char*
  * @param	questionId		The id of the question to retrieve from the database
  * @return	The question with the given question id
  */
-Question SqliteDatabase::getQuestion(const int& questionId)
+Question SqliteDatabase::getQuestion(const uint& questionId)
 {
 	const string statement = R"(
 					BEGIN TRANSACTION;
@@ -497,7 +500,7 @@ Question SqliteDatabase::getQuestion(const int& questionId)
  * @param	numberOfQuestions		The amount of questions to get from the database
  * @return	A vector with the wanted amount of questions
  */
-vector<Question> SqliteDatabase::getRandomQuestions(const int& numberOfQuestions)
+vector<Question> SqliteDatabase::getRandomQuestions(const uint& numberOfQuestions)
 {
 	set<int> questionsIds = Helper::generateRandomNumbersSet(numberOfQuestions, QUESTIONS_TABLE_STARTING_ID, NUM_OF_QUESTIONS_IN_DB);
 

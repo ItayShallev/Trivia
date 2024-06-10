@@ -17,8 +17,6 @@ using std::vector;
 using std::map;
 using nlohmann::json;
 
-typedef unsigned int uint;
-
 
 // ************************** OTHERS *************************
 typedef vector<unsigned char> Buffer;
@@ -67,7 +65,7 @@ struct PlayerResults
 	string username;
 	uint correctAnswerCount;
 	uint wrongAnswerCount;
-	uint averageAnswerTime;
+	double averageAnswerTime;
 };
 void to_json(json& j, const PlayerResults& response);
 

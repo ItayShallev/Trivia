@@ -1,30 +1,32 @@
 #pragma once
 
 #include <string>
-#include <vector>
+#include <map>
 
 
 using std::string;
-using std::vector;
+using std::map;
+
+typedef unsigned int uint;
 
 
 class Question
 {
 public:
 	Question();
-	Question(const string& question, const vector<string>& possibleAnswers, const int& answerId);
+	Question(const string& question, const map<uint, string>& possibleAnswers, const uint& answerId);
 
 	string getQuestion() const;
-	vector<string> getPossibleAnswers() const;
-	int getCorrectAnswerId() const;
+	map<uint, string> getPossibleAnswers() const;
+	uint getCorrectAnswerId() const;
 
 	void setQuestion(const string& question);
-	void setPossibleAnswers(const vector<string>& possibleAnswers);
-	void setCorrectAnswerId(int answerId);
+	void setPossibleAnswers(const map<uint, string>& possibleAnswers);
+	void setCorrectAnswerId(const uint& answerId);
 
 
 private:
 	string m_question;
-	vector<string> m_possibleAnswers;
-	int m_answerId;
+	map<uint, string> m_possibleAnswers;
+	uint m_answerId;
 };

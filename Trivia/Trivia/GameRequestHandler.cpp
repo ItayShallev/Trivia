@@ -1,8 +1,9 @@
 #include "GameRequestHandler.h"
-
 #include "Helper.h"
 #include "JsonRequestPacketDeserializer.h"
 #include "JsonResponsePacketSerializer.h"
+#include "MenuRequestHandler.h"
+
 
 GameRequestHandler::GameRequestHandler(const std::shared_ptr<Game>& game, std::shared_ptr<LoggedUser>& user, GameManager& gameManager, RequestHandlerFactory* factory) : m_game(game), m_user(user), m_gameManager(gameManager), m_handlerFactory(factory)
 {
@@ -27,7 +28,7 @@ RequestResult GameRequestHandler::handleRequest(RequestInfo reqInfo)
 		break;
 
 	case RequestId::GetQuestionRequestId:
-		return GetQuestionRequestId(reqInfo);
+		return getQuestion(reqInfo);
 		break;
 
 	case RequestId::SubmitAnswerRequestId:
@@ -115,7 +116,7 @@ RequestResult GameRequestHandler::getGameResult(RequestInfo reqInfo)
 RequestResult GameRequestHandler::leaveGame(RequestInfo reqInfo)
 {
 	// remove the user from the game
-	this->m_game->removePlayer(this->m_user);
+	this->m_game->removeUser(this->m_user);
 
 	// create a new menu request handler	
 	std::shared_ptr<MenuRequestHandler> newHandler = this->m_handlerFactory->createMenuRequestHandler(this->m_user);

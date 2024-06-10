@@ -52,7 +52,7 @@ void Game::submitAnswer(const std::shared_ptr<LoggedUser>& user, const uint& ans
 	}
 	else												// If no questions remained
 	{
-		currUserGameData.currentQuestion = Question("NO QUESTIONS REMAINED!", vector<string>(), 0);
+		currUserGameData.currentQuestion = Question("NO QUESTIONS REMAINED!", map<uint, string>(), 0);
 		this->m_numFinished++;
 	}
 }

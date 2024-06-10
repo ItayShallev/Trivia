@@ -1,5 +1,7 @@
 #pragma once
 
+typedef unsigned int uint;
+
 // ************************** SERVER CONSTANTS *************************
 #define SERVER_PORT 8888
 #define DEFAULT_BUFFER_SIZE 255			// TODO: remove when message format is established, update receive data
