@@ -3,9 +3,12 @@
 #include <vector>
 #include <map>
 #include <memory>
-#include "Structures.h"
+#include "GameStructures.h"
 #include "Question.h"
 #include "LoggedUser.h"
+
+
+using std::map;
 
 
 class Game

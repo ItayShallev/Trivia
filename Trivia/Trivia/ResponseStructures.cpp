@@ -2,7 +2,7 @@
  * Converts response structures to JSON objects.  *
  * See Structures.h for structure definitions.    *
 \**************************************************/
-#include "Structures.h"
+#include "ResponseStructures.h"
 
 
 // RoomData
@@ -27,6 +27,15 @@ void to_json(json& j, const PlayerResults& response)
 		{"correctAnswerCount", response.correctAnswerCount},
 		{"wrongAnswerCount", response.wrongAnswerCount},
 		{"averageAnswerTime", response.averageAnswerTime}
+	};
+}
+
+// AnswerItem
+void to_json(json& j, const AnswerItem& response)
+{
+	j = json{
+	{"answerId", response.answerId},
+	{"answer", response.answer},
 	};
 }
 

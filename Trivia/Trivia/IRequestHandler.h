@@ -2,7 +2,6 @@
 
 struct RequestInfo;
 struct RequestResult;
-#include "Structures.h"
 
 
 class IRequestHandler

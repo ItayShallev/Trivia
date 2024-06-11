@@ -25,18 +25,16 @@ RequestResult GameRequestHandler::handleRequest(RequestInfo reqInfo)
 	{
 	case RequestId::LeaveGameRequestId:
 		return leaveGame(reqInfo);
-		break;
 
 	case RequestId::GetQuestionRequestId:
 		return getQuestion(reqInfo);
-		break;
 
 	case RequestId::SubmitAnswerRequestId:
 		return submitAnswer(reqInfo);
-		break;
+
 	case RequestId::GetGameResultRequestId:
 		return getGameResult(reqInfo);
-		break;
+
 	default:
 		return Helper::buildRequestResult(JsonResponsePacketSerializer::serializeResponse(ErrorResponse()),
 			std::shared_ptr<GameRequestHandler>(this, [](GameRequestHandler*) {}));

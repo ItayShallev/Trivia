@@ -2,142 +2,18 @@
 
 #include <string>
 #include <vector>
-#include <ctime>
-#include "Constants.h"
-#include "IRequestHandler.h"
 #include "json.hpp"
-#include "Question.h"
+#include "GameStructures.h"
 
-// Forward declarations
-struct RoomData;
-class IRequestHandler;
 
 using std::string;
 using std::vector;
-using std::map;
 using nlohmann::json;
 
 
-// ************************** OTHERS *************************
-typedef vector<unsigned char> Buffer;
+typedef unsigned int uint;
 
 
-struct RequestInfo
-{
-	Buffer buffer;
-	RequestId id;
-	time_t ReceivalTime;
-};
-
-
-struct RequestResult
-{
-	Buffer response;
-	std::shared_ptr<IRequestHandler> newHandler;
-};
-
-
-struct RoomState
-{
-	bool hasGameBegan;
-	vector<string> players;
-	uint questionCount;
-	uint answerTimeout;
-	RoomStatus roomStatus;
-};
-
-
-struct RoomData
-{
-	uint id;
-	string name;
-	string admin;
-	uint maxPlayers;
-	uint numOfQuestionsInGame;
-	uint timePerQuestion;
-	RoomStatus roomStatus;
-};
-void to_json(json& j, const RoomData& response);
-
-
-struct PlayerResults
-{
-	string username;
-	uint correctAnswerCount;
-	uint wrongAnswerCount;
-	double averageAnswerTime;
-};
-void to_json(json& j, const PlayerResults& response);
-
-
-struct GameData
-{
-	Question currentQuestion;
-	uint correctAnswerCount = 0;
-	uint wrongAnswerCount = 0;
-	double averageAnswerTime = 0.0;
-};
-
-
-// ******************* REQUESTS STRUCTURES *******************
-struct LoginRequest
-{
-	string username;
-	string password;
-};
-
-
-struct SignupRequest
-{
-	string username;
-	string password;
-	string mail;
-};
-
-
-struct GetPlayersInRoomRequest
-{
-	uint roomID;
-};
-
-
-struct JoinRoomRequest
-{
-	uint roomID;
-};
-
-
-struct CreateRoomRequest
-{
-	string admin;
-	string roomName;
-	uint maxPlayers;
-	uint questionCount;
-	uint answerTimeout;
-};
-
-
-struct CheckIfUserExistsRequest
-{
-	string username;
-};
-
-
-struct CloseRoomRequest
-{
-	uint roomId;
-};
-
-
-struct SubmitAnswerRequest
-{
-	uint answerId;
-	double answerTime;
-};
-
-
-
-// ******************* RESPONSE STRUCTURES *******************
 struct ErrorResponse
 {
 	string message = "ERROR";
@@ -261,7 +137,7 @@ struct GetQuestionResponse
 {
 	uint status = 1;
 	string question;
-	map<uint, string> answers;
+	vector<AnswerItem> answers;
 };
 void to_json(json& j, const GetQuestionResponse& response);
 

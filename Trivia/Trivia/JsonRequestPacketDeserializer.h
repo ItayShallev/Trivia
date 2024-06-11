@@ -1,6 +1,7 @@
 #pragma once
 
-#include "Structures.h"
+#include "GameStructures.h"
+#include "RequestStructures.h"
 
 
 class JsonRequestPacketDeserializer

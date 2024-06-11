@@ -68,10 +68,13 @@ namespace Client.Pages
         public RoomData RoomData
         {
             get { return _roomData; }
-            set
-            {
-                _roomData = value;
-            }
+            set { _roomData = value; }
+        }
+
+        public Timer Timer
+        {
+            get { return _timer; }
+            set { _timer = value; }
         }
 
         public AdminWaitingRoomPage(RoomData roomData, string username)
@@ -84,7 +87,7 @@ namespace Client.Pages
 
             Username = username;
 
-            _timer = new Timer(UpdateUI, null, 0, 3000);
+            Timer = new Timer(UpdateUI, null, 0, 3000);
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -127,13 +130,13 @@ namespace Client.Pages
 
         private void GoBackArrow_OnGoBackClicked(object sender, RoutedEventArgs e)
         {
-            ///// Send a CloseRoom request /////
-            Helper.SendRequest(Constants.CloseRoomRequestId, JsonSerializer.Serialize(new CloseRoomRequest()));
+            // Sending a CloseRoom request
+            Helper.SendRequest(Constants.CloseRoomRequestId, JsonSerializer.Serialize(new CloseRoomRequest(this.RoomData.Id)));
             CloseRoomResponse closeRoomResponse = Helper.GetResponse<CloseRoomResponse>();
 
             if (closeRoomResponse.Status == 1)
             {
-                _timer.Dispose();       // Pausing the getRoomState requests from being sent to the server
+                Timer.Dispose();       // Pausing the getRoomState requests from being sent to the server
 
                 // Navigating the user back to the menu page
                 MenuPage menuPage = new MenuPage(Username);
@@ -143,7 +146,23 @@ namespace Client.Pages
 
         private void BtnStartGame_Click(object sender, RoutedEventArgs e)
         {
+            // Stopping the timer while the server is processing the start game request
+            Timer.Dispose();
 
+            // Sending a start game request
+            Helper.SendRequest(Constants.StartGameRequestId, JsonSerializer.Serialize(new StartGameRequest(this.RoomData.Id)));
+            StartGameResponse startGameResponse = Helper.GetResponse<StartGameResponse>();
+
+            // Checking if the server approved the start game request
+            if (startGameResponse.Status == 1)
+            {
+                // Navigate the user to the game page
+            }
+            else
+            {
+                // Reinitializing the timer because the start game request failed
+                Timer = new Timer(UpdateUI, null, 0, 3000);
+            }
         }
     }
 }
