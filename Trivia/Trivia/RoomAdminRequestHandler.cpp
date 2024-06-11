@@ -45,29 +45,6 @@ RequestResult RoomAdminRequestHandler::closeRoom(RequestInfo reqInfo)
 
     // build and return the request result
     return Helper::buildRequestResult(JsonResponsePacketSerializer::serializeResponse(CloseRoomResponse()), newHandler);
-
-
-
-
-
-
-    //// TODO: check if that's all you need to do
-    //// change the room status to closed
-    //this->m_room.setRoomStatus(RoomStatus::Closed);
-
-    //// TODO: check if room state changed
-    //// get the room state
-    //RoomState currRoomState = this->m_roomManager.getRoomState(this->m_room);
-
-    //// return a room state response with the new room status
-    //// create the room state response
-    //GetRoomStateResponse roomStateResp = Helper::buildRoomStateResponse(currRoomState);
-
-    //// create the new handler
-    //std::shared_ptr<MenuRequestHandler> newHandler = this->m_handlerFactory->createMenuRequestHandler(this->m_user);
-
-    //// build and return the request result
-    //return Helper::buildRequestResult(JsonResponsePacketSerializer::serializeResponse(roomStateResp), newHandler);
 }
 
 RequestResult RoomAdminRequestHandler::startGame(RequestInfo reqInfo)
@@ -80,10 +57,6 @@ RequestResult RoomAdminRequestHandler::startGame(RequestInfo reqInfo)
     // get the room state
     RoomState currRoomState = this->m_roomManager.getRoomState(this->m_room);
 
-    // return a room state response with the new room status
-    // create the room state response
-    GetRoomStateResponse roomStateResp = Helper::buildRoomStateResponse(currRoomState);
-
     // create the game
     std::shared_ptr<Game> game = this->m_handlerFactory->getGameManager().createGame(this->m_room);
 
@@ -91,7 +64,7 @@ RequestResult RoomAdminRequestHandler::startGame(RequestInfo reqInfo)
     std::shared_ptr<GameRequestHandler> newGameHandler = this->m_handlerFactory->createGameRequestHandler(game, this->m_user);
 
     // build and return the request result
-    return Helper::buildRequestResult(JsonResponsePacketSerializer::serializeResponse(roomStateResp),newGameHandler);
+    return Helper::buildRequestResult(JsonResponsePacketSerializer::serializeResponse(StartGameResponse()),newGameHandler);
 }
 
 RequestResult RoomAdminRequestHandler::getRoomState(RequestInfo reqInfo)

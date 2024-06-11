@@ -43,6 +43,10 @@ namespace Client
         public const string LeaveRoomRequestId = "11";
         public const string StartGameRequestId = "12";
         public const string GetRoomStateRequestId = "13";
+        public const string SubmitAnswerRequestId = "14";
+        public const string LeaveGameRequestId = "15";
+        public const string GetQuestionRequestId = "16";
+        public const string GetGameResultRequestId = "17";
 
 
         public const string LogoutResponseId = "00";
@@ -59,6 +63,10 @@ namespace Client
         public const string LeaveRoomResponseId = "11";
         public const string StartGameResponseId = "12";
         public const string GetRoomStateResponseId = "13";
-        public const string ErrorResponseId = "14";
+        public const string SubmitAnswerResponseId = "14";
+        public const string LeaveGameResponseId = "15";
+        public const string GetQuestionResponseId = "16";
+        public const string GetGameResultResponseId = "17";
+        public const string ErrorResponseId = "18";
     }
 }

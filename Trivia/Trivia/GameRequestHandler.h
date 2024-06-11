@@ -1,7 +1,9 @@
 #pragma once
 #include "IRequestHandler.h"
-class RequestHandlerFactory;
 #include "GameManager.h"
+
+
+class RequestHandlerFactory;
 
 
 class GameRequestHandler : public IRequestHandler

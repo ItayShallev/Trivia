@@ -45,9 +45,9 @@ public:
 	// ****************************************************************************************************************
 
 	// ************************************************* GAME queries *************************************************
-	static int getQuestionCallback(void* data, int argc, char** argv, char** azColName);						   // *
-	virtual Question getQuestion(const uint& questionId) override;												   // *
-	virtual vector<Question> getRandomQuestions(const uint& numberOfQuestions) override;							   // *
+	bool compileSqliteStatement(sqlite3_stmt*& statement, const string& query) const;							   // *
+	virtual vector<Question> processGetQuestionsResults(sqlite3_stmt* statement);								   // *
+	virtual vector<Question> getRandomQuestions(const uint& numberOfQuestions) override;						   // *
 	// ****************************************************************************************************************
 
 

@@ -1,6 +1,7 @@
 #pragma once
 #include "LoggedUser.h"
-#include "Structures.h"
+#include "GameStructures.h"
+
 
 class Room
 {

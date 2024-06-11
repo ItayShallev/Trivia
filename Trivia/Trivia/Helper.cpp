@@ -2,6 +2,8 @@
 #include <random>
 #include "Helper.h"
 
+#include <iostream>
+
 
 using std::shuffle;
 using std::find;
@@ -116,40 +118,28 @@ GetRoomStateResponse Helper::buildRoomStateResponse(const RoomState& roomState)
 
 int Helper::generateRandomNumber(const int& minValue, const int& maxValue)
 {
-	srand((unsigned)time(NULL));
-	int range = maxValue - minValue + 1;
-
-	return rand() % range + minValue;
+    int range = maxValue - minValue + 1;
+    return rand() % range + minValue;
 }
 
-set<int> Helper::generateRandomNumbersSet(const int& setSize, const int& minValue, const int& maxValue)
+set<int> Helper::generateRandomNumbersSet(const uint& setSize, const int& minValue, const int& maxValue)
 {
-	set<int> randomNumbers;
+    set<int> randomNumbers;
 
-	while (randomNumbers.size() < setSize)
-	{
-		int randomNumber = Helper::generateRandomNumber(minValue, maxValue);
+	// Creating a seed for randomization
+	srand(static_cast<unsigned>(time(NULL)));
 
-		// Trying to insert the random number only if it wasn't generated already
-		if (randomNumbers.find(randomNumber) == randomNumbers.end())
-		{
-			randomNumbers.insert(randomNumber);
-		}
-	}
+    while (randomNumbers.size() < setSize)
+    {
+        int randomNumber = Helper::generateRandomNumber(minValue, maxValue);
 
-	return randomNumbers;
+        // Trying to insert the random number only if it wasn't generated already
+        if (randomNumbers.find(randomNumber) == randomNumbers.end())
+        {
+            randomNumbers.insert(randomNumber);
+        }
+
+    }
+
+    return randomNumbers;
 }
-
-//int Helper::shuffleAnswers(vector<string>& possibleAnswers, const string& correctAnswer)
-//{
-//	auto rng = default_random_engine { };
-//
-//	// Shuffling the possible answers vector
-//	shuffle(possibleAnswers.begin(), possibleAnswers.end(), rng);
-//
-//	// Finding the index of the correct answer
-//	auto it = find(possibleAnswers.begin(), possibleAnswers.end(), correctAnswer);
-//
-//	// Returning the index of the correct answer
-//	return distance(possibleAnswers.begin(), it);
-//}

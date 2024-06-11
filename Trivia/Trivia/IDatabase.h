@@ -29,6 +29,6 @@ public:
 	virtual vector<string> getUserStatistics(const string& username) = 0;
 	virtual vector<string> getHighScores() = 0;
 
-	virtual Question getQuestion(const uint& questionId) = 0;
+	//virtual Question getQuestion(const uint& questionId) = 0;
 	virtual vector<Question> getRandomQuestions(const uint& numberOfQuestions) = 0;
 };

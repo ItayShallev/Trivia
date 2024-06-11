@@ -132,6 +132,7 @@
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameManager.h" />
     <ClInclude Include="GameRequestHandler.h" />
+    <ClInclude Include="GameStructures.h" />
     <ClInclude Include="Question.h" />
     <ClInclude Include="Helper.h" />
     <ClInclude Include="IDatabase.h" />
@@ -144,6 +145,8 @@
     <ClInclude Include="LoginRequestHandler.h" />
     <ClInclude Include="MenuRequestHandler.h" />
     <ClInclude Include="RequestHandlerFactory.h" />
+    <ClInclude Include="RequestStructures.h" />
+    <ClInclude Include="ResponseStructures.h" />
     <ClInclude Include="Room.h" />
     <ClInclude Include="RoomAdminRequestHandler.h" />
     <ClInclude Include="RoomManager.h" />
@@ -152,7 +155,6 @@
     <ClInclude Include="sqlite3.h" />
     <ClInclude Include="SqliteDatabase.h" />
     <ClInclude Include="StatisticsManager.h" />
-    <ClInclude Include="Structures.h" />
     <ClInclude Include="WSAInitializer.h" />
   </ItemGroup>
   <ItemGroup>
@@ -178,7 +180,7 @@
     <ClCompile Include="sqlite3.c" />
     <ClCompile Include="SqliteDatabase.cpp" />
     <ClCompile Include="StatisticsManager.cpp" />
-    <ClCompile Include="Structures.cpp" />
+    <ClCompile Include="ResponseStructures.cpp" />
     <ClCompile Include="WSAInitializer.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

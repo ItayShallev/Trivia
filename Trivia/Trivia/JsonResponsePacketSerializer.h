@@ -2,7 +2,8 @@
 
 #include <map>
 #include "json.hpp"
-#include "Structures.h"
+#include "GameStructures.h"
+#include "ResponseStructures.h"
 
 using json = nlohmann::json;
 using std::to_string;

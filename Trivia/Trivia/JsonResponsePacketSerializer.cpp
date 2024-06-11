@@ -1,7 +1,6 @@
 #include "JsonResponsePacketSerializer.h"
 #include "json.hpp"
 #include "Helper.h"
-#include "Structures.h"
 
 
 using std::to_string;
