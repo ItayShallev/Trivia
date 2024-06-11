@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Text.Json.Serialization;
 using System.Numerics;
+using System.Runtime.InteropServices.ComTypes;
 using System.Windows.Ink;
 
 namespace Client.Communication
@@ -112,15 +113,24 @@ namespace Client.Communication
     }
 
     public struct LeaveRoomRequest { }
-    
-    public struct StartGameRequestId { }
-
 
     public struct GetRoomStateRequest
     {
         [JsonPropertyName("roomId")] public uint RoomId { get; set; } = 0;
 
         public GetRoomStateRequest(uint roomId)
+        {
+            RoomId = roomId;
+        }
+    }
+
+    public struct GetQuestionRequest { }
+
+    public struct StartGameRequest
+    {
+        [JsonPropertyName("roomId")] public uint RoomId { get; set; } = 0;
+
+        public StartGameRequest(uint roomId)
         {
             RoomId = roomId;
         }
@@ -257,7 +267,15 @@ namespace Client.Communication
         }
     }
 
-    public struct StartGameResponse { }
+    public struct StartGameResponse
+    {
+        [JsonPropertyName("status")] public uint Status { get; set; } = 1;
+
+        public StartGameResponse(uint status)
+        {
+            Status = status;
+        }
+    }
 
     public struct GetRoomStateResponse
     {
@@ -276,6 +294,20 @@ namespace Client.Communication
             QuestionCount = questionCount;
             AnswerTimeout = answerTimeout;
             RoomStatus = roomStatus;
+        }
+    }
+
+    public struct GetQuestionResponse
+    {
+        [JsonPropertyName("status")] public uint Status { get; set; } = 0;
+        [JsonPropertyName("question")] public string Question { get; set; } = "";
+        [JsonPropertyName("answers")] public List<AnswerItem> Answers { get; set; } = [];
+
+        public GetQuestionResponse(uint status, string question, List<AnswerItem> answers)
+        {
+            Status = status;
+            Question = question;
+            Answers = answers;
         }
     }
 
@@ -318,5 +350,18 @@ namespace Client.Communication
         public string ResponseId { get; set; }
         public int MessageLength { get; set; }
         public string Message { get; set; }
+    }
+
+
+    public struct AnswerItem
+    {
+        [JsonPropertyName("answerId")] public uint AnswerId { get; set; } = 0;
+        [JsonPropertyName("answer")] public string Answer { get; set; } = "";
+
+        public AnswerItem(uint answerId, string answer)
+        {
+            AnswerId = answerId;
+            Answer = answer;
+        }
     }
 }

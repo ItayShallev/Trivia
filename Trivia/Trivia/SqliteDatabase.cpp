@@ -1,6 +1,7 @@
 #include "SqliteDatabase.h"
 #include "Constants.h"
 #include "Helper.h"
+#include "GameStructures.h"
 #include <iostream>
 #include <io.h>
 #include <set>
@@ -12,6 +13,7 @@ using std::to_string;
 using std::cout;
 using std::stoi;
 using std::stof;
+using std::make_pair;
 
 
 /**
@@ -442,72 +444,94 @@ vector<string> SqliteDatabase::getHighScores()
 }
 
 
-/**
- * @brief	Callback function for getting a question from the database
- * @return	0 (indicates success)
- */
-int SqliteDatabase::getQuestionCallback(void* data, int argc, char** argv, char** azColName)
+bool SqliteDatabase::compileSqliteStatement(sqlite3_stmt*& statement, const string& query) const
 {
-	Question* question = static_cast<Question*>(data);
+	// compiling the SQL statement
+	if (sqlite3_prepare_v2(this->_db, query.c_str(), -1, &statement, nullptr) != SQLITE_OK)
+	{
+		std::cerr << "Failed to prepare statement: " << sqlite3_errmsg(this->_db) << '\n';
 
-	// Setting the question text
-	question->setQuestion(argv[0]);
+		sqlite3_close(this->_db);
 
-	// Shuffling the possible answers
-	map<uint, string> possibleAnswers = {
-		{0, argv[CORRECT_ANSWER_INDEX]},
-		{1, argv[INCORRECT_ANSWER_1_INDEX]},
-		{2, argv[INCORRECT_ANSWER_2_INDEX]},
-		{3, argv[INCORRECT_ANSWER_3_INDEX]}
-	};
+		return false;
+	}
 
-	// Setting the possible answers
-	question->setPossibleAnswers(possibleAnswers);
+	return true;
+}
 
-	// Setting the correct answerId
-	question->setCorrectAnswerId(0);
+vector<Question> SqliteDatabase::processGetQuestionsResults(sqlite3_stmt* statement)
+{
+	vector<Question> questions;
 
-	return 0;
+	while (sqlite3_step(statement) == SQLITE_ROW)		// Iterating over all the result rows
+	{
+		Question newQuestion;
+
+		// Setting the question string
+		newQuestion.setQuestion(reinterpret_cast<const char*>(sqlite3_column_text(statement, 0)));
+
+		// Setting the possible answers
+		vector<AnswerItem> possibleAnswers = { AnswerItem(0, reinterpret_cast<const char*>(sqlite3_column_text(statement, 1))),
+											AnswerItem(1, reinterpret_cast<const char*>(sqlite3_column_text(statement, 2))),
+											AnswerItem(2, reinterpret_cast<const char*>(sqlite3_column_text(statement, 3))),
+											AnswerItem(3, reinterpret_cast<const char*>(sqlite3_column_text(statement, 4))) };
+		newQuestion.setPossibleAnswers(possibleAnswers);
+
+		// Setting the correct answer id
+		newQuestion.setCorrectAnswerId(sqlite3_column_int(statement, 1));
+
+		questions.push_back(newQuestion);
+	}
+
+	return questions;
 }
 
 
-/**
- * @brief	Returns the question with the given id from the database
- * @param	questionId		The id of the question to retrieve from the database
- * @return	The question with the given question id
- */
-Question SqliteDatabase::getQuestion(const uint& questionId)
-{
-	const string statement = R"(
-					BEGIN TRANSACTION;
-					
-					SELECT QUESTION, CORRECT_ANSWER, INCORRECT_ANSWER_1, INCORRECT_ANSWER_2, INCORRECT_ANSWER_3
-					FROM QUESTIONS
-					WHERE ID = )" + to_string(questionId) + R"(;
-					
-					END TRANSACTION;
-					)";
-
-	Question question;
-	executeSqlStatement(statement, getQuestionCallback, &question);
-
-	return question;
-}
-
-
-/**
- * @brief	Returns a vector of random and unique questions from the database
- * @param	numberOfQuestions		The amount of questions to get from the database
- * @return	A vector with the wanted amount of questions
- */
 vector<Question> SqliteDatabase::getRandomQuestions(const uint& numberOfQuestions)
 {
+	// Generating a random set of numbers that will be used to fetch questions from the DB
 	set<int> questionsIds = Helper::generateRandomNumbersSet(numberOfQuestions, QUESTIONS_TABLE_STARTING_ID, NUM_OF_QUESTIONS_IN_DB);
 
-	vector<Question> questions;
-	for (int questionId : questionsIds)
+	// Constructing the query with placeholders for the question ids
+	string query = "SELECT QUESTION, CORRECT_ANSWER, INCORRECT_ANSWER_1, INCORRECT_ANSWER_2, INCORRECT_ANSWER_3 FROM QUESTIONS WHERE ID IN (";
+	for (auto it = questionsIds.begin(); it != questionsIds.end(); ++it)
 	{
-		questions.push_back(this->getQuestion(questionId));
+		if (it != questionsIds.begin())
+		{
+			query += ", ";
+		}
+		query += "?";		// A placeholder that will be used to fill in question ids
+	}
+	query += ");";
+
+	sqlite3_stmt* statement = nullptr;
+
+	// compiling the SQL statement
+	if (!compileSqliteStatement(statement, query)) { return { }; }
+
+	// Binding the question ids to the prepared statement
+	int index = 1;
+	for (int id : questionsIds)
+	{
+		if (sqlite3_bind_int(statement, index, id) != SQLITE_OK)
+		{
+			std::cerr << "Failed to bind parameter: " << sqlite3_errmsg(this->_db) << '\n';
+
+			sqlite3_finalize(statement);			// Destroying the prepared SQL statement
+			sqlite3_close(this->_db);
+
+			return { };
+		}
+		++index;
+	}
+
+	// Executing the statement and inserting the results into the questions vector
+	vector<Question> questions = processGetQuestionsResults(statement);
+
+	// Finalize the statement
+	if (sqlite3_finalize(statement) != SQLITE_OK)
+	{
+		std::cerr << "Failed to finalize statement: " << sqlite3_errmsg(this->_db) << '\n';
 	}
 
 	return questions;
