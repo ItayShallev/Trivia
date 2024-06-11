@@ -136,6 +136,18 @@ namespace Client.Communication
         }
     }
 
+    public struct SubmitAnswerRequest
+    {
+        [JsonPropertyName("answerId")] public uint AnswerId { get; set; } = 0;
+        [JsonPropertyName("answerTime")] public double AnswerTime { get; set; } = 0.0;
+
+        public SubmitAnswerRequest(uint answerId, double answerTime)
+        {
+            AnswerId = answerId;
+            AnswerTime = answerTime;
+        }
+    }
+
 
     // ******************* RESPONSE STRUCTURES *******************
 
@@ -308,6 +320,18 @@ namespace Client.Communication
             Status = status;
             Question = question;
             Answers = answers;
+        }
+    }
+
+    public struct SubmitAnswerResponse
+    {
+        [JsonPropertyName("status")] public uint Status { get; set; } = 0;
+        [JsonPropertyName("correctAnswerId")] public uint CorrectAnswerId { get; set; } = 0;
+
+        public SubmitAnswerResponse(uint status, uint correctAnswerId)
+        {
+            Status = status;
+            CorrectAnswerId = correctAnswerId;
         }
     }
 

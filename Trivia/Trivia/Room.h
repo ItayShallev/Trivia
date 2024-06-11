@@ -27,7 +27,7 @@ public:
 	// getters
 	vector<std::shared_ptr<LoggedUser>> getUsers() const;
 	RoomData getRoomData() const;
-	uint getID() const;
+	uint getId() const;
 	string getName() const;
 	string getAdmin() const;
 	uint getMaxPlayers() const;

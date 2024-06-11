@@ -56,8 +56,8 @@ RequestResult RoomMemberRequestHandler::getRoomState(RequestInfo reqInfo)
 	// if the room has started playing
 	if(currRoomState.roomStatus == RoomStatus::Playing)
 	{
-		// get the room
-		std::shared_ptr<Game> game = this->m_handlerFactory->getGameManager().createGame(this->m_room);
+		// get the game object
+		std::shared_ptr<Game> game = this->m_handlerFactory->getGameManager().getGameById(this->m_room.getId());
 
 		// create the new game handler
 		std::shared_ptr<GameRequestHandler> gameHandler = this->m_handlerFactory->createGameRequestHandler(game, this->m_user);

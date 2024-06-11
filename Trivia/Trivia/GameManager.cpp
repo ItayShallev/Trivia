@@ -13,8 +13,8 @@ std::shared_ptr<Game> GameManager::createGame(const Room& room)
 		players[loggedUser] = GameData();
 	}
 
-	// Creating a new game dynamically
-	std::shared_ptr<Game> newGame = std::make_shared<Game>(this->m_games.size(), players, this->m_database->getRandomQuestions(room.getNumOfQuestions()));
+	// Creating a new game dynamically (the game has the same ID as the room)
+	std::shared_ptr<Game> newGame = std::make_shared<Game>(room.getId(), players, this->m_database->getRandomQuestions(room.getNumOfQuestions()));
 
 	// pushing the game to the m_games vector
 	m_games.push_back(newGame);
@@ -37,4 +37,14 @@ void GameManager::deleteRoom(const uint& gameId)
 			++it;		// Advancing to the next game in the vector
 		}
 	}
+}
+
+
+std::shared_ptr<Game> GameManager::getGameById(const uint& gameId) const
+{
+	auto matchGameIdLambda = [gameId](const std::shared_ptr<Game>& game) { return game->getGameId() == gameId; };
+
+	auto it = std::find_if(m_games.begin(), m_games.end(), matchGameIdLambda);
+
+	return (it != m_games.end()) ? *it : nullptr;
 }

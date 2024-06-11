@@ -146,9 +146,6 @@ namespace Client.Pages
 
         private void BtnStartGame_Click(object sender, RoutedEventArgs e)
         {
-            // Stopping the timer while the server is processing the start game request
-            Timer.Dispose();
-
             // Sending a start game request
             Helper.SendRequest(Constants.StartGameRequestId, JsonSerializer.Serialize(new StartGameRequest(this.RoomData.Id)));
             StartGameResponse startGameResponse = Helper.GetResponse<StartGameResponse>();
@@ -156,7 +153,11 @@ namespace Client.Pages
             // Checking if the server approved the start game request
             if (startGameResponse.Status == 1)
             {
-                // Navigate the user to the game page
+                Timer.Dispose();
+
+                // Navigating the user to the game page
+                GamePage gamePage = new GamePage(Username, RoomData);
+                NavigationService.Navigate(gamePage);
             }
             else
             {

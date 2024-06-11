@@ -13,6 +13,7 @@ public:
 	std::shared_ptr<Game> createGame(const Room& room);
 	void deleteRoom(const uint& gameId);
 
+	std::shared_ptr<Game> getGameById(const uint& gameId) const;
 
 private:
 	IDatabase* m_database;
