@@ -46,9 +46,11 @@ RequestResult GameRequestHandler::getQuestion(RequestInfo reqInfo)
 	// get the next question for the user
 	Question nextQuestion = this->m_game->getQuestionForUser(this->m_user);
 
+	uint status = nextQuestion.getQuestion() != "NO QUESTIONS REMAINED!" ? 1 : 0;
+
 	// build the question response
 	GetQuestionResponse questionResp = {
-		1,
+		status,
 		nextQuestion.getQuestion(),
 		nextQuestion.getPossibleAnswers()
 	};

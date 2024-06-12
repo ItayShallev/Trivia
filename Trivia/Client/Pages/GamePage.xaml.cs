@@ -46,8 +46,48 @@ namespace Client.Pages
             // Displaying the starting question on the screen
             if (getQuestionResponse.Status == 1)
             {
+                // Setting the question
                 QuestionTextBlock.Text = getQuestionResponse.Question;
+
+                // Setting the possible answers
+                ButtonAnswer0.Content = getQuestionResponse.Answers[0].Answer;
+                ButtonAnswer1.Content = getQuestionResponse.Answers[1].Answer;
+                ButtonAnswer2.Content = getQuestionResponse.Answers[2].Answer;
+                ButtonAnswer3.Content = getQuestionResponse.Answers[3].Answer;
             }
+            else
+            {
+                // Navigating the user to the results page
+                //////////////////////////////////////////
+            }
+        }
+
+        private async void SubmitAnswer(object sender, RoutedEventArgs e)
+        {
+            Button pressedButton = sender as Button;
+            uint userAnswerId = uint.Parse((pressedButton.Name[^1]).ToString());
+
+            Helper.SendRequest(Constants.SubmitAnswerRequestId, JsonSerializer.Serialize(new SubmitAnswerRequest(userAnswerId, 5.2)));
+            SubmitAnswerResponse submitAnswerResponse = Helper.GetResponse<SubmitAnswerResponse>();
+
+            if (submitAnswerResponse.CorrectAnswerId == userAnswerId)
+            {
+                pressedButton.Background = new SolidColorBrush(Colors.Green);
+            }
+            else
+            {
+                pressedButton.Background = new SolidColorBrush(Colors.Red);
+            }
+
+            // Waiting a second to let the user see if his answer is correct or incorrect
+            //System.Threading.Thread.Sleep(1000);
+            await Task.Delay(1000);
+
+            // Resetting the buttons' colors
+            pressedButton.Background = new SolidColorBrush(Colors.DodgerBlue);
+            
+            // Displaying the next question
+            DisplayNextQuestion();
         }
 
 
@@ -63,16 +103,6 @@ namespace Client.Pages
                 MenuPage menuPage = new MenuPage(Username);
                 NavigationService.Navigate(menuPage);
             }
-        }
-
-        private void NextQuestion_OnClick(object sender, RoutedEventArgs e)
-        {
-            // DEBUG
-            Helper.SendRequest(Constants.SubmitAnswerRequestId, JsonSerializer.Serialize(new SubmitAnswerRequest(0, 5.2)));
-            SubmitAnswerResponse submitAnswerResponse = Helper.GetResponse<SubmitAnswerResponse>();
-            // DEBUG
-
-            DisplayNextQuestion();
         }
     }
 }
