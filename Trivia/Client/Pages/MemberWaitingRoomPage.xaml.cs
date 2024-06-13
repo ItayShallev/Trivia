@@ -137,6 +137,13 @@ namespace Client.Pages
                 {
                     LeaveRoom();
                 }
+                else if (getRoomStateResponse.RoomStatus == Constants.RoomStatus.Playing)
+                {
+                    _timer.Dispose();
+
+                    GamePage gamePage = new GamePage(Username, RoomData);
+                    NavigationService.Navigate(gamePage);
+                }
                 else if (UsersCount != getRoomStateResponse.Players.Count)
                 {
                     UpdateUsersList(getRoomStateResponse.Players);

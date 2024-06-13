@@ -15,7 +15,12 @@ struct AnswerItem
 	uint answerId = 0;
 	string answer = "";
 
-	AnswerItem(const uint& id, const string& ans) : answerId(id), answer(ans) { }
+	AnswerItem(const uint& id, const string& answer) : answerId(id), answer(answer) { }
+
+	bool operator ==(const AnswerItem& otherAnswerItem) const
+	{
+		return (answerId == otherAnswerItem.answerId) && (answer == otherAnswerItem.answer);
+	}
 };
 void to_json(json& j, const AnswerItem& response);
 

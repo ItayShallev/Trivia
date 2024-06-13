@@ -89,7 +89,7 @@ RoomData Room::getRoomData() const
 	return this->m_metadata;
 }
 
-uint Room::getID() const
+uint Room::getId() const
 {
 	return this->m_metadata.id;
 }

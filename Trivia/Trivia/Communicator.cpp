@@ -73,7 +73,7 @@ void Communicator::handleNewClient(SOCKET clientSoc, int id)
 
 			// Printing the request of the client
 			Helper::setConsoleColor(CYAN);
-			cout << "CLIENT: " << id << ":\n";
+			cout << "CLIENT " << id << ":\n";
 			for (size_t i = 0; i < buff.size(); i++)
 			{
 				cout << buff[i];
