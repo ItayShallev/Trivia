@@ -27,5 +27,5 @@ public:
 	static int generateRandomNumber(const int& minValue, const int& maxValue);
 	static set<int> generateRandomNumbersSet(const uint& setSize, const int& minValue, const int& maxValue);
 
-	//static int shuffleAnswers(vector<string>& possibleAnswers, const string& correctAnswer);
+	//static int shuffleAnswers(vector<string>& possibleAnswers, const string correctAnswer);		// Do not correctAnswer pass by reference - it may be mistakenly changed
 };

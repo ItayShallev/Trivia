@@ -23,6 +23,9 @@ namespace Client.Pages
     /// </summary>
     public partial class GamePage : Page
     {
+        static Random rnd = new Random();
+
+
         private string Username { get; set; }
         private RoomData RoomData { get; set; }
         // GameData ????
@@ -50,10 +53,21 @@ namespace Client.Pages
                 QuestionTextBlock.Text = getQuestionResponse.Question;
 
                 // Setting the possible answers
-                ButtonAnswer0.Content = getQuestionResponse.Answers[0].Answer;
-                ButtonAnswer1.Content = getQuestionResponse.Answers[1].Answer;
-                ButtonAnswer2.Content = getQuestionResponse.Answers[2].Answer;
-                ButtonAnswer3.Content = getQuestionResponse.Answers[3].Answer;
+                
+                int[] arr = new int[] { 0, 1, 2, 3 };
+                rnd.Shuffle(arr);
+                
+                ButtonAnswer0.Content = getQuestionResponse.Answers[arr[0]].Answer;
+                ButtonAnswer0.Tag = getQuestionResponse.Answers[arr[0]].AnswerId;
+
+                ButtonAnswer1.Content = getQuestionResponse.Answers[arr[1]].Answer;
+                ButtonAnswer1.Tag = getQuestionResponse.Answers[arr[1]].AnswerId;
+
+                ButtonAnswer2.Content = getQuestionResponse.Answers[arr[2]].Answer;
+                ButtonAnswer2.Tag = getQuestionResponse.Answers[arr[2]].AnswerId;
+
+                ButtonAnswer3.Content = getQuestionResponse.Answers[arr[3]].Answer;
+                ButtonAnswer3.Tag = getQuestionResponse.Answers[arr[3]].AnswerId;
             }
             else
             {
@@ -65,7 +79,7 @@ namespace Client.Pages
         private async void SubmitAnswer(object sender, RoutedEventArgs e)
         {
             Button pressedButton = sender as Button;
-            uint userAnswerId = uint.Parse((pressedButton.Name[^1]).ToString());
+            uint userAnswerId = (uint)pressedButton.Tag;
 
             Helper.SendRequest(Constants.SubmitAnswerRequestId, JsonSerializer.Serialize(new SubmitAnswerRequest(userAnswerId, 5.2)));
             SubmitAnswerResponse submitAnswerResponse = Helper.GetResponse<SubmitAnswerResponse>();
