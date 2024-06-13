@@ -15,11 +15,6 @@
     WindowState="Maximized"
     mc:Ignorable="d">
     <Grid>
-        <Grid.LayoutTransform>
-            <ScaleTransform ScaleX="0.6" ScaleY="0.6" />
-        </Grid.LayoutTransform>
-
-
         <Frame x:Name="MainFrame" NavigationUIVisibility="Hidden" />
     </Grid>
 </Window>

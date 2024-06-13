@@ -52,8 +52,7 @@ namespace Client.Pages
                 // Setting the question
                 QuestionTextBlock.Text = getQuestionResponse.Question;
 
-                // Setting the possible answers
-                
+                // Setting the possible answers in random order
                 int[] arr = new int[] { 0, 1, 2, 3 };
                 rnd.Shuffle(arr);
                 
@@ -94,7 +93,6 @@ namespace Client.Pages
             }
 
             // Waiting a second to let the user see if his answer is correct or incorrect
-            //System.Threading.Thread.Sleep(1000);
             await Task.Delay(1000);
 
             // Resetting the buttons' colors

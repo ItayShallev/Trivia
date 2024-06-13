@@ -63,6 +63,7 @@
                             BorderBrush="{DynamicResource MaterialDesignDivider}"
                             BorderThickness="2"
                             FontSize="18"
+                            PasswordChanged="PswdPasswordBox_OnPasswordChanged"
                             Style="{StaticResource MaterialDesignOutlinedPasswordBox}" />
 
                         <Button
@@ -75,7 +76,11 @@
                             Content="Login"
                             FontSize="18"
                             IsDefault="True"
-                            Style="{StaticResource MaterialDesignFlatMidBgButton}" />
+                            IsEnabled="False"
+                            Style="{StaticResource MaterialDesignFlatMidBgButton}" >
+
+                        </Button>
+                        
                     </Grid>
 
 

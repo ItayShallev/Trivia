@@ -48,6 +48,16 @@ namespace Client.Pages
             }
         }
 
+        private void TxtMail_OnChanged(object sender, TextChangedEventArgs args)
+        {
+            BtnSignup.IsEnabled = ((txtMail.Text != "") && (pswdPasswordBox.Password != "") && (Helper.IsValidEmailAddress(txtMail.Text)));
+        }
+
+        private void PswdPasswordBox_OnPasswordChanged(object sender, RoutedEventArgs e)
+        {
+            BtnSignup.IsEnabled = ((txtMail.Text != "") && (pswdPasswordBox.Password != ""));
+        }
+
         private void GoBackArrow_OnGoBackClicked(object sender, RoutedEventArgs e)
         {
             NavigationService.GoBack();
