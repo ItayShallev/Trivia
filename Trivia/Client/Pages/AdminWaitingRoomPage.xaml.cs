@@ -18,6 +18,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Client.Communication;
 using Client.UserControls;
+using Client.ViewModels;
 using static Client.Constants;
 
 namespace Client.Pages
@@ -97,16 +98,30 @@ namespace Client.Pages
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        private void UpdateUsersList(List<string> players)
-        {
-            LBUsersList.Items.Clear();      // Removing all players boxes from the players list
+        //private void UpdateUsersList(List<string> players)
+        //{
+        //    LBUsersList.Items.Clear();      // Removing all players boxes from the players list
 
-            // Iterating over the players list and creating a list box item for each player
-            foreach (string playerName in players)
+        //    // Iterating over the players list and creating a list box item for each player
+        //    foreach (string playerName in players)
+        //    {
+        //        ListBoxItem newPlayerBox = new ListBoxItem { Content = playerName };
+        //        LBUsersList.Items.Add(newPlayerBox);
+        //    }
+        //}
+
+        private void UpdateUsersList(List<string> users)
+        {
+            List<UserEntry> userEntries = new List<UserEntry>();
+
+            // Iterating over the users list and creating a UserEntry item for each one
+            foreach (string user in users)
             {
-                ListBoxItem newPlayerBox = new ListBoxItem { Content = playerName };
-                LBUsersList.Items.Add(newPlayerBox);
+                UserEntry newUserEntry = new UserEntry(user, user == RoomData.Admin);
+                userEntries.Add(newUserEntry);
             }
+
+            UsersListDataGrid.ItemsSource = userEntries;
         }
 
         private void UpdateUI(object state)

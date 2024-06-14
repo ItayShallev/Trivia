@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Net;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Text.Json;
@@ -68,7 +69,7 @@ namespace Client.Pages
             if (getQuestionResponse.Status == 1)
             {
                 // Setting the question
-                QuestionTextBlock.Text = getQuestionResponse.Question;
+                QuestionTextBlock.Text = WebUtility.HtmlDecode(getQuestionResponse.Question);
 
                 // Setting the possible answers in random order
                 int[] arr = new int[] { 0, 1, 2, 3 };

@@ -73,82 +73,144 @@
                         </TextBlock>
                     </Grid>
 
-                    <Grid Grid.Row="3">
-                        <Border
-                            Margin="15"
-                            BorderBrush="Gray"
-                            BorderThickness="2"
-                            CornerRadius="15">
+                    <Grid Grid.Row="3" Margin="15">
+                        <Separator VerticalAlignment="Top" />
 
-                            <Grid>
-                                <Grid.RowDefinitions>
-                                    <RowDefinition />
-                                    <RowDefinition />
-                                    <RowDefinition />
-                                </Grid.RowDefinitions>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="344*" />
+                                <ColumnDefinition Width="247*" />
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition />
+                                <RowDefinition />
+                                <RowDefinition />
+                            </Grid.RowDefinitions>
 
-                                <Grid Margin="10" Row="0">
-                                    <TextBlock FontSize="20" FontWeight="Medium">
-                                        <TextBlock.Text>
-                                            <MultiBinding StringFormat="Room name: {0}">
-                                                <Binding Path="RoomData.Name" />
-                                            </MultiBinding>
-                                        </TextBlock.Text>
-                                    </TextBlock>
-                                </Grid>
-
-                                <Grid Margin="10" Row="1">
-                                    <TextBlock FontSize="20" FontWeight="Medium">
-                                        <TextBlock.Text>
-                                            <MultiBinding StringFormat="Number of questions: {0}">
-                                                <Binding Path="RoomData.NumOfQuestionsInGame" />
-                                            </MultiBinding>
-                                        </TextBlock.Text>
-                                    </TextBlock>
-                                </Grid>
-
-                                <Grid Margin="10" Row="2">
-                                    <TextBlock FontSize="20" FontWeight="Medium">
-                                        <TextBlock.Text>
-                                            <MultiBinding StringFormat="Time Per Question: {0} seconds">
-                                                <Binding Path="RoomData.TimePerQuestion" />
-                                            </MultiBinding>
-                                        </TextBlock.Text>
-                                    </TextBlock>
-                                </Grid>
+                            <Grid
+                                Grid.ColumnSpan="2"
+                                Margin="10,10,10,10"
+                                Row="0">
+                                <TextBlock FontSize="20" FontWeight="Medium">
+                                    <TextBlock.Text>
+                                        <MultiBinding StringFormat="Room name: {0}">
+                                            <Binding Path="RoomData.Name" />
+                                        </MultiBinding>
+                                    </TextBlock.Text>
+                                </TextBlock>
                             </Grid>
-                        </Border>
+
+                            <Grid
+                                Grid.ColumnSpan="2"
+                                Margin="10,10,10,10"
+                                Row="1">
+                                <TextBlock FontSize="20" FontWeight="Medium">
+                                    <TextBlock.Text>
+                                        <MultiBinding StringFormat="Number of questions: {0}">
+                                            <Binding Path="RoomData.NumOfQuestionsInGame" />
+                                        </MultiBinding>
+                                    </TextBlock.Text>
+                                </TextBlock>
+                            </Grid>
+
+                            <Grid
+                                Grid.ColumnSpan="2"
+                                Margin="10,10,10,10"
+                                Row="2">
+                                <TextBlock FontSize="20" FontWeight="Medium">
+                                    <TextBlock.Text>
+                                        <MultiBinding StringFormat="Time Per Question: {0} seconds">
+                                            <Binding Path="RoomData.TimePerQuestion" />
+                                        </MultiBinding>
+                                    </TextBlock.Text>
+                                </TextBlock>
+                            </Grid>
+                        </Grid>
                     </Grid>
 
                     <Grid Grid.Row="4" Margin="15">
-                        <Border
-                            BorderBrush="Gray"
-                            BorderThickness="2"
-                            CornerRadius="15">
+                        <Separator VerticalAlignment="Top" />
 
-                            <StackPanel>
-                                <ListBox x:Name="LBUsersList">
-                                    <ListBox.ItemContainerStyle>
-                                        <Style BasedOn="{StaticResource TriviaListBox}" TargetType="ListBoxItem" />
-                                    </ListBox.ItemContainerStyle>
-                                </ListBox>
-                            </StackPanel>
+                        <StackPanel>
+                            <DataGrid
+                                x:Name="UsersListDataGrid"
+                                Margin="10"
+                                AutoGenerateColumns="False"
+                                CanUserAddRows="False"
+                                CanUserDeleteRows="False"
+                                CanUserReorderColumns="False"
+                                CanUserResizeColumns="False"
+                                CanUserSortColumns="True"
+                                GridLinesVisibility="All"
+                                IsReadOnly="True"
+                                SelectionUnit="Cell">
 
-                        </Border>
+                                <DataGrid.Resources>
+                                    <Style x:Key="CenterAlignedTextBlock" TargetType="TextBlock">
+                                        <Setter Property="HorizontalAlignment" Value="Center" />
+                                        <Setter Property="VerticalAlignment" Value="Center" />
+                                    </Style>
+                                </DataGrid.Resources>
+
+                                <DataGrid.ColumnHeaderStyle>
+                                    <Style TargetType="DataGridColumnHeader">
+                                        <Setter Property="Height" Value="50" />
+                                        <Setter Property="HorizontalContentAlignment" Value="Center" />
+                                        <Setter Property="FontSize" Value="20" />
+                                        <Setter Property="FontWeight" Value="SemiBold" />
+                                        <Setter Property="Margin" Value="0,0,0,5" />
+                                        <Setter Property="Padding" Value="5,5,10,5" />
+                                        <Setter Property="BorderBrush" Value="Transparent" />
+                                        <Setter Property="BorderThickness" Value="0,0,0,0" />
+                                        <Setter Property="Cursor" Value="Arrow" />
+
+                                        <Style.Triggers>
+                                            <Trigger Property="IsMouseOver" Value="True">
+                                                <Setter Property="BorderThickness" Value="0,0,0,4" />
+                                                <Setter Property="BorderBrush" Value="CornflowerBlue" />
+                                            </Trigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </DataGrid.ColumnHeaderStyle>
+
+                                <DataGrid.RowStyle>
+                                    <Style TargetType="DataGridRow">
+                                        <Setter Property="Background" Value="White" />
+                                        <Setter Property="Foreground" Value="Black" />
+                                        <Setter Property="BorderBrush" Value="LightGray" />
+                                        <Setter Property="BorderThickness" Value="0,0,0,2" />
+                                        <Setter Property="Margin" Value="0,2" />
+                                        <Setter Property="MinHeight" Value="48" />
+                                        <Setter Property="HorizontalContentAlignment" Value="Center" />
+                                        <Setter Property="VerticalAlignment" Value="Center" />
+                                        <Setter Property="Cursor" Value="Hand" />
+                                        <Setter Property="FontSize" Value="20" />
+                                        <Setter Property="FontWeight" Value="SemiBold" />
+                                        <Style.Triggers>
+                                            <Trigger Property="IsMouseOver" Value="True">
+                                                <Setter Property="BorderThickness" Value="0,0,0,4" />
+                                                <Setter Property="BorderBrush" Value="DarkOrange" />
+                                            </Trigger>
+
+                                            <DataTrigger Binding="{Binding IsAdmin}" Value="True">
+                                                <Setter Property="Background" Value="Gold" />
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </DataGrid.RowStyle>
+
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn
+                                        Width="*"
+                                        Binding="{Binding Username}"
+                                        ElementStyle="{StaticResource CenterAlignedTextBlock}"
+                                        Header="Username" />
+                                </DataGrid.Columns>
+                            </DataGrid>
+                        </StackPanel>
                     </Grid>
 
-                    <Grid Grid.Row="5">
-                        <!--<Button
-                        x:Name="BtnStartGame"
-                        Width="300"
-                        Height="53"
-                        Margin="0,0,0,0"
-                        materialDesign:ButtonAssist.CornerRadius="10"
-                        materialDesign:ShadowAssist.ShadowDepth="Depth0"
-                        Content="Start Game"
-                        FontSize="18"
-                        Style="{StaticResource MaterialDesignFlatMidBgButton}" />-->
-                    </Grid>
+                    <Grid Grid.Row="5" />
                 </Grid>
             </materialDesign:DialogHost>
         </materialDesign:Card>
