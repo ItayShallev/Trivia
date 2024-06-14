@@ -214,11 +214,11 @@
                                                     materialDesign:SliderAssist.OnlyShowFocusVisualWhileDragging="False"
                                                     Cursor="Hand"
                                                     IsSnapToTickEnabled="True"
-                                                    Maximum="25"
+                                                    Maximum="100"
                                                     Minimum="5"
                                                     Style="{StaticResource MaterialDesignSlider}"
                                                     TickFrequency="1"
-                                                    Value="10" />
+                                                    Value="25" />
                                             </StackPanel>
                                         </Border>
                                     </StackPanel>

@@ -1,8 +1,10 @@
 ﻿using Client.Communication;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
@@ -15,20 +17,36 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 
 namespace Client.Pages
 {
     /// <summary>
     /// Interaction logic for Game.xaml
     /// </summary>
-    public partial class GamePage : Page
+    public partial class GamePage : Page, INotifyPropertyChanged
     {
         static Random rnd = new Random();
 
 
         private string Username { get; set; }
-        private RoomData RoomData { get; set; }
-        // GameData ????
+        public RoomData RoomData { get; set; }
+
+        private DispatcherTimer QuestionTimer { get; set; }
+        private double _timeElapsed;
+
+        public double TimeElapsed
+        {
+            get { return _timeElapsed; }
+            set
+            {
+                if (_timeElapsed != value)
+                {
+                    _timeElapsed = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
 
 
         public GamePage(string username, RoomData roomData)
@@ -67,6 +85,8 @@ namespace Client.Pages
 
                 ButtonAnswer3.Content = getQuestionResponse.Answers[arr[3]].Answer;
                 ButtonAnswer3.Tag = getQuestionResponse.Answers[arr[3]].AnswerId;
+
+                StartTimer();
             }
             else
             {
@@ -75,12 +95,48 @@ namespace Client.Pages
             }
         }
 
+        private void StartTimer()
+        {
+            // Clearing the old timer if it already exists
+            if (QuestionTimer != null)
+            {
+                QuestionTimer.Stop();
+                QuestionTimer.Tick -= Timer_Tick;
+                QuestionTimer = null;
+            }
+
+            QuestionTimer = new DispatcherTimer();
+            QuestionTimer.Interval = TimeSpan.FromSeconds(0.1);
+            QuestionTimer.Tick += Timer_Tick;
+            TimeElapsed = 0;
+            QuestionTimer.Start();
+        }
+
+        private void Timer_Tick(object sender, EventArgs e)
+        {
+            TimeElapsed += 0.1;
+        }
+
+
+        private void SetIsEnabledPropertyForAnswerButtons(bool value)
+        {
+            ButtonAnswer0.IsHitTestVisible = value;
+            ButtonAnswer1.IsHitTestVisible = value;
+            ButtonAnswer2.IsHitTestVisible = value;
+            ButtonAnswer3.IsHitTestVisible = value;
+        }
+
+
+
         private async void SubmitAnswer(object sender, RoutedEventArgs e)
         {
+            // Disabling all answer buttons
+            SetIsEnabledPropertyForAnswerButtons(false);
+
             Button pressedButton = sender as Button;
             uint userAnswerId = (uint)pressedButton.Tag;
 
-            Helper.SendRequest(Constants.SubmitAnswerRequestId, JsonSerializer.Serialize(new SubmitAnswerRequest(userAnswerId, 5.2)));
+            Helper.SendRequest(Constants.SubmitAnswerRequestId, JsonSerializer.Serialize(new SubmitAnswerRequest(userAnswerId, TimeElapsed)));
             SubmitAnswerResponse submitAnswerResponse = Helper.GetResponse<SubmitAnswerResponse>();
 
             if (submitAnswerResponse.CorrectAnswerId == userAnswerId)
@@ -100,6 +156,9 @@ namespace Client.Pages
             
             // Displaying the next question
             DisplayNextQuestion();
+
+            // Enabling the answer buttons
+            SetIsEnabledPropertyForAnswerButtons(true);
         }
 
 
@@ -115,6 +174,13 @@ namespace Client.Pages
                 MenuPage menuPage = new MenuPage(Username);
                 NavigationService.Navigate(menuPage);
             }
+        }
+
+        public event PropertyChangedEventHandler? PropertyChanged;
+
+        protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }
