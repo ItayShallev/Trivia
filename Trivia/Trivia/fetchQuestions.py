@@ -1,9 +1,15 @@
+import sys
 import requests
+import time
 import json
 import html
 import sqlite3
+from colorama import Fore, Back, Style, init
 
-NUMBER_OF_QUESTIONS_TO_FETCH = 50
+TIMES_TO_REQUEST_CL_ARG_INDEX = 1
+TRIVIA_API_COOLDOWN = 5
+
+NUMBER_OF_QUESTIONS_TO_FETCH = 50       # This is the max amount of questions
 QUESTIONS_URL = "https://opentdb.com/api.php?amount=" + str(NUMBER_OF_QUESTIONS_TO_FETCH) + "&type=multiple"
 SUCCESS_CODE = 0
 
@@ -37,12 +43,23 @@ def insert_questions_to_db(questions: json) -> None:
 
 
 def main():
-    questions = requests.get(QUESTIONS_URL)
+    init()      # For colorful printing
 
-    if questions.json()["response_code"] == SUCCESS_CODE:
-        insert_questions_to_db(questions.json())
-    else:
-        print("OpenTrivia error (Code: " + questions.json()["response_code"])
+    print(Fore.YELLOW + "Sending " + sys.argv[TIMES_TO_REQUEST_CL_ARG_INDEX] + " Requests" + Fore.WHITE)
+
+    for i in range(int(sys.argv[TIMES_TO_REQUEST_CL_ARG_INDEX])):
+        if i != 0:          # Waiting between each request
+            time.sleep(TRIVIA_API_COOLDOWN)
+
+        questions = requests.get(QUESTIONS_URL)
+        print(Fore.YELLOW + "RETURN CODE: " + str(questions.json()["response_code"]) + Fore.WHITE)
+
+        if questions.json()["response_code"] == SUCCESS_CODE:
+            insert_questions_to_db(questions.json())
+        else:
+            print(Fore.YELLOW + "OpenTrivia error (Code: " + str(questions.json()["response_code"]) + ")" + Fore.WHITE)
+
+    print(Fore.YELLOW + "Finished fetching questions..." + Fore.YELLOW)
 
 
 if __name__ == '__main__':

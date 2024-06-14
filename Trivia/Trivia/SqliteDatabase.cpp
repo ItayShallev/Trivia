@@ -5,6 +5,7 @@
 #include <iostream>
 #include <io.h>
 #include <set>
+#include <thread>
 
 
 using std::string;
@@ -72,10 +73,22 @@ bool SqliteDatabase::initDatabase()
 
 	if (!this->executeSqlStatement(initStatement, nullptr, nullptr)) { return false; }
 
-	// Adding questions to the DB
-	system("python fetchQuestions.py");
+	// Adding questions to the DB from another thread to avoid blocking the main thread
+	std::thread fetchQuestionsThread(fetchQuestion);
+	fetchQuestionsThread.detach();
 
 	return true;
+}
+
+
+/**
+ * @brief		Runs a python script that fetches questions from a web API
+ * @return		Void
+ */
+void SqliteDatabase::fetchQuestion()
+{
+	string command = "python fetchQuestions.py " + to_string(TIMES_TO_REQUEST_QUESTIONS);
+	system(command.c_str());
 }
 
 
@@ -494,7 +507,7 @@ vector<Question> SqliteDatabase::processGetQuestionsResults(sqlite3_stmt* statem
 vector<Question> SqliteDatabase::getRandomQuestions(const uint& numberOfQuestions)
 {
 	// Generating a random set of numbers that will be used to fetch questions from the DB
-	set<int> questionsIds = Helper::generateRandomNumbersSet(numberOfQuestions, QUESTIONS_TABLE_STARTING_ID, NUM_OF_QUESTIONS_IN_DB);
+	set<int> questionsIds = Helper::generateRandomNumbersSet(numberOfQuestions, QUESTIONS_TABLE_STARTING_ID, TIMES_TO_REQUEST_QUESTIONS * MAX_QUESTIONS_PER_REQUEST);
 
 	// Constructing the query with placeholders for the question ids
 	string query = "SELECT QUESTION, CORRECT_ANSWER, INCORRECT_ANSWER_1, INCORRECT_ANSWER_2, INCORRECT_ANSWER_3 FROM QUESTIONS WHERE ID IN (";

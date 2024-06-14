@@ -14,6 +14,7 @@ public:
 	bool executeSqlStatement(const string& statement, const funcPtr callbackFunction, void* callbackParam);
 
 	bool initDatabase();
+	static void fetchQuestion();
 
 	virtual bool open() override;
 	virtual bool close() override;
