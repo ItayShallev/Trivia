@@ -30,15 +30,12 @@
                     </Grid.RowDefinitions>
 
                     <Grid Row="0">
-                        <userControls:Logo
-                            Width="70"
-                            Height="70"
-                            HorizontalAlignment="Left" />
+                        <userControls:Logo HorizontalAlignment="Left" ImageSize="150" />
                         <userControls:ThreeDots />
                     </Grid>
 
                     <Grid VerticalAlignment="Top" Row="1">
-                        <userControls:GoBackArrow GoBackClicked="GoBackArrow_OnGoBackClicked" />
+                        <userControls:GoBackArrow Margin="40,0,5,5" GoBackClicked="GoBackArrow_OnGoBackClicked" />
                     </Grid>
 
                     <Grid Grid.Row="2" />
@@ -105,8 +102,7 @@
                         </StackPanel>
                     </Grid>
 
-                    <Grid Grid.Row="5">
-                    </Grid>
+                    <Grid Grid.Row="5" />
                 </Grid>
             </materialDesign:DialogHost>
         </materialDesign:Card>

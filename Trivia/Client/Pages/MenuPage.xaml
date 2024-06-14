@@ -10,7 +10,6 @@
     Title="MenuPage"
     d:DesignHeight="1140"
     d:DesignWidth="675"
-    
     Loaded="MenuPage_OnLoaded"
     mc:Ignorable="d">
 
@@ -42,10 +41,7 @@
                     </Grid.RowDefinitions>
 
                     <Grid Row="0">
-                        <userControls:Logo
-                            Width="70"
-                            Height="70"
-                            HorizontalAlignment="Left" />
+                        <userControls:Logo HorizontalAlignment="Left" ImageSize="150" />
 
                         <TextBlock
                             x:Name="UserGreetingTextBlock"
@@ -62,7 +58,7 @@
                     </Grid>
 
                     <Grid VerticalAlignment="Top" Row="1">
-                        <userControls:GoBackArrow GoBackClicked="GoBackArrow_OnGoBackClicked" />
+                        <userControls:GoBackArrow Margin="40,0,5,5" GoBackClicked="GoBackArrow_OnGoBackClicked" />
                     </Grid>
 
                     <Grid HorizontalAlignment="Right" Row="2">

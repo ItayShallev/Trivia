@@ -5,15 +5,17 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="clr-namespace:Client.UserControls"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    d:DesignHeight="150"
-    d:DesignWidth="150"
+    d:DesignHeight="600"
+    d:DesignWidth="600"
     mc:Ignorable="d">
     <Grid>
         <Image
-            Height="150"
-            Margin="5"
+            Width="{Binding ImageSize}"
+            Height="{Binding ImageSize}"
+            Margin="0"
             HorizontalAlignment="Center"
             VerticalAlignment="Center"
+            RenderOptions.BitmapScalingMode="HighQuality"
             Source="pack://siteoforigin:,,,/Media/TriviaLogo.png" />
     </Grid>
 </UserControl>

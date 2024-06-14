@@ -42,8 +42,7 @@
 
                     <Grid Row="0">
                         <userControls:Logo
-                            Width="70"
-                            Height="70"
+                            ImageSize="150"
                             HorizontalAlignment="Left" />
 
                         <TextBlock
@@ -59,7 +58,7 @@
                     </Grid>
 
                     <Grid VerticalAlignment="Top" Row="1">
-                        <userControls:GoBackArrow GoBackClicked="GoBackArrow_OnGoBackClicked" />
+                        <userControls:GoBackArrow Margin="40 0 5 5" GoBackClicked="GoBackArrow_OnGoBackClicked" />
                     </Grid>
 
                     <Grid Grid.Row="2">

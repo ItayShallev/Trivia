@@ -20,9 +20,19 @@ namespace Client.UserControls
     /// </summary>
     public partial class Logo : UserControl
     {
+        public static readonly DependencyProperty ImageSizeProperty =
+            DependencyProperty.Register("ImageSize", typeof(double), typeof(Logo), new PropertyMetadata(100.0));
+
+        public double ImageSize
+        {
+            get { return (double)GetValue(ImageSizeProperty); }
+            set { SetValue(ImageSizeProperty, value); }
+        }
+
         public Logo()
         {
             InitializeComponent();
+            DataContext = this; // Ensure DataContext is set to the UserControl itself
         }
     }
 }

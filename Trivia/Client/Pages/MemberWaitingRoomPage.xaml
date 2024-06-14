@@ -4,8 +4,8 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="clr-namespace:Client.Pages"
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:userControls="clr-namespace:Client.UserControls"
     Title="MemberWaitingRoomPage"
     d:DesignHeight="1140"
@@ -25,10 +25,10 @@
 
     <Grid>
         <materialDesign:Card
-        Margin="25"
-        materialDesign:ShadowAssist.ShadowDepth="Depth4"
-        Background="{DynamicResource MaterialDesignPaper}"
-        UniformCornerRadius="15">
+            Margin="25"
+            materialDesign:ShadowAssist.ShadowDepth="Depth4"
+            Background="{DynamicResource MaterialDesignPaper}"
+            UniformCornerRadius="15">
             <materialDesign:DialogHost x:Name="DialogHost" CloseOnClickAway="True">
                 <Grid>
                     <Grid.RowDefinitions>
@@ -41,32 +41,29 @@
                     </Grid.RowDefinitions>
 
                     <Grid Row="0">
-                        <userControls:Logo
-                        Width="70"
-                        Height="70"
-                        HorizontalAlignment="Left" />
+                        <userControls:Logo HorizontalAlignment="Left" ImageSize="150" />
 
                         <TextBlock
-                        x:Name="WaitingRoomHeader"
-                        HorizontalAlignment="Center"
-                        VerticalAlignment="Center"
-                        FontFamily="Montserrat"
-                        FontSize="24"
-                        FontWeight="Bold"
-                        Text="Waiting Room" />
+                            x:Name="WaitingRoomHeader"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            FontFamily="Montserrat"
+                            FontSize="24"
+                            FontWeight="Bold"
+                            Text="Waiting Room" />
 
                         <userControls:ThreeDots />
                     </Grid>
 
                     <Grid VerticalAlignment="Top" Row="1">
-                        <userControls:GoBackArrow GoBackClicked="GoBackArrow_OnGoBackClicked" />
+                        <userControls:GoBackArrow Margin="40,0,5,5" GoBackClicked="GoBackArrow_OnGoBackClicked" />
                     </Grid>
 
                     <Grid Grid.Row="2">
                         <TextBlock
-                        HorizontalAlignment="Center"
-                        FontSize="35"
-                        FontWeight="Medium">
+                            HorizontalAlignment="Center"
+                            FontSize="35"
+                            FontWeight="Medium">
                             <TextBlock.Text>
                                 <MultiBinding StringFormat="{}{0}/{1}">
                                     <Binding Path="UsersCount" />
@@ -78,10 +75,10 @@
 
                     <Grid Grid.Row="3">
                         <Border
-                        Margin="15"
-                        BorderBrush="Gray"
-                        BorderThickness="2"
-                        CornerRadius="15">
+                            Margin="15"
+                            BorderBrush="Gray"
+                            BorderThickness="2"
+                            CornerRadius="15">
 
                             <Grid>
                                 <Grid.RowDefinitions>
@@ -125,9 +122,9 @@
 
                     <Grid Grid.Row="4" Margin="15">
                         <Border
-                        BorderBrush="Gray"
-                        BorderThickness="2"
-                        CornerRadius="15">
+                            BorderBrush="Gray"
+                            BorderThickness="2"
+                            CornerRadius="15">
 
                             <StackPanel>
                                 <ListBox x:Name="LBUsersList">
@@ -156,4 +153,4 @@
             </materialDesign:DialogHost>
         </materialDesign:Card>
     </Grid>
-</Page> 
+</Page>
