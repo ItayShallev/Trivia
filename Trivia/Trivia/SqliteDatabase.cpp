@@ -470,21 +470,6 @@ vector<Question> SqliteDatabase::processGetQuestionsResults(sqlite3_stmt* statem
 		// Setting the question string
 		newQuestion.setQuestion(reinterpret_cast<const char*>(sqlite3_column_text(statement, 0)));
 
-		//// Shuffling the possible answers
-		//vector<string> stringPossibleAnswers = { reinterpret_cast<const char*>(sqlite3_column_text(statement, 1)),
-		//									reinterpret_cast<const char*>(sqlite3_column_text(statement, 2)),
-		//									reinterpret_cast<const char*>(sqlite3_column_text(statement, 3)),
-		//									reinterpret_cast<const char*>(sqlite3_column_text(statement, 4)) };
-
-		//cout << "Before shuffle:\n";
-		//for (int i = 0; i < stringPossibleAnswers.size(); ++i)
-		//{
-		//	cout << i << ": " << stringPossibleAnswers[i] << "\n";
-		//}
-		//cout << "----------------------------------------\n";
-
-		//int correctAnswerId = Helper::shuffleAnswers(stringPossibleAnswers, stringPossibleAnswers[0]);
-
 		// Creating AnswerItems vector and setting an ID for each answer (by the order after the shuffle)
 		vector<AnswerItem> possibleAnswers = {
 			AnswerItem(0, reinterpret_cast<const char*>(sqlite3_column_text(statement, 1))),
@@ -492,8 +477,6 @@ vector<Question> SqliteDatabase::processGetQuestionsResults(sqlite3_stmt* statem
 			AnswerItem(2, reinterpret_cast<const char*>(sqlite3_column_text(statement, 3))),
 			AnswerItem(3, reinterpret_cast<const char*>(sqlite3_column_text(statement, 4)))
 		};
-
-		/*cout << "Correct Answer: " << possibleAnswers[correctAnswerId].answer << " (" << correctAnswerId << ")\n";*/
 
 		// Setting the possible answers
 		newQuestion.setPossibleAnswers(possibleAnswers);

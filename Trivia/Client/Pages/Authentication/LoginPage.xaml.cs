@@ -34,10 +34,19 @@ namespace Client.Pages
             // Focusing on the password box
             pswdPasswordBox.Focus();
         }
-        
+        private void PswdPasswordBox_OnPasswordChanged(object sender, RoutedEventArgs e)
+        {
+            BtnLogin.IsEnabled = (pswdPasswordBox.Password != "");
+        }
 
         private void BtnLogin_OnClick(object sender, RoutedEventArgs e)
         {
+            // Input validation
+            if (pswdPasswordBox.Password == "")
+            {
+                BtnLogin.IsEnabled = false;
+            }
+
             // Sending a login request to the server
             Helper.SendRequest(Constants.LoginRequestId, JsonSerializer.Serialize(new LoginRequest(this._username, pswdPasswordBox.Password)));
 

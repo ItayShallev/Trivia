@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Text.Json;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using static System.Runtime.InteropServices.JavaScript.JSType;
@@ -68,6 +69,12 @@ namespace Client.Communication
             if (roomStatus == Constants.RoomStatus.Waiting) return "Waiting";
             if (roomStatus == Constants.RoomStatus.Playing) return "Playing";
             return "Closed";
+        }
+
+        public static bool IsValidEmailAddress(string s)
+        {
+            Regex regex = new Regex(@"^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$");
+            return regex.IsMatch(s);
         }
     }
 }

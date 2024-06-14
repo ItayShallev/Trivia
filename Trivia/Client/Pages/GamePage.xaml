@@ -65,10 +65,6 @@
                         Grid.Row="4"
                         Margin="15"
                         VerticalAlignment="Center">
-                        <!--<Border
-                            BorderBrush="Gray"
-                            BorderThickness="2"
-                            CornerRadius="15" />-->
                         <StackPanel>
                             <Button
                                 x:Name="ButtonAnswer0"

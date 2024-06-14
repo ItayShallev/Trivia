@@ -75,6 +75,7 @@
                             Content="Continue"
                             FontSize="18"
                             IsDefault="True"
+                            IsEnabled="{Binding ElementName=UsernameTextBox, Path=Text.Length}"
                             Style="{StaticResource MaterialDesignFlatMidBgButton}" />
                     </Grid>
                 </Grid>

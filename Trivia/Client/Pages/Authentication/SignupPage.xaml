@@ -66,6 +66,7 @@
                                 BorderBrush="{DynamicResource MaterialDesignDivider}"
                                 BorderThickness="2"
                                 FontSize="18"
+                                PasswordChanged="PswdPasswordBox_OnPasswordChanged"
                                 Style="{StaticResource MaterialDesignOutlinedPasswordBox}" />
 
                             <TextBox
@@ -78,6 +79,7 @@
                                 BorderBrush="{DynamicResource MaterialDesignDivider}"
                                 BorderThickness="2"
                                 FontSize="18"
+                                TextChanged="TxtMail_OnChanged"
                                 Style="{StaticResource MaterialDesignOutlinedTextBox}" />
 
                             <Button
@@ -91,6 +93,7 @@
                                 Content="Signup"
                                 FontSize="18"
                                 IsDefault="True"
+                                IsEnabled="False"
                                 Style="{StaticResource MaterialDesignFlatMidBgButton}" />
                         </StackPanel>
                     </Grid>
