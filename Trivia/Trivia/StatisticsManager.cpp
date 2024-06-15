@@ -13,7 +13,7 @@ StatisticsManager::StatisticsManager(IDatabase* database) : m_database(database)
  * @brief	Returns a leaderboard containing the 5 best users
  * @return	A vector containing the usernames of the 5 best users
  */
-vector<string> StatisticsManager::getHighScore() const
+vector<HighScoreRow> StatisticsManager::getHighScore() const
 {
 	return this->m_database->getHighScores();
 }

@@ -130,7 +130,7 @@ FOREIGN KEY (USERNAME) REFERENCES USERS(USERNAME));)"
 // ************************** Game *************************
 // Leaderboard
 #define LEADERBOARD_SIZE					5
-#define LEADERBOARD_MIN_GAMES_TO_QUALIFY	5
+#define LEADERBOARD_MIN_GAMES_TO_QUALIFY	1
 
 #define WINS_WEIGHT							2
 #define AVERAGE_ANSWER_TIME_WEIGHT			1
@@ -145,3 +145,7 @@ FOREIGN KEY (USERNAME) REFERENCES USERS(USERNAME));)"
 #define WHITE	15
 #define CYAN	3
 #define GREY	7
+
+
+// ************************** GENERAL *************************
+#define BASE_10		10

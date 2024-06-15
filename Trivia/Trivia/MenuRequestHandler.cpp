@@ -146,7 +146,7 @@ RequestResult MenuRequestHandler::getPersonalStats(RequestInfo reqInfo)
 RequestResult MenuRequestHandler::getHighScore(RequestInfo reqInfo)
 {
 	// get the high score
-	vector<string> highScore = this->m_handlerFactory.getStatisticsManager().getHighScore();
+	vector<HighScoreRow> highScore = this->m_handlerFactory.getStatisticsManager().getHighScore();
 
 	// build the response
 	GetHighScoreResponse highScoreResp = GetHighScoreResponse{ 1, highScore };

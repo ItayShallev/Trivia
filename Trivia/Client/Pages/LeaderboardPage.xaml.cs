@@ -14,6 +14,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Client.ViewModels;
 
 namespace Client.Pages
 {
@@ -30,80 +31,26 @@ namespace Client.Pages
 
         private void LeaderboardPage_OnLoaded(object sender, RoutedEventArgs e)
         {
-            const int NUM_MAX_PLAYERS = 5;
-            
-            // build and send the request
-            Helper.SendRequest(Constants.GetHighScoreRequestId, "");
+            // Sending GetHighScoresRequest
+            Helper.SendRequest(Constants.GetHighScoreRequestId, JsonSerializer.Serialize(new GetHighScoreRequest()));
+            GetHighScoreResponse getHighScoreResponse = Helper.GetResponse<GetHighScoreResponse>();
 
+            //// get the players list from the response
+            List<HighScoreRow> highScores = getHighScoreResponse.Statistics;
 
-            ///////// TODO: DEBUG TO CHECK DESERIALIZER
-            // receive the response info
-            ResponseInfo respInfo = Helper.GetResponseInfo(Communicator.Connection.ReceiveMessage());
-
-            // if the response is not the wanted response
-            if (respInfo.ResponseId != Constants.GetHighScoreResponseId)
+            // Iterating over the rows and adding entries to the leaderboard
+            List<LeaderboardEntry> leaderBoardEntries = [];
+            foreach (HighScoreRow highScoreRow in highScores)
             {
-                // build an error list
-                List<string> errorList = BuildErrorList(NUM_MAX_PLAYERS);
+                LeaderboardEntry newLeaderboardEntry = new LeaderboardEntry(highScoreRow.Username,
+                    highScoreRow.NumGamesPlayed, highScoreRow.NumCorrectAnswers,
+                    highScoreRow.NumWrongAnswers, highScoreRow.AverageAnswerTime, highScoreRow.Points,
+                    highScoreRow.Rank);
 
-                // set the text elements
-                //SetTxtElements(errorList);
-
-                return;
+                leaderBoardEntries.Add(newLeaderboardEntry);
             }
 
-            // extract the high score response from the response info
-            GetHighScoreResponse highScoreResp = JsonSerializer.Deserialize<GetHighScoreResponse>(respInfo.Message);
-
-            // get the players list from the response
-            List<string> players = highScoreResp.Statistics;
-
-            // make sure we have the wanted amount of players
-            MakeListXelements(players, NUM_MAX_PLAYERS);
-
-            // set the txt boxes values accordingly
-            //SetTxtElements(players);
-
-        }
-
-        private void MakeListXelements(List<string> list, int x)
-        {
-            if (x == list.Count) // no need to change anything
-            {
-                return;
-            }
-            else if (x > list.Count) // need to add elements
-            {
-                // get the number of elements that needs to be added
-                int numElementsToAdd = x - list.Count;
-
-                // add the elements
-                for (int i = 0; i < numElementsToAdd; i++)
-                {
-                    list.Add("TBD");
-                }
-            }
-            else // unused currently
-            {
-                // remove the extra elements
-                list.RemoveRange(x, list.Count - x);
-            }
-        }
-
-        private List<string> BuildErrorList(int numElements)
-        {
-            // build a new list
-            List<string> errorList = new List<string>();
-
-            // make numElements amount of error elements
-            for (int i = 0; i < numElements; i++)
-            {
-                // add error
-                errorList.Add("ERROR");
-            }
-
-            // return the error list
-            return errorList;
+            LeaderboardDataGrid.ItemsSource = leaderBoardEntries;
         }
 
         private void GoBackArrow_OnGoBackClicked(object sender, RoutedEventArgs e)

@@ -242,9 +242,9 @@ namespace Client.Communication
     public struct GetHighScoreResponse
     {
         [JsonPropertyName("status")] public uint Status { get; set; } = 1;
-        [JsonPropertyName("statistics")] public List<string> Statistics { get; set; } = new List<string>();
+        [JsonPropertyName("statistics")] public List<HighScoreRow> Statistics { get; set; } = [];
 
-        public GetHighScoreResponse(uint status, List<string> statistics)
+        public GetHighScoreResponse(uint status, List<HighScoreRow> statistics)
         {
             Status = status;
             Statistics = statistics;
@@ -403,6 +403,28 @@ namespace Client.Communication
         {
             AnswerId = answerId;
             Answer = answer;
+        }
+    }
+
+    public struct HighScoreRow
+    {
+        [JsonPropertyName("username")] public string Username { get; set; } = "";
+        [JsonPropertyName("numGamesPlayed")] public uint NumGamesPlayed { get; set; } = 0;
+        [JsonPropertyName("numCorrectAnswers")] public uint NumCorrectAnswers { get; set; } = 0;
+        [JsonPropertyName("numWrongAnswers")] public uint NumWrongAnswers { get; set; } = 0;
+        [JsonPropertyName("averageAnswerTime")] public double AverageAnswerTime { get; set; } = 0.0;
+        [JsonPropertyName("points")] public uint Points { get; set; } = 0;
+        [JsonPropertyName("rank")] public uint Rank { get; set; } = 0;
+
+        public HighScoreRow(string username, uint numGamesPlayed, uint numCorrectAnswers, uint numWrongAnswers, double averageAnswerTime, uint points, uint rank)
+        {
+            Username = username;
+            NumGamesPlayed = numGamesPlayed;
+            NumCorrectAnswers = numCorrectAnswers;
+            NumWrongAnswers = numWrongAnswers;
+            AverageAnswerTime = averageAnswerTime;
+            Points = points;
+            Rank = rank;
         }
     }
 }

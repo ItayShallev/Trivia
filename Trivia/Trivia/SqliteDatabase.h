@@ -42,7 +42,7 @@ public:
 	virtual vector<string> getUserStatistics(const string& username) override;									   // *
 																												   // *
 	static int getHighScoresCallback(void* data, int argc, char** argv, char** azColName);						   // *
-	virtual vector<string> getHighScores() override;															   // *
+	virtual vector<HighScoreRow> getHighScores() override;														   // *
 																												   // *
 	bool doesUserHasStatisticsRecord(const string& username);													   // *
 	void submitUserGameStatistics(const std::pair<std::shared_ptr<LoggedUser>, GameData>& user);				   // *

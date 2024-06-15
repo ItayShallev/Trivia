@@ -423,52 +423,63 @@ vector<string> SqliteDatabase::getUserStatistics(const string& username)
 
 int SqliteDatabase::getHighScoresCallback(void* data, int argc, char** argv, char** azColName)
 {
-	(static_cast<vector<string>*>(data))->push_back(argv[0]);		// Pushing the username of the current user in the leaderboard into the vector
+	//(static_cast<vector<string>*>(data))->push_back(argv[0]);		// Pushing the username of the current user in the leaderboard into the vector
+	vector<HighScoreRow>* highScores = static_cast<vector<HighScoreRow>*>(data);
+
+	char* end;
+	HighScoreRow highScoreRow{ argv[0],								// Username
+								strtoul(argv[1], &end, BASE_10),	// Number of games played
+								strtoul(argv[2], &end, BASE_10),	// Number of correct answers
+								strtoul(argv[3], &end, BASE_10),	// Number of wrong answers
+								strtod(argv[4], &end),					// Average answer timer
+								strtoul(argv[5], &end, BASE_10),	// points
+								0 };									// Rank (Will be set later...)
+
+	highScores->push_back(highScoreRow);
 
 	return 0;
 }
 
 
 /**
- * @brief	Returns a leaderboard containing the 5 best users
- * @return	A vector containing the usernames of the 5 best users
+ * @brief	Returns a leaderboard of the best users
+ * @return	A vector containing the usernames of the best users
  */
-vector<string> SqliteDatabase::getHighScores()
+vector<HighScoreRow> SqliteDatabase::getHighScores()
 {
-	//const string statement = R"(
-	//				BEGIN TRANSACTION;
-	//				
-	//				SELECT
-	//				USERNAME,
-	//				(NUM_GAMES_WON / NUM_GAMES_PLAYED) * )" + to_string(WINS_WEIGHT) + R"( As WinRate,
-	//				(1 - (NUM_GAMES_WON / NUM_GAMES_PLAYED)) * (1.0 / AVERAGE_ANSWER_TIME) * )" + to_string(AVERAGE_ANSWER_TIME_WEIGHT) + R"( AS LeaderboardScore
-	//				FROM STATISTICS
-	//				WHERE NUM_GAMES_PLAYED >= )" + to_string(LEADERBOARD_MIN_GAMES_TO_QUALIFY) + R"(
-	//				GROUP BY USERNAME
-	//				ORDER BY LeaderboardScore DESC
-	//				LIMIT )" + to_string(LEADERBOARD_SIZE) + R"(;
-
-	//				END TRANSACTION;
-	//				)";
-
 	const string statement = R"(
 					BEGIN TRANSACTION;
 					
 					SELECT
-					USERNAME,
-					((NUM_GAMES_PLAYED / 3) / NUM_GAMES_PLAYED) * )" + to_string(WINS_WEIGHT) + R"( As WinRate,
-					(1 - ((NUM_GAMES_PLAYED / 2) / NUM_GAMES_PLAYED)) * (1.0 / AVERAGE_ANSWER_TIME) * )" + to_string(AVERAGE_ANSWER_TIME_WEIGHT) + R"( AS LeaderboardScore
+					USERNAME, NUM_GAMES_PLAYED, NUM_CORRECT_ANSWERS, NUM_WRONG_ANSWERS, AVERAGE_ANSWER_TIME, POINTS
 					FROM STATISTICS
 					WHERE NUM_GAMES_PLAYED >= )" + to_string(LEADERBOARD_MIN_GAMES_TO_QUALIFY) + R"(
-					GROUP BY USERNAME
-					ORDER BY LeaderboardScore DESC
-					LIMIT )" + to_string(LEADERBOARD_SIZE) + R"(;
+
+					ORDER BY POINTS DESC, AVERAGE_ANSWER_TIME ASC;
 
 					END TRANSACTION;
 					)";
 
-	vector<string> highScores;
+	vector<HighScoreRow> highScores;
 	executeSqlStatement(statement, getHighScoresCallback, &highScores);
+
+	// Setting the ranks
+	int currentRank = 1;
+	for (HighScoreRow& row : highScores)
+	{
+		row.rank = currentRank++;
+	}
+
+	//for (HighScoreRow row : highScores)
+	//{
+	//	cout << "RANK: " << row.rank << "\t\t";
+	//	cout << "USERNAME: " << row.username << "\t\t";
+	//	cout << "GAMES PLAYED: " << row.numGamesPlayed << "\t\t";
+	//	cout << "CORRECT ANSWERS: " << row.numCorrectAnswers << "\t\t";
+	//	cout << "WRONG ANSWERS: " << row.numWrongAnswers << "\t\t";
+	//	cout << "AVG ANSWER TIME: " << row.averageAnswerTime << "\t\t";
+	//	cout << "POINTS: " << row.points << "\t\t\n";
+	//}
 
 	return highScores;
 }

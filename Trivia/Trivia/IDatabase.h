@@ -31,7 +31,7 @@ public:
 	virtual uint getPlayerScore(const string& username) = 0;
 
 	virtual vector<string> getUserStatistics(const string& username) = 0;
-	virtual vector<string> getHighScores() = 0;
+	virtual vector<HighScoreRow> getHighScores() = 0;
 	virtual void submitGameStatistics(const map<std::shared_ptr<LoggedUser>, GameData>& users) = 0;
 
 	virtual vector<Question> getRandomQuestions(const uint& numberOfQuestions) = 0;
