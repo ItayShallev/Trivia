@@ -24,8 +24,6 @@ namespace Client.Pages
     public partial class GamePage : Page
     {
         static Random rnd = new Random();
-
-
         private string Username { get; set; }
         private RoomData RoomData { get; set; }
         // GameData ????
@@ -105,11 +103,12 @@ namespace Client.Pages
 
         private void GoBackArrow_OnGoBackClicked(object sender, RoutedEventArgs e)
         {
-            // Sending a CloseRoom request
-            Helper.SendRequest(Constants.CloseRoomRequestId, JsonSerializer.Serialize(new CloseRoomRequest(this.RoomData.Id)));
-            CloseRoomResponse closeRoomResponse = Helper.GetResponse<CloseRoomResponse>();
+            // Sending a Leave Game request
+            Helper.SendRequest(Constants.LeaveGameRequestId,
+                JsonSerializer.Serialize(new LeaveGameRequest()));
+            LeaveGameResponse leaveGameResponse = Helper.GetResponse<LeaveGameResponse>();
 
-            if (closeRoomResponse.Status == 1)
+            if (leaveGameResponse.Status == 1)
             {
                 // Navigating the user back to the menu page
                 MenuPage menuPage = new MenuPage(Username);
