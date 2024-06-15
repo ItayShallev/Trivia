@@ -1,14 +1,14 @@
 #include "Question.h"
 
 
-Question::Question() : m_question(""), m_possibleAnswers(vector<AnswerItem>()), m_answerId(0) { }
+Question::Question() : m_question(L""), m_possibleAnswers(vector<AnswerItem>()), m_answerId(0) { }
 
 
-Question::Question(const string& question, const vector<AnswerItem>& possibleAnswers, const uint& answerId)
+Question::Question(const wstring& question, const vector<AnswerItem>& possibleAnswers, const uint& answerId)
 	: m_question(question), m_possibleAnswers(possibleAnswers), m_answerId(answerId) { }
 
 
-string Question::getQuestion() const
+wstring Question::getQuestion() const
 {
 	return this->m_question;
 }
@@ -26,7 +26,7 @@ uint Question::getCorrectAnswerId() const
 }
 
 
-void Question::setQuestion(const string& question)
+void Question::setQuestion(const wstring& question)
 {
 	this->m_question = question;
 }

@@ -98,18 +98,6 @@ namespace Client.Pages
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        //private void UpdateUsersList(List<string> players)
-        //{
-        //    LBUsersList.Items.Clear();      // Removing all players boxes from the players list
-
-        //    // Iterating over the players list and creating a list box item for each player
-        //    foreach (string playerName in players)
-        //    {
-        //        ListBoxItem newPlayerBox = new ListBoxItem { Content = playerName };
-        //        LBUsersList.Items.Add(newPlayerBox);
-        //    }
-        //}
-
         private void UpdateUsersList(List<string> users)
         {
             List<UserEntry> userEntries = new List<UserEntry>();

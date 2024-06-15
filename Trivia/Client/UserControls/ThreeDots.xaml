@@ -45,9 +45,9 @@
                     Orientation="Horizontal">
                     <TextBlock VerticalAlignment="Center" Text="Dark Mode" />
                     <ToggleButton
-                        Name="themeToggle"
+                        Name="ThemeToggle"
                         Margin="12,0,8,0"
-                        Click="toggleTheme"
+                        Click="ToggleTheme"
                         Cursor="Hand"
                         IsChecked="{Binding IsDarkTheme}"
                         ToolTip="Enable Dark Mode" />

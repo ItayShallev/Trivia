@@ -6,6 +6,7 @@
 #include <io.h>
 #include <set>
 #include <thread>
+#include <codecvt>
 
 
 using std::string;
@@ -271,7 +272,7 @@ int SqliteDatabase::intCallback(void* data, int argc, char** argv, char** azColN
 
 
 /**
- * @brief		Callback function that returns the result of a select query in an float
+ * @brief		Callback function that returns the result of a select query in a float
  * @param		data			A pointer to an integer where the result will be stored
  * @param		argc			The number of columns in the result set
  * @param		argv			An array of strings representing the result set
@@ -412,7 +413,7 @@ vector<string> SqliteDatabase::getUserStatistics(const string& username)
 	vector<string> userStatistics;
 
 	userStatistics.push_back(to_string(this->getPlayerScore(username)));					// Points earned
-	userStatistics.push_back(to_string(this->getNumOfPlayerGames(username)));			// Number of Games Played
+	userStatistics.push_back(to_string(this->getNumOfPlayerGames(username)));				// Number of Games Played
 	userStatistics.push_back(to_string(this->getNumOfCorrectAnswers(username)));			// Number of Correct Answers
 	userStatistics.push_back(to_string(this->getPlayerAverageAnswerTime(username)));		// Average Answer Time
 
@@ -476,20 +477,30 @@ vector<Question> SqliteDatabase::processGetQuestionsResults(sqlite3_stmt* statem
 {
 	vector<Question> questions;
 
+	std::wstring_convert<std::codecvt_utf8<wchar_t>> utf8ToWstringConverter;
+
 	while (sqlite3_step(statement) == SQLITE_ROW)		// Iterating over all the result rows
 	{
 		Question newQuestion;
 
 		// Setting the question string
-		newQuestion.setQuestion(reinterpret_cast<const char*>(sqlite3_column_text(statement, 0)));
+		string question = reinterpret_cast<const char*>(sqlite3_column_text(statement, 0));
 
-		// Creating AnswerItems vector and setting an ID for each answer (by the order after the shuffle)
-		vector<AnswerItem> possibleAnswers = {
-			AnswerItem(0, reinterpret_cast<const char*>(sqlite3_column_text(statement, 1))),
-			AnswerItem(1, reinterpret_cast<const char*>(sqlite3_column_text(statement, 2))),
-			AnswerItem(2, reinterpret_cast<const char*>(sqlite3_column_text(statement, 3))),
-			AnswerItem(3, reinterpret_cast<const char*>(sqlite3_column_text(statement, 4)))
-		};
+		// Converting the question from UTF-8 to wide string (to support special character displaying)
+		std::wstring wideStringQuestion = utf8ToWstringConverter.from_bytes(question);
+		newQuestion.setQuestion(wideStringQuestion);
+
+		// Creating AnswerItems vector and setting an ID for each answer
+		vector<AnswerItem> possibleAnswers;
+		for (int i = 1; i <= 4; ++i)
+		{
+			string currentAnswer = reinterpret_cast<const char*>(sqlite3_column_text(statement, i));
+
+			// Converting the current answer from UTF-8 to wide string (to support special character displaying)
+			std::wstring wideStringAnswer = utf8ToWstringConverter.from_bytes(currentAnswer);
+
+			possibleAnswers.push_back(AnswerItem(i - 1, wideStringAnswer));
+		}
 
 		// Setting the possible answers
 		newQuestion.setPossibleAnswers(possibleAnswers);

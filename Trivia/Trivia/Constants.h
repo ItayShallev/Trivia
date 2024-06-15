@@ -135,6 +135,8 @@ FOREIGN KEY (USERNAME) REFERENCES USERS(USERNAME));)"
 #define WINS_WEIGHT							2
 #define AVERAGE_ANSWER_TIME_WEIGHT			1
 
+#define TIME_EXPIRED_ANSWER_ID				4
+
 
 // ************************** Console Colors *************************
 #define GREEN	2

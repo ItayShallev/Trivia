@@ -21,6 +21,8 @@ namespace Client
         
         public const int NUM_ZEROS_TO_PAD = 4;
 
+        public const int TIME_EXPIRED_ANSWER_ID = 4;
+
         public enum RoomStatus
         {
             Waiting = 0,

@@ -78,14 +78,9 @@
                             IsDefault="True"
                             IsEnabled="False"
                             Style="{StaticResource MaterialDesignFlatMidBgButton}" >
-
                         </Button>
-                        
                     </Grid>
-
-
                 </Grid>
-
             </materialDesign:DialogHost>
         </materialDesign:Card>
     </Grid>

@@ -136,7 +136,7 @@ void to_json(json& j, const LeaveGameResponse& response);
 struct GetQuestionResponse
 {
 	uint status = 1;
-	string question;
+	wstring question;
 	vector<AnswerItem> answers;
 };
 void to_json(json& j, const GetQuestionResponse& response);

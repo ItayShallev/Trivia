@@ -7,6 +7,7 @@ using System.Text.Json;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Markup;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Client.Communication
@@ -75,6 +76,19 @@ namespace Client.Communication
         {
             Regex regex = new Regex(@"^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$");
             return regex.IsMatch(s);
+        }
+
+        public static string DecodeAsciiCodes(List<int> asciiCodes)
+        {
+            // Converting the list of ASCII codes to character array and then to string
+            char[] chars = new char[asciiCodes.Count];
+
+            for (int i = 0; i < asciiCodes.Count; i++)
+            {
+                chars[i] = (char)asciiCodes[i];
+            }
+
+            return new string(chars);
         }
     }
 }

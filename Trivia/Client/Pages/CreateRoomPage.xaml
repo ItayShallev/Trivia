@@ -152,7 +152,7 @@
                                                     FontWeight="Medium"
                                                     Foreground="#2196f3"
                                                     Text="Time Per Question" />
-
+    
                                                 <Slider
                                                     x:Name="TimePerQuestionSlider"
                                                     Width="300"
