@@ -34,7 +34,7 @@
                     </Grid>
 
                     <Grid VerticalAlignment="Center" Row="1">
-                        <userControls:Logo />
+                        <userControls:Logo ImageSize="350" />
                     </Grid>
 
                     <Grid VerticalAlignment="Center" Row="2">
@@ -78,14 +78,9 @@
                             IsDefault="True"
                             IsEnabled="False"
                             Style="{StaticResource MaterialDesignFlatMidBgButton}" >
-
                         </Button>
-                        
                     </Grid>
-
-
                 </Grid>
-
             </materialDesign:DialogHost>
         </materialDesign:Card>
     </Grid>

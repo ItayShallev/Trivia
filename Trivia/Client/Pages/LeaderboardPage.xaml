@@ -28,10 +28,7 @@
                     </Grid.RowDefinitions>
 
                     <Grid Row="0">
-                        <UserControls:Logo
-                            Width="70"
-                            Height="70"
-                            HorizontalAlignment="Left" />
+                        <UserControls:Logo HorizontalAlignment="Left" ImageSize="150" />
 
                         <TextBlock
                             x:Name="LeaderboardHeader"
@@ -46,7 +43,7 @@
                     </Grid>
 
                     <Grid VerticalAlignment="Top" Row="1">
-                        <UserControls:GoBackArrow GoBackClicked="GoBackArrow_OnGoBackClicked" />
+                        <UserControls:GoBackArrow Margin="40,0,5,5" GoBackClicked="GoBackArrow_OnGoBackClicked" />
                     </Grid>
 
                     <Grid Row="2">

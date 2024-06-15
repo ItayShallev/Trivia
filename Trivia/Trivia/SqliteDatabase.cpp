@@ -5,6 +5,8 @@
 #include <iostream>
 #include <io.h>
 #include <set>
+#include <thread>
+#include <codecvt>
 
 
 using std::string;
@@ -72,10 +74,22 @@ bool SqliteDatabase::initDatabase()
 
 	if (!this->executeSqlStatement(initStatement, nullptr, nullptr)) { return false; }
 
-	// Adding questions to the DB
-	system("python fetchQuestions.py");
+	// Adding questions to the DB from another thread to avoid blocking the main thread
+	std::thread fetchQuestionsThread(fetchQuestion);
+	fetchQuestionsThread.detach();
 
 	return true;
+}
+
+
+/**
+ * @brief		Runs a python script that fetches questions from a web API
+ * @return		Void
+ */
+void SqliteDatabase::fetchQuestion()
+{
+	string command = "python fetchQuestions.py " + to_string(TIMES_TO_REQUEST_QUESTIONS);
+	system(command.c_str());
 }
 
 
@@ -258,7 +272,7 @@ int SqliteDatabase::intCallback(void* data, int argc, char** argv, char** azColN
 
 
 /**
- * @brief		Callback function that returns the result of a select query in an float
+ * @brief		Callback function that returns the result of a select query in a float
  * @param		data			A pointer to an integer where the result will be stored
  * @param		argc			The number of columns in the result set
  * @param		argv			An array of strings representing the result set
@@ -399,7 +413,7 @@ vector<string> SqliteDatabase::getUserStatistics(const string& username)
 	vector<string> userStatistics;
 
 	userStatistics.push_back(to_string(this->getPlayerScore(username)));					// Points earned
-	userStatistics.push_back(to_string(this->getNumOfPlayerGames(username)));			// Number of Games Played
+	userStatistics.push_back(to_string(this->getNumOfPlayerGames(username)));				// Number of Games Played
 	userStatistics.push_back(to_string(this->getNumOfCorrectAnswers(username)));			// Number of Correct Answers
 	userStatistics.push_back(to_string(this->getPlayerAverageAnswerTime(username)));		// Average Answer Time
 
@@ -463,20 +477,30 @@ vector<Question> SqliteDatabase::processGetQuestionsResults(sqlite3_stmt* statem
 {
 	vector<Question> questions;
 
+	std::wstring_convert<std::codecvt_utf8<wchar_t>> utf8ToWstringConverter;
+
 	while (sqlite3_step(statement) == SQLITE_ROW)		// Iterating over all the result rows
 	{
 		Question newQuestion;
 
 		// Setting the question string
-		newQuestion.setQuestion(reinterpret_cast<const char*>(sqlite3_column_text(statement, 0)));
+		string question = reinterpret_cast<const char*>(sqlite3_column_text(statement, 0));
 
-		// Creating AnswerItems vector and setting an ID for each answer (by the order after the shuffle)
-		vector<AnswerItem> possibleAnswers = {
-			AnswerItem(0, reinterpret_cast<const char*>(sqlite3_column_text(statement, 1))),
-			AnswerItem(1, reinterpret_cast<const char*>(sqlite3_column_text(statement, 2))),
-			AnswerItem(2, reinterpret_cast<const char*>(sqlite3_column_text(statement, 3))),
-			AnswerItem(3, reinterpret_cast<const char*>(sqlite3_column_text(statement, 4)))
-		};
+		// Converting the question from UTF-8 to wide string (to support special character displaying)
+		std::wstring wideStringQuestion = utf8ToWstringConverter.from_bytes(question);
+		newQuestion.setQuestion(wideStringQuestion);
+
+		// Creating AnswerItems vector and setting an ID for each answer
+		vector<AnswerItem> possibleAnswers;
+		for (int i = 1; i <= 4; ++i)
+		{
+			string currentAnswer = reinterpret_cast<const char*>(sqlite3_column_text(statement, i));
+
+			// Converting the current answer from UTF-8 to wide string (to support special character displaying)
+			std::wstring wideStringAnswer = utf8ToWstringConverter.from_bytes(currentAnswer);
+
+			possibleAnswers.push_back(AnswerItem(i - 1, wideStringAnswer));
+		}
 
 		// Setting the possible answers
 		newQuestion.setPossibleAnswers(possibleAnswers);
@@ -494,7 +518,7 @@ vector<Question> SqliteDatabase::processGetQuestionsResults(sqlite3_stmt* statem
 vector<Question> SqliteDatabase::getRandomQuestions(const uint& numberOfQuestions)
 {
 	// Generating a random set of numbers that will be used to fetch questions from the DB
-	set<int> questionsIds = Helper::generateRandomNumbersSet(numberOfQuestions, QUESTIONS_TABLE_STARTING_ID, NUM_OF_QUESTIONS_IN_DB);
+	set<int> questionsIds = Helper::generateRandomNumbersSet(numberOfQuestions, QUESTIONS_TABLE_STARTING_ID, TIMES_TO_REQUEST_QUESTIONS * MAX_QUESTIONS_PER_REQUEST);
 
 	// Constructing the query with placeholders for the question ids
 	string query = "SELECT QUESTION, CORRECT_ANSWER, INCORRECT_ANSWER_1, INCORRECT_ANSWER_2, INCORRECT_ANSWER_3 FROM QUESTIONS WHERE ID IN (";

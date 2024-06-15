@@ -1,4 +1,5 @@
 ﻿using Client.Communication;
+using Client.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -108,16 +109,18 @@ namespace Client.Pages
             }
         }
 
-        private void UpdateUsersList(List<string> players)
+        private void UpdateUsersList(List<string> users)
         {
-            LBUsersList.Items.Clear();      // Removing all players boxes from the players list
+            List<UserEntry> userEntries = new List<UserEntry>();
 
-            // Iterating over the players list and creating a list box item for each player
-            foreach (string playerName in players)
+            // Iterating over the users list and creating a UserEntry item for each one
+            foreach (string user in users)
             {
-                ListBoxItem newPlayerBox = new ListBoxItem { Content = playerName };
-                LBUsersList.Items.Add(newPlayerBox);
+                UserEntry newUserEntry = new UserEntry(user, user == RoomData.Admin);
+                userEntries.Add(newUserEntry);
             }
+
+            UsersListDataGrid.ItemsSource = userEntries;
         }
 
         private void UpdateUI(object state)

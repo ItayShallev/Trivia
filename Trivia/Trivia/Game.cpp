@@ -33,6 +33,11 @@ void Game::submitAnswer(const std::shared_ptr<LoggedUser>& user, const uint& ans
 	{
 		currUserGameData.correctAnswerCount++;
 	}
+	else if (answerId == TIME_EXPIRED_ANSWER_ID)
+	{
+		// TODO: Maybe implement some logic related to answers thtat weren't really answered by the user...
+		currUserGameData.wrongAnswerCount++;
+	}
 	else
 	{
 		currUserGameData.wrongAnswerCount++;
@@ -52,7 +57,7 @@ void Game::submitAnswer(const std::shared_ptr<LoggedUser>& user, const uint& ans
 	}
 	else												// If no questions remained
 	{
-		currUserGameData.currentQuestion = Question("NO QUESTIONS REMAINED!", vector<AnswerItem>(), 0);
+		currUserGameData.currentQuestion = Question(L"NO QUESTIONS REMAINED!", vector<AnswerItem>(), 0);
 		this->m_numFinished++;
 	}
 }

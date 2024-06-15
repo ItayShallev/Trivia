@@ -311,13 +311,13 @@ namespace Client.Communication
         }
     }
 
-    public struct GetQuestionResponse
+    public class GetQuestionResponse
     {
         [JsonPropertyName("status")] public uint Status { get; set; } = 0;
-        [JsonPropertyName("question")] public string Question { get; set; } = "";
+        [JsonPropertyName("question")] public List<int> Question { get; set; } = [];
         [JsonPropertyName("answers")] public List<AnswerItem> Answers { get; set; } = [];
 
-        public GetQuestionResponse(uint status, string question, List<AnswerItem> answers)
+        public GetQuestionResponse(uint status, List<int> question, List<AnswerItem> answers)
         {
             Status = status;
             Question = question;
@@ -395,9 +395,9 @@ namespace Client.Communication
     public struct AnswerItem
     {
         [JsonPropertyName("answerId")] public uint AnswerId { get; set; } = 0;
-        [JsonPropertyName("answer")] public string Answer { get; set; } = "";
+        [JsonPropertyName("answer")] public List<int> Answer { get; set; } = [];
 
-        public AnswerItem(uint answerId, string answer)
+        public AnswerItem(uint answerId, List<int> answer)
         {
             AnswerId = answerId;
             Answer = answer;

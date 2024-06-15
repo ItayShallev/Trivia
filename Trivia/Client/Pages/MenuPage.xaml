@@ -10,7 +10,6 @@
     Title="MenuPage"
     d:DesignHeight="1140"
     d:DesignWidth="675"
-    
     Loaded="MenuPage_OnLoaded"
     mc:Ignorable="d">
 
@@ -42,10 +41,7 @@
                     </Grid.RowDefinitions>
 
                     <Grid Row="0">
-                        <userControls:Logo
-                            Width="70"
-                            Height="70"
-                            HorizontalAlignment="Left" />
+                        <userControls:Logo HorizontalAlignment="Left" ImageSize="150" />
 
                         <TextBlock
                             x:Name="UserGreetingTextBlock"
@@ -62,7 +58,7 @@
                     </Grid>
 
                     <Grid VerticalAlignment="Top" Row="1">
-                        <userControls:GoBackArrow GoBackClicked="GoBackArrow_OnGoBackClicked" />
+                        <userControls:GoBackArrow Margin="40,0,5,5" GoBackClicked="GoBackArrow_OnGoBackClicked" />
                     </Grid>
 
                     <Grid HorizontalAlignment="Right" Row="2">
@@ -132,6 +128,8 @@
                         </Grid.RowDefinitions>
 
                         <Grid Row="0">
+                            <Separator VerticalAlignment="Bottom" />
+                            
                             <TextBlock
                                 HorizontalAlignment="Center"
                                 VerticalAlignment="Center"
@@ -141,108 +139,101 @@
                         </Grid>
 
                         <Grid Row="1">
-                            <Border
-                                BorderBrush="Gray"
-                                BorderThickness="2"
-                                CornerRadius="15">
+                            <StackPanel>
+                                <DataGrid
+                                    x:Name="RoomsListDataGrid"
+                                    Margin="10"
+                                    AutoGenerateColumns="False"
+                                    CanUserAddRows="False"
+                                    CanUserDeleteRows="False"
+                                    CanUserReorderColumns="False"
+                                    CanUserResizeColumns="False"
+                                    CanUserSortColumns="True"
+                                    GridLinesVisibility="All"
+                                    IsReadOnly="True"
+                                    SelectionChanged="RoomClicked"
+                                    SelectionMode="Single"
+                                    SelectionUnit="FullRow">
 
-                                <StackPanel>
-                                    <DataGrid
-                                        x:Name="RoomsListDataGrid"
-                                        Margin="10"
-                                        AutoGenerateColumns="False"
-                                        CanUserAddRows="False"
-                                        CanUserDeleteRows="False"
-                                        CanUserReorderColumns="False"
-                                        CanUserResizeColumns="False"
-                                        CanUserSortColumns="True"
-                                        GridLinesVisibility="All"
-                                        IsReadOnly="True"
-                                        SelectionChanged="RoomClicked"
-                                        SelectionMode="Single"
-                                        SelectionUnit="FullRow">
+                                    <DataGrid.Resources>
+                                        <Style x:Key="CenterAlignedTextBlock" TargetType="TextBlock">
+                                            <Setter Property="HorizontalAlignment" Value="Center" />
+                                            <Setter Property="VerticalAlignment" Value="Center" />
+                                        </Style>
+                                    </DataGrid.Resources>
 
-                                        <DataGrid.Resources>
-                                            <Style x:Key="CenterAlignedTextBlock" TargetType="TextBlock">
-                                                <Setter Property="HorizontalAlignment" Value="Center" />
-                                                <Setter Property="VerticalAlignment" Value="Center" />
-                                            </Style>
-                                        </DataGrid.Resources>
+                                    <DataGrid.ColumnHeaderStyle>
+                                        <Style TargetType="DataGridColumnHeader">
+                                            <Setter Property="Height" Value="50" />
+                                            <Setter Property="HorizontalContentAlignment" Value="Center" />
+                                            <Setter Property="FontSize" Value="14" />
+                                            <Setter Property="FontWeight" Value="SemiBold" />
+                                            <Setter Property="Margin" Value="0,0,0,5" />
+                                            <Setter Property="Padding" Value="5,5,10,5" />
+                                            <Setter Property="BorderBrush" Value="Transparent" />
+                                            <Setter Property="BorderThickness" Value="0,0,0,0" />
+                                            <Setter Property="Cursor" Value="Arrow" />
 
-                                        <DataGrid.ColumnHeaderStyle>
-                                            <Style TargetType="DataGridColumnHeader">
-                                                <Setter Property="Height" Value="50" />
-                                                <Setter Property="HorizontalContentAlignment" Value="Center" />
-                                                <Setter Property="FontSize" Value="14" />
-                                                <Setter Property="FontWeight" Value="SemiBold" />
-                                                <Setter Property="Margin" Value="0,0,0,5" />
-                                                <Setter Property="Padding" Value="5,5,10,5" />
-                                                <Setter Property="BorderBrush" Value="Transparent" />
-                                                <Setter Property="BorderThickness" Value="0,0,0,0" />
-                                                <Setter Property="Cursor" Value="Arrow" />
+                                            <Style.Triggers>
+                                                <Trigger Property="IsMouseOver" Value="True">
+                                                    <Setter Property="BorderThickness" Value="0,0,0,4" />
+                                                    <Setter Property="BorderBrush" Value="CornflowerBlue" />
+                                                </Trigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </DataGrid.ColumnHeaderStyle>
 
-                                                <Style.Triggers>
-                                                    <Trigger Property="IsMouseOver" Value="True">
-                                                        <Setter Property="BorderThickness" Value="0,0,0,4" />
-                                                        <Setter Property="BorderBrush" Value="CornflowerBlue" />
-                                                    </Trigger>
-                                                </Style.Triggers>
-                                            </Style>
-                                        </DataGrid.ColumnHeaderStyle>
+                                    <DataGrid.RowStyle>
+                                        <Style TargetType="DataGridRow">
+                                            <Setter Property="Background" Value="White" />
+                                            <Setter Property="Foreground" Value="Black" />
+                                            <Setter Property="BorderBrush" Value="LightGray" />
+                                            <Setter Property="BorderThickness" Value="0,0,0,2" />
+                                            <Setter Property="Margin" Value="0,2" />
+                                            <Setter Property="MinHeight" Value="48" />
+                                            <Setter Property="HorizontalContentAlignment" Value="Center" />
+                                            <Setter Property="VerticalAlignment" Value="Center" />
+                                            <Setter Property="Cursor" Value="Hand" />
+                                            <Setter Property="FontSize" Value="14" />
+                                            <Setter Property="FontWeight" Value="SemiBold" />
+                                            <Style.Triggers>
+                                                <Trigger Property="IsMouseOver" Value="True">
+                                                    <Setter Property="BorderThickness" Value="0,0,0,4" />
+                                                    <Setter Property="BorderBrush" Value="DarkOrange" />
+                                                </Trigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </DataGrid.RowStyle>
 
-                                        <DataGrid.RowStyle>
-                                            <Style TargetType="DataGridRow">
-                                                <Setter Property="Background" Value="White" />
-                                                <Setter Property="Foreground" Value="Black" />
-                                                <Setter Property="BorderBrush" Value="LightGray" />
-                                                <Setter Property="BorderThickness" Value="0,0,0,2" />
-                                                <Setter Property="Margin" Value="0,2" />
-                                                <Setter Property="MinHeight" Value="48" />
-                                                <Setter Property="HorizontalContentAlignment" Value="Center" />
-                                                <Setter Property="VerticalAlignment" Value="Center" />
-                                                <Setter Property="Cursor" Value="Hand" />
-                                                <Setter Property="FontSize" Value="14" />
-                                                <Setter Property="FontWeight" Value="SemiBold" />
-                                                <Style.Triggers>
-                                                    <Trigger Property="IsMouseOver" Value="True">
-                                                        <Setter Property="BorderThickness" Value="0,0,0,4" />
-                                                        <Setter Property="BorderBrush" Value="DarkOrange" />
-                                                    </Trigger>
-                                                </Style.Triggers>
-                                            </Style>
-                                        </DataGrid.RowStyle>
-
-                                        <DataGrid.Columns>
-                                            <DataGridTextColumn
-                                                Width="*"
-                                                Binding="{Binding Name}"
-                                                ElementStyle="{StaticResource CenterAlignedTextBlock}"
-                                                Header="Room Name" />
-                                            <DataGridTextColumn
-                                                Width="*"
-                                                Binding="{Binding Admin}"
-                                                ElementStyle="{StaticResource CenterAlignedTextBlock}"
-                                                Header="Admin" />
-                                            <DataGridTextColumn
-                                                Width="*"
-                                                Binding="{Binding RoomStatus}"
-                                                ElementStyle="{StaticResource CenterAlignedTextBlock}"
-                                                Header="Status" />
-                                            <DataGridTextColumn
-                                                Width="*"
-                                                Binding="{Binding QuestionCount}"
-                                                ElementStyle="{StaticResource CenterAlignedTextBlock}"
-                                                Header="Question Count" />
-                                            <DataGridTextColumn
-                                                Width="*"
-                                                Binding="{Binding QuestionTimeout}"
-                                                ElementStyle="{StaticResource CenterAlignedTextBlock}"
-                                                Header="Timeout" />
-                                        </DataGrid.Columns>
-                                    </DataGrid>
-                                </StackPanel>
-
-                            </Border>
+                                    <DataGrid.Columns>
+                                        <DataGridTextColumn
+                                            Width="*"
+                                            Binding="{Binding Name}"
+                                            ElementStyle="{StaticResource CenterAlignedTextBlock}"
+                                            Header="Room Name" />
+                                        <DataGridTextColumn
+                                            Width="*"
+                                            Binding="{Binding Admin}"
+                                            ElementStyle="{StaticResource CenterAlignedTextBlock}"
+                                            Header="Admin" />
+                                        <DataGridTextColumn
+                                            Width="*"
+                                            Binding="{Binding RoomStatus}"
+                                            ElementStyle="{StaticResource CenterAlignedTextBlock}"
+                                            Header="Status" />
+                                        <DataGridTextColumn
+                                            Width="*"
+                                            Binding="{Binding QuestionCount}"
+                                            ElementStyle="{StaticResource CenterAlignedTextBlock}"
+                                            Header="Question Count" />
+                                        <DataGridTextColumn
+                                            Width="*"
+                                            Binding="{Binding QuestionTimeout}"
+                                            ElementStyle="{StaticResource CenterAlignedTextBlock}"
+                                            Header="Timeout" />
+                                    </DataGrid.Columns>
+                                </DataGrid>
+                            </StackPanel>
                         </Grid>
                     </Grid>
 

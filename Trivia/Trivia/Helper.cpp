@@ -138,23 +138,7 @@ set<int> Helper::generateRandomNumbersSet(const uint& setSize, const int& minVal
         {
             randomNumbers.insert(randomNumber);
         }
-
     }
 
     return randomNumbers;
 }
-
-//int Helper::shuffleAnswers(vector<string>& possibleAnswers, const string correctAnswer)
-//{
-//	// Preparing the random engine to generate random sequence
-//	std::random_device rd;
-//	std::default_random_engine range(rd());
-//
-//	// Shuffling the possible answers vector
-//	shuffle(possibleAnswers.begin(), possibleAnswers.end(), range);
-//
-//	// Finding the index of the correct answer
-//	ptrdiff_t correctAnswerId = find(possibleAnswers.begin(), possibleAnswers.end(), correctAnswer) - possibleAnswers.begin();
-//
-//	return correctAnswerId;
-//}

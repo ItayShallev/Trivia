@@ -5,6 +5,7 @@
 #include "json.hpp"
 
 using std::string;
+using std::wstring;
 using std::vector;
 using nlohmann::json;
 
@@ -13,9 +14,9 @@ typedef unsigned int uint;
 struct AnswerItem
 {
 	uint answerId = 0;
-	string answer = "";
+	wstring answer;
 
-	AnswerItem(const uint& id, const string& answer) : answerId(id), answer(answer) { }
+	AnswerItem(const uint& id, const wstring& answer) : answerId(id), answer(answer) { }
 
 	bool operator ==(const AnswerItem& otherAnswerItem) const
 	{
@@ -29,19 +30,19 @@ class Question
 {
 public:
 	Question();
-	Question(const string& question, const vector<AnswerItem>& possibleAnswers, const uint& answerId);
+	Question(const wstring& question, const vector<AnswerItem>& possibleAnswers, const uint& answerId);
 
-	string getQuestion() const;
+	wstring getQuestion() const;
 	vector<AnswerItem> getPossibleAnswers() const;
 	uint getCorrectAnswerId() const;
 
-	void setQuestion(const string& question);
+	void setQuestion(const wstring& question);
 	void setPossibleAnswers(const vector<AnswerItem>& possibleAnswers);
 	void setCorrectAnswerId(const uint& answerId);
 
 
 private:
-	string m_question;
+	wstring m_question;
 	vector<AnswerItem> m_possibleAnswers;
 	uint m_answerId;
 };
