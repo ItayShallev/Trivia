@@ -4,7 +4,7 @@ typedef unsigned int uint;
 
 // ************************** SERVER CONSTANTS *************************
 #define SERVER_PORT 8888
-#define DEFAULT_BUFFER_SIZE 255			// TODO: remove when message format is established, update receive data
+#define DEFAULT_BUFFER_SIZE 255
 #define LIMIT_OF_MAX_PLAYERS_IN_ROOM 20
 
 
@@ -72,9 +72,6 @@ enum QuestionDifficulty
 
 
 
-// ************************** DE/SERIALIZERS *************************
-
-
 // ************************** PROTOCOL_CONSTANTS *************************
 #define ID_BYTE_LENGTH			2
 
@@ -113,6 +110,7 @@ NUM_QUESTIONS_ANSWERED INTEGER NOT NULL,
 NUM_CORRECT_ANSWERS INTEGER NOT NULL,
 NUM_WRONG_ANSWERS INTEGER NOT NULL,
 AVERAGE_ANSWER_TIME FLOAT NOT NULL,
+POINTS INTEGER NOT NULL,
 FOREIGN KEY (USERNAME) REFERENCES USERS(USERNAME));)"
 
 #define QUESTIONS_TABLE_STARTING_ID		1
@@ -124,19 +122,22 @@ FOREIGN KEY (USERNAME) REFERENCES USERS(USERNAME));)"
 #define INCORRECT_ANSWER_1_INDEX		2
 #define INCORRECT_ANSWER_2_INDEX		3
 #define INCORRECT_ANSWER_3_INDEX		4
+#define DIFFICULTY_INDEX				5
 
-
-
+#define TIME_EXPIRED_ANSWER_ID				4
 
 
 // ************************** Game *************************
 // Leaderboard
 #define LEADERBOARD_SIZE					5
 #define LEADERBOARD_MIN_GAMES_TO_QUALIFY	5
+
 #define WINS_WEIGHT							2
 #define AVERAGE_ANSWER_TIME_WEIGHT			1
 
-#define TIME_EXPIRED_ANSWER_ID				4
+#define POINTS_POSSIBLE_FOR_EASY			100
+#define POINTS_POSSIBLE_FOR_MEDIUM			350
+#define POINTS_POSSIBLE_FOR_HARD			500
 
 
 // ************************** Console Colors *************************

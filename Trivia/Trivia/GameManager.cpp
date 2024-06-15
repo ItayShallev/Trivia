@@ -14,7 +14,7 @@ std::shared_ptr<Game> GameManager::createGame(const Room& room)
 	}
 
 	// Creating a new game dynamically (the game has the same ID as the room)
-	std::shared_ptr<Game> newGame = std::make_shared<Game>(room.getId(), players, this->m_database->getRandomQuestions(room.getNumOfQuestions()));
+	std::shared_ptr<Game> newGame = std::make_shared<Game>(room.getId(), players, this->m_database->getRandomQuestions(room.getNumOfQuestions()), room.getRoomData());
 
 	// pushing the game to the m_games vector
 	m_games.push_back(newGame);

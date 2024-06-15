@@ -142,3 +142,20 @@ set<int> Helper::generateRandomNumbersSet(const uint& setSize, const int& minVal
 
     return randomNumbers;
 }
+
+double Helper::getPointsPossibleForDifficulty(const QuestionDifficulty& questionDifficulty)
+{
+	switch (questionDifficulty)
+	{
+	case QuestionDifficulty::Easy:
+		return POINTS_POSSIBLE_FOR_EASY;
+
+	case QuestionDifficulty::Medium:
+		return POINTS_POSSIBLE_FOR_MEDIUM;
+
+	case QuestionDifficulty::Hard:
+		return POINTS_POSSIBLE_FOR_HARD;
+	}
+
+	return 0;
+}

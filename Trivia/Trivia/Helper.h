@@ -26,4 +26,6 @@ public:
 
 	static int generateRandomNumber(const int& minValue, const int& maxValue);
 	static set<int> generateRandomNumbersSet(const uint& setSize, const int& minValue, const int& maxValue);
+
+	static double getPointsPossibleForDifficulty(const QuestionDifficulty& questionDifficulty);
 };

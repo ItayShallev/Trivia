@@ -73,5 +73,5 @@ struct GameData
 	uint correctAnswerCount = 0;
 	uint wrongAnswerCount = 0;
 	double averageAnswerTime = 0.0;
+	int points = 0;
 };
-

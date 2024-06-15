@@ -1,4 +1,5 @@
 #include "StatisticsManager.h"
+#include "Helper.h"
 
 
 /**
@@ -26,4 +27,10 @@ vector<string> StatisticsManager::getHighScore() const
 vector<string> StatisticsManager::getUserStatistics(const string& username) const
 {
 	return this->m_database->getUserStatistics(username);
+}
+
+
+int StatisticsManager::calculateRoundPoints(const double& answerTime, const uint& timePerQuestion, const QuestionDifficulty& difficulty)
+{
+	return static_cast<int>(round((1 - ((answerTime / timePerQuestion) / 2)) * Helper::getPointsPossibleForDifficulty(difficulty)));
 }

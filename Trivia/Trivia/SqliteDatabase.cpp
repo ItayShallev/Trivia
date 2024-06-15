@@ -435,13 +435,29 @@ int SqliteDatabase::getHighScoresCallback(void* data, int argc, char** argv, cha
  */
 vector<string> SqliteDatabase::getHighScores()
 {
+	//const string statement = R"(
+	//				BEGIN TRANSACTION;
+	//				
+	//				SELECT
+	//				USERNAME,
+	//				(NUM_GAMES_WON / NUM_GAMES_PLAYED) * )" + to_string(WINS_WEIGHT) + R"( As WinRate,
+	//				(1 - (NUM_GAMES_WON / NUM_GAMES_PLAYED)) * (1.0 / AVERAGE_ANSWER_TIME) * )" + to_string(AVERAGE_ANSWER_TIME_WEIGHT) + R"( AS LeaderboardScore
+	//				FROM STATISTICS
+	//				WHERE NUM_GAMES_PLAYED >= )" + to_string(LEADERBOARD_MIN_GAMES_TO_QUALIFY) + R"(
+	//				GROUP BY USERNAME
+	//				ORDER BY LeaderboardScore DESC
+	//				LIMIT )" + to_string(LEADERBOARD_SIZE) + R"(;
+
+	//				END TRANSACTION;
+	//				)";
+
 	const string statement = R"(
 					BEGIN TRANSACTION;
 					
 					SELECT
 					USERNAME,
-					(NUM_GAMES_WON / NUM_GAMES_PLAYED) * )" + to_string(WINS_WEIGHT) + R"( As WinRate,
-					(1 - (NUM_GAMES_WON / NUM_GAMES_PLAYED)) * (1.0 / AVERAGE_ANSWER_TIME) * )" + to_string(AVERAGE_ANSWER_TIME_WEIGHT) + R"( AS LeaderboardScore
+					((NUM_GAMES_PLAYED / 3) / NUM_GAMES_PLAYED) * )" + to_string(WINS_WEIGHT) + R"( As WinRate,
+					(1 - ((NUM_GAMES_PLAYED / 2) / NUM_GAMES_PLAYED)) * (1.0 / AVERAGE_ANSWER_TIME) * )" + to_string(AVERAGE_ANSWER_TIME_WEIGHT) + R"( AS LeaderboardScore
 					FROM STATISTICS
 					WHERE NUM_GAMES_PLAYED >= )" + to_string(LEADERBOARD_MIN_GAMES_TO_QUALIFY) + R"(
 					GROUP BY USERNAME
@@ -492,7 +508,8 @@ void SqliteDatabase::submitUserGameStatistics(const std::pair<std::shared_ptr<Lo
 					NUM_WRONG_ANSWERS = NUM_WRONG_ANSWERS + )" + to_string(userGameData.wrongAnswerCount) + R"(,
 					AVERAGE_ANSWER_TIME = ((AVERAGE_ANSWER_TIME * NUM_QUESTIONS_ANSWERED) + )" + to_string(totalAnswerTimeThisGame) + ")"
 											"/ (NUM_QUESTIONS_ANSWERED + " + to_string(numQuestionsAnsweredThisGame) + R"(),
-					NUM_QUESTIONS_ANSWERED = NUM_QUESTIONS_ANSWERED + )" + to_string(numQuestionsAnsweredThisGame) + R"(
+					NUM_QUESTIONS_ANSWERED = NUM_QUESTIONS_ANSWERED + )" + to_string(numQuestionsAnsweredThisGame) + R"(,
+					POINTS = POINTS + )" + to_string(userGameData.points) + R"(
 
 					WHERE USERNAME = ')" + user.first->getUserName() + R"(';
 					
@@ -517,8 +534,8 @@ void SqliteDatabase::submitGameStatistics(const map<std::shared_ptr<LoggedUser>,
 
 									    INSERT INTO STATISTICS
 									    (USERNAME, NUM_GAMES_PLAYED, NUM_QUESTIONS_ANSWERED, 
-									     NUM_CORRECT_ANSWERS, NUM_WRONG_ANSWERS, AVERAGE_ANSWER_TIME)
-									    VALUES (')" + currentUsername + R"(', 0, 0, 0, 0, 0.0);
+									     NUM_CORRECT_ANSWERS, NUM_WRONG_ANSWERS, AVERAGE_ANSWER_TIME, POINTS)
+									    VALUES (')" + currentUsername + R"(', 0, 0, 0, 0, 0.0, 0);
 
 									    END TRANSACTION;
 									)";
@@ -568,7 +585,7 @@ vector<Question> SqliteDatabase::processGetQuestionsResults(sqlite3_stmt* statem
 
 		// Creating AnswerItems vector and setting an ID for each answer
 		vector<AnswerItem> possibleAnswers;
-		for (int i = 1; i <= 4; ++i)
+		for (int i = CORRECT_ANSWER_INDEX; i <= INCORRECT_ANSWER_3_INDEX; ++i)
 		{
 			string currentAnswer = reinterpret_cast<const char*>(sqlite3_column_text(statement, i));
 
@@ -585,7 +602,7 @@ vector<Question> SqliteDatabase::processGetQuestionsResults(sqlite3_stmt* statem
 		newQuestion.setCorrectAnswerId(0);
 
 		// Setting the question difficulty
-		string stringQuestionDifficulty = reinterpret_cast<const char*>(sqlite3_column_text(statement, 5));
+		string stringQuestionDifficulty = reinterpret_cast<const char*>(sqlite3_column_text(statement, DIFFICULTY_INDEX));
 		newQuestion.setDifficulty(Question::getDifficultyFromString(stringQuestionDifficulty));
 
 		questions.push_back(newQuestion);

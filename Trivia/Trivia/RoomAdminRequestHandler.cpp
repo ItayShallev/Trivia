@@ -58,13 +58,13 @@ RequestResult RoomAdminRequestHandler::startGame(RequestInfo reqInfo)
     RoomState currRoomState = this->m_roomManager.getRoomState(this->m_room);
 
     // create the game
-    std::shared_ptr<Game> game = this->m_handlerFactory->getGameManager().createGame(this->m_room);
+	std::shared_ptr<Game> game = this->m_handlerFactory->getGameManager().createGame(this->m_room);         // TODO: PASS THE ROOM_DATA so the Game class would have that information
 
     // create a new game handler
     std::shared_ptr<GameRequestHandler> newGameHandler = this->m_handlerFactory->createGameRequestHandler(game, this->m_user);
 
     // build and return the request result
-    return Helper::buildRequestResult(JsonResponsePacketSerializer::serializeResponse(StartGameResponse()),newGameHandler);
+    return Helper::buildRequestResult(JsonResponsePacketSerializer::serializeResponse(StartGameResponse()), newGameHandler);
 }
 
 RequestResult RoomAdminRequestHandler::getRoomState(RequestInfo reqInfo)
