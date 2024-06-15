@@ -148,6 +148,8 @@ namespace Client.Communication
         }
     }
 
+    public struct LeaveGameRequest { }
+
 
     // ******************* RESPONSE STRUCTURES *******************
 
@@ -334,6 +336,17 @@ namespace Client.Communication
             CorrectAnswerId = correctAnswerId;
         }
     }
+    
+    public struct LeaveGameResponse
+    {
+        [JsonPropertyName("status")] public uint Status { get; set; } = 0;
+
+        public LeaveGameResponse(uint status)
+        {
+            Status = status;
+        }
+
+    }
 
     public struct ErrorResponse
     {
@@ -344,6 +357,8 @@ namespace Client.Communication
             Message = message;
         }
     }
+
+    
 
 
     // ******************* OTHERS *******************
