@@ -57,7 +57,7 @@ void Game::submitAnswer(const std::shared_ptr<LoggedUser>& user, const uint& ans
 	}
 	else												// If no questions remained
 	{
-		currUserGameData.currentQuestion = Question(L"NO QUESTIONS REMAINED!", vector<AnswerItem>(), 0);
+		currUserGameData.currentQuestion = Question(L"NO QUESTIONS REMAINED!", vector<AnswerItem>(), 0, QuestionDifficulty::Easy);
 		this->m_numFinished++;
 	}
 }

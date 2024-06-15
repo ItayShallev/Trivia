@@ -413,7 +413,7 @@ vector<string> SqliteDatabase::getUserStatistics(const string& username)
 	vector<string> userStatistics;
 
 	userStatistics.push_back(to_string(this->getPlayerScore(username)));					// Points earned
-	userStatistics.push_back(to_string(this->getNumOfPlayerGames(username)));				// Number of Games Played
+	userStatistics.push_back(to_string(this->getNumOfPlayerGames(username)));			// Number of Games Played
 	userStatistics.push_back(to_string(this->getNumOfCorrectAnswers(username)));			// Number of Correct Answers
 	userStatistics.push_back(to_string(this->getPlayerAverageAnswerTime(username)));		// Average Answer Time
 
@@ -584,6 +584,10 @@ vector<Question> SqliteDatabase::processGetQuestionsResults(sqlite3_stmt* statem
 		// Setting the correct answer id
 		newQuestion.setCorrectAnswerId(0);
 
+		// Setting the question difficulty
+		string stringQuestionDifficulty = reinterpret_cast<const char*>(sqlite3_column_text(statement, 5));
+		newQuestion.setDifficulty(Question::getDifficultyFromString(stringQuestionDifficulty));
+
 		questions.push_back(newQuestion);
 	}
 
@@ -597,7 +601,7 @@ vector<Question> SqliteDatabase::getRandomQuestions(const uint& numberOfQuestion
 	set<int> questionsIds = Helper::generateRandomNumbersSet(numberOfQuestions, QUESTIONS_TABLE_STARTING_ID, TIMES_TO_REQUEST_QUESTIONS * MAX_QUESTIONS_PER_REQUEST);
 
 	// Constructing the query with placeholders for the question ids
-	string query = "SELECT QUESTION, CORRECT_ANSWER, INCORRECT_ANSWER_1, INCORRECT_ANSWER_2, INCORRECT_ANSWER_3 FROM QUESTIONS WHERE ID IN (";
+	string query = "SELECT QUESTION, CORRECT_ANSWER, INCORRECT_ANSWER_1, INCORRECT_ANSWER_2, INCORRECT_ANSWER_3, DIFFICULTY FROM QUESTIONS WHERE ID IN (";
 	for (auto it = questionsIds.begin(); it != questionsIds.end(); ++it)
 	{
 		if (it != questionsIds.begin())

@@ -52,7 +52,8 @@ RequestResult GameRequestHandler::getQuestion(RequestInfo reqInfo)
 	GetQuestionResponse questionResp = {
 		status,
 		nextQuestion.getQuestion(),
-		nextQuestion.getPossibleAnswers()
+		nextQuestion.getPossibleAnswers(),
+		nextQuestion.getDifficulty()
 	};
 
 	// build and return the request result

@@ -311,17 +311,19 @@ namespace Client.Communication
         }
     }
 
-    public class GetQuestionResponse
+    public struct GetQuestionResponse
     {
         [JsonPropertyName("status")] public uint Status { get; set; } = 0;
         [JsonPropertyName("question")] public List<int> Question { get; set; } = [];
         [JsonPropertyName("answers")] public List<AnswerItem> Answers { get; set; } = [];
+        [JsonPropertyName("difficulty")] public Constants.QuestionDifficulty Difficulty { get; set; }
 
-        public GetQuestionResponse(uint status, List<int> question, List<AnswerItem> answers)
+        public GetQuestionResponse(uint status, List<int> question, List<AnswerItem> answers, Constants.QuestionDifficulty questionDifficulty)
         {
             Status = status;
             Question = question;
             Answers = answers;
+            Difficulty = questionDifficulty;
         }
     }
 

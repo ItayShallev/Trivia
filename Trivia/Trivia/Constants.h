@@ -63,6 +63,12 @@ enum RoomStatus
 	Closed
 };
 
+enum QuestionDifficulty
+{
+	Easy = 0,
+	Medium,
+	Hard
+};
 
 
 

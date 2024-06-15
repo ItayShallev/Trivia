@@ -138,6 +138,7 @@ struct GetQuestionResponse
 	uint status = 1;
 	wstring question;
 	vector<AnswerItem> answers;
+	QuestionDifficulty difficulty;
 };
 void to_json(json& j, const GetQuestionResponse& response);
 

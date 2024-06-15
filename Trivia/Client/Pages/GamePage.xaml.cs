@@ -71,6 +71,9 @@ namespace Client.Pages
                 // Setting the question
                 QuestionTextBlock.Text = Helper.DecodeAsciiCodes(getQuestionResponse.Question);
 
+                // Setting the question difficulty
+                DifficultyTextBlock.Text = Helper.QuestionDifficultyToStringDifficulty(getQuestionResponse.Difficulty);
+
                 // Setting the possible answers in random order
                 int[] arr = new int[] { 0, 1, 2, 3 };
                 rnd.Shuffle(arr);

@@ -152,7 +152,8 @@ void to_json(json& j, const GetQuestionResponse& response)
 	j = json{
 		{"status", response.status},
 		{"question", response.question},
-		{"answers", response.answers}
+		{"answers", response.answers},
+		{"difficulty", response.difficulty}
 	};
 }
 

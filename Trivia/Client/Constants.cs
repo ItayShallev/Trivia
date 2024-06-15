@@ -30,6 +30,13 @@ namespace Client
             Closed = 2 // future use?
         };
 
+        public enum QuestionDifficulty
+        {
+            Easy = 0,
+            Medium = 1,
+            Hard = 2
+        }
+
         // ************************** REQUEST & RESPONSE ID'S *************************
         public const string LogoutRequestId = "00";
         public const string LoginRequestId = "01";
