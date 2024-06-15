@@ -88,13 +88,15 @@
                                 VerticalContentAlignment="Center"
                                 FontSize="20"
                                 FontWeight="Medium"
-                                MaxDropDownHeight="200"
+                                Cursor="Hand"
+                                MaxDropDownHeight="220"
                                 SelectedIndex="0"
                                 SelectionChanged="MaxPlayersComboBox_OnSelectionChanged">
                                 <ComboBox.Resources>
 
                                     <Style TargetType="ComboBoxItem">
                                         <Setter Property="FontSize" Value="14" />
+                                        <Setter Property="Cursor" Value="Hand" />
                                         <Setter Property="Foreground" Value="Black" />
                                         <Setter Property="Padding" Value="5" />
                                         <Setter Property="Template">

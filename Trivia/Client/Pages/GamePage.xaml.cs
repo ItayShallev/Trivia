@@ -30,6 +30,7 @@ namespace Client.Pages
     {
         static Random rnd = new Random();
         private string Username { get; set; }
+        private int AnswersCount { get; set; }
         public RoomData RoomData { get; set; }
 
         private DispatcherTimer QuestionTimer { get; set; }
@@ -95,15 +96,20 @@ namespace Client.Pages
             }
         }
 
-        private void StartTimer()
+        private void StopTimer()
         {
-            // Clearing the old timer if it already exists
             if (QuestionTimer != null)
             {
                 QuestionTimer.Stop();
                 QuestionTimer.Tick -= Timer_Tick;
                 QuestionTimer = null;
             }
+        }
+
+        private void StartTimer()
+        {
+            // Clearing the old timer if it already exists
+            StopTimer();
 
             QuestionTimer = new DispatcherTimer();
             QuestionTimer.Interval = TimeSpan.FromSeconds(0.1);
@@ -120,6 +126,8 @@ namespace Client.Pages
             if (TimeElapsed >= RoomData.TimePerQuestion - 0.1)
             {
                 QuestionTimer.Stop();
+
+                TimeElapsed = RoomData.TimePerQuestion;     // To avoid some inaccuracies of the Stopwatch
 
                 SubmitAnswer(Constants.TIME_EXPIRED_ANSWER_ID, null);
             }
@@ -162,6 +170,9 @@ namespace Client.Pages
                 ButtonAnswer3.Background = new SolidColorBrush(Colors.Red);
             }
 
+            // Incrementing the answers count
+            AnswersCount++;
+
             // Waiting a second to let the user see if his answer is correct or incorrect
             await Task.Delay(1000);
 
@@ -170,9 +181,13 @@ namespace Client.Pages
             ButtonAnswer1.Background = new SolidColorBrush(Colors.DodgerBlue);
             ButtonAnswer2.Background = new SolidColorBrush(Colors.DodgerBlue);
             ButtonAnswer3.Background = new SolidColorBrush(Colors.DodgerBlue);
-            
-            // Displaying the next question
-            DisplayNextQuestion();
+
+            // Checking if there are more questions for the user
+            if (AnswersCount < RoomData.NumOfQuestionsInGame)
+            {
+                // Displaying the next question
+                DisplayNextQuestion();
+            }
 
             // Enabling the answer buttons
             SetIsEnabledPropertyForAnswerButtons(true);
@@ -203,6 +218,9 @@ namespace Client.Pages
 
         private async void ButtonAnswer_OnClick(object sender, RoutedEventArgs e)
         {
+            // Stopping the timer
+            StopTimer();
+
             Button pressedButton = sender as Button;
             uint userAnswerId = (uint)pressedButton.Tag;
 

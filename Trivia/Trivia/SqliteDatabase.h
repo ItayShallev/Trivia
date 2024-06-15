@@ -20,7 +20,7 @@ public:
 	virtual bool close() override;
 
 	// ********************************************* USERS table queries *********************************************
-	static int doesUserExistsCallback(void* data, int argc, char** argv, char** azColName);						  // *
+	static int doesUserExistCallback(void* data, int argc, char** argv, char** azColName);						  // *
 	virtual bool doesUserExist(const string& username) override;												  // *
 																												  // *
 	static int doesPasswordMatchCallback(void* data, int argc, char** argv, char** azColName);					  // *
@@ -43,6 +43,10 @@ public:
 																												   // *
 	static int getHighScoresCallback(void* data, int argc, char** argv, char** azColName);						   // *
 	virtual vector<string> getHighScores() override;															   // *
+																												   // *
+	bool doesUserHasStatisticsRecord(const string& username);													   // *
+	void submitUserGameStatistics(const std::pair<std::shared_ptr<LoggedUser>, GameData>& user);				   // *
+	virtual void submitGameStatistics(const map<std::shared_ptr<LoggedUser>, GameData>& users) override;		   // *
 	// ****************************************************************************************************************
 
 	// ************************************************* GAME queries *************************************************

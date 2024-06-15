@@ -157,7 +157,7 @@ bool SqliteDatabase::close()
  @param		azColName		An array of strings containing the column names of the result set
  @return	Always returns 0
  */
-int SqliteDatabase::doesUserExistsCallback(void* data, int argc, char** argv, char** azColName)
+int SqliteDatabase::doesUserExistCallback(void* data, int argc, char** argv, char** azColName)
 {
 	*(static_cast<bool*>(data)) = std::stoi(argv[0]) != 0;
 
@@ -182,7 +182,7 @@ bool SqliteDatabase::doesUserExist(const string& username)
 					)";
 
 	bool doesUserExist = false;
-	executeSqlStatement(doesUserExistsQuery, doesUserExistsCallback, &doesUserExist);
+	executeSqlStatement(doesUserExistsQuery, doesUserExistCallback, &doesUserExist);
 
 	return doesUserExist;
 }
@@ -458,6 +458,81 @@ vector<string> SqliteDatabase::getHighScores()
 }
 
 
+bool SqliteDatabase::doesUserHasStatisticsRecord(const string& username)
+{
+	string doesUserExistsQuery = R"(
+					BEGIN TRANSACTION;
+					
+					SELECT COUNT(*) FROM STATISTICS
+					WHERE USERNAME = ')" + username + R"(';
+					
+					END TRANSACTION;
+					)";
+
+	bool doesUserExist = false;
+	executeSqlStatement(doesUserExistsQuery, doesUserExistCallback, &doesUserExist);
+
+	return doesUserExist;
+}
+
+
+void SqliteDatabase::submitUserGameStatistics(const std::pair<std::shared_ptr<LoggedUser>, GameData>& user)
+{
+	GameData userGameData = user.second;
+
+	uint numQuestionsAnsweredThisGame = userGameData.correctAnswerCount + userGameData.wrongAnswerCount;
+	double totalAnswerTimeThisGame = userGameData.averageAnswerTime * numQuestionsAnsweredThisGame;
+
+	string statement = R"(
+					BEGIN TRANSACTION;
+
+					UPDATE STATISTICS
+					SET NUM_GAMES_PLAYED = NUM_GAMES_PLAYED + 1,
+					NUM_CORRECT_ANSWERS = NUM_CORRECT_ANSWERS + )" + to_string(userGameData.correctAnswerCount) + R"(,
+					NUM_WRONG_ANSWERS = NUM_WRONG_ANSWERS + )" + to_string(userGameData.wrongAnswerCount) + R"(,
+					AVERAGE_ANSWER_TIME = ((AVERAGE_ANSWER_TIME * NUM_QUESTIONS_ANSWERED) + )" + to_string(totalAnswerTimeThisGame) + ")"
+											"/ (NUM_QUESTIONS_ANSWERED + " + to_string(numQuestionsAnsweredThisGame) + R"(),
+					NUM_QUESTIONS_ANSWERED = NUM_QUESTIONS_ANSWERED + )" + to_string(numQuestionsAnsweredThisGame) + R"(
+
+					WHERE USERNAME = ')" + user.first->getUserName() + R"(';
+					
+					END TRANSACTION;
+					)";
+
+	executeSqlStatement(statement, nullptr, nullptr);
+}
+
+
+void SqliteDatabase::submitGameStatistics(const map<std::shared_ptr<LoggedUser>, GameData>& users)
+{
+	for (auto user : users)
+	{
+		const string currentUsername = user.first->getUserName();
+
+		if (!doesUserHasStatisticsRecord(currentUsername))
+		{
+			// Creating a record in the STATISTICS table for the user
+			const string createUserRecordStatement = R"(
+									    BEGIN TRANSACTION;
+
+									    INSERT INTO STATISTICS
+									    (USERNAME, NUM_GAMES_PLAYED, NUM_QUESTIONS_ANSWERED, 
+									     NUM_CORRECT_ANSWERS, NUM_WRONG_ANSWERS, AVERAGE_ANSWER_TIME)
+									    VALUES (')" + currentUsername + R"(', 0, 0, 0, 0, 0.0);
+
+									    END TRANSACTION;
+									)";
+
+			// Executing the statement
+			executeSqlStatement(createUserRecordStatement, nullptr, nullptr);
+		}
+
+		// Modify the user's record at the STATISTICS table
+		submitUserGameStatistics(user);
+	}
+}
+
+
 bool SqliteDatabase::compileSqliteStatement(sqlite3_stmt*& statement, const string& query) const
 {
 	// compiling the SQL statement
@@ -472,6 +547,7 @@ bool SqliteDatabase::compileSqliteStatement(sqlite3_stmt*& statement, const stri
 
 	return true;
 }
+
 
 vector<Question> SqliteDatabase::processGetQuestionsResults(sqlite3_stmt* statement)
 {
