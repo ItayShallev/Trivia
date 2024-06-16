@@ -17,6 +17,8 @@ namespace Client.ViewModels
         public uint Points { get; set; }
         public uint Rank { get; set; }
 
+        public bool IsHighlighted { get; set; }
+
 
         public LeaderboardEntry(string username, uint numGamesPlayed, uint numCorrectAnswers, uint numWrongAnswers, double averageAnswerTime, uint points, uint rank)
         {
@@ -27,6 +29,7 @@ namespace Client.ViewModels
             AverageAnswerTime = averageAnswerTime;
             Points = points;
             Rank = rank;
+            IsHighlighted = false;
         }
     }
 }

@@ -24,12 +24,21 @@ namespace Client.Pages
     
     public partial class LeaderboardPage : Page
     {
-        public LeaderboardPage()
+        public string Username { get; set; }
+
+        public LeaderboardPage(string username)
         {
             InitializeComponent();
+
+            Username = username;
         }
 
         private void LeaderboardPage_OnLoaded(object sender, RoutedEventArgs e)
+        {
+            AddHighScoresEntries();
+        }
+
+        private void AddHighScoresEntries()
         {
             // Sending GetHighScoresRequest
             Helper.SendRequest(Constants.GetHighScoreRequestId, JsonSerializer.Serialize(new GetHighScoreRequest()));
@@ -51,6 +60,24 @@ namespace Client.Pages
             }
 
             LeaderboardDataGrid.ItemsSource = leaderBoardEntries;
+
+            // Highlight the current user's entry
+            HighlightCurrentUserEntry();
+        }
+
+        private void HighlightCurrentUserEntry()
+        {
+            foreach (LeaderboardEntry row in LeaderboardDataGrid.Items)
+            {
+                // Checking if the current user was found in the list
+                if (row.Username == Username)
+                {
+                    row.IsHighlighted = true;
+                    row.Username += " (You)";
+
+                    return;
+                }
+            }
         }
 
         private void GoBackArrow_OnGoBackClicked(object sender, RoutedEventArgs e)

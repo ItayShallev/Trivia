@@ -251,6 +251,9 @@ bool SqliteDatabase::addNewUser(const string& username, const string& password, 
 
 	executeSqlStatement(addNewUserStatement, nullptr, nullptr);
 
+	// Adding a new statistics record for the user in the STATISTICS table
+	addUserStatisticsRecord(username);
+
 	return true;
 }
 
@@ -379,7 +382,6 @@ uint SqliteDatabase::getNumOfPlayerGames(const string& username)
 }
 
 
-
 /**
  * brief	Returns the score that the given user has earned
  * param	username	The username of the user to get its score
@@ -390,7 +392,7 @@ uint SqliteDatabase::getPlayerScore(const string& username)
 	const string statement = R"(
 					BEGIN TRANSACTION;
 					
-					SELECT POINTS_EARNED FROM STATISTICS
+					SELECT POINTS FROM STATISTICS
 					WHERE USERNAME = ')" + username + R"(';
 					
 					END TRANSACTION;
@@ -470,36 +472,26 @@ vector<HighScoreRow> SqliteDatabase::getHighScores()
 		row.rank = currentRank++;
 	}
 
-	//for (HighScoreRow row : highScores)
-	//{
-	//	cout << "RANK: " << row.rank << "\t\t";
-	//	cout << "USERNAME: " << row.username << "\t\t";
-	//	cout << "GAMES PLAYED: " << row.numGamesPlayed << "\t\t";
-	//	cout << "CORRECT ANSWERS: " << row.numCorrectAnswers << "\t\t";
-	//	cout << "WRONG ANSWERS: " << row.numWrongAnswers << "\t\t";
-	//	cout << "AVG ANSWER TIME: " << row.averageAnswerTime << "\t\t";
-	//	cout << "POINTS: " << row.points << "\t\t\n";
-	//}
-
 	return highScores;
 }
 
 
-bool SqliteDatabase::doesUserHasStatisticsRecord(const string& username)
+void SqliteDatabase::addUserStatisticsRecord(const string& username)
 {
-	string doesUserExistsQuery = R"(
-					BEGIN TRANSACTION;
-					
-					SELECT COUNT(*) FROM STATISTICS
-					WHERE USERNAME = ')" + username + R"(';
-					
-					END TRANSACTION;
-					)";
+	// Creating a record in the STATISTICS table for the user
+	const string createUserRecordStatement = R"(
+									    BEGIN TRANSACTION;
 
-	bool doesUserExist = false;
-	executeSqlStatement(doesUserExistsQuery, doesUserExistCallback, &doesUserExist);
+									    INSERT INTO STATISTICS
+									    (USERNAME, NUM_GAMES_PLAYED, NUM_QUESTIONS_ANSWERED, 
+									     NUM_CORRECT_ANSWERS, NUM_WRONG_ANSWERS, AVERAGE_ANSWER_TIME, POINTS)
+									    VALUES (')" + username + R"(', 0, 0, 0, 0, 0.0, 0);
 
-	return doesUserExist;
+									    END TRANSACTION;
+									)";
+
+	// Executing the statement
+	executeSqlStatement(createUserRecordStatement, nullptr, nullptr);
 }
 
 
@@ -537,25 +529,7 @@ void SqliteDatabase::submitGameStatistics(const map<std::shared_ptr<LoggedUser>,
 	{
 		const string currentUsername = user.first->getUserName();
 
-		if (!doesUserHasStatisticsRecord(currentUsername))
-		{
-			// Creating a record in the STATISTICS table for the user
-			const string createUserRecordStatement = R"(
-									    BEGIN TRANSACTION;
-
-									    INSERT INTO STATISTICS
-									    (USERNAME, NUM_GAMES_PLAYED, NUM_QUESTIONS_ANSWERED, 
-									     NUM_CORRECT_ANSWERS, NUM_WRONG_ANSWERS, AVERAGE_ANSWER_TIME, POINTS)
-									    VALUES (')" + currentUsername + R"(', 0, 0, 0, 0, 0.0, 0);
-
-									    END TRANSACTION;
-									)";
-
-			// Executing the statement
-			executeSqlStatement(createUserRecordStatement, nullptr, nullptr);
-		}
-
-		// Modify the user's record at the STATISTICS table
+		// Modifying the user's record at the STATISTICS table
 		submitUserGameStatistics(user);
 	}
 }

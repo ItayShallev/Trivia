@@ -129,7 +129,7 @@ FOREIGN KEY (USERNAME) REFERENCES USERS(USERNAME));)"
 
 // ************************** Game *************************
 // Leaderboard
-#define LEADERBOARD_SIZE					5
+//#define LEADERBOARD_SIZE					5
 #define LEADERBOARD_MIN_GAMES_TO_QUALIFY	1
 
 #define WINS_WEIGHT							2
