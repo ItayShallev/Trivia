@@ -1,12 +1,14 @@
 #include "Game.h"
+#include "StatisticsManager.h"
 
 
-Game::Game(const uint& gameId, const map<std::shared_ptr<LoggedUser>, GameData>& players, const vector<Question>& questions)
+Game::Game(const uint& gameId, const map<std::shared_ptr<LoggedUser>, GameData>& players, const vector<Question>& questions, const RoomData& gameSettings)
 {
 	this->m_gameId = gameId;
 	this->m_players = players;
 	this->m_questions = questions;
 	this->m_numFinished = 0;
+	this->m_gameSettings = gameSettings;
 
 	// Setting the currentQuestion for every player
 	for (auto& playerPair : this->m_players)
@@ -32,10 +34,13 @@ void Game::submitAnswer(const std::shared_ptr<LoggedUser>& user, const uint& ans
 	if (answerId == currUserGameData.currentQuestion.getCorrectAnswerId())
 	{
 		currUserGameData.correctAnswerCount++;
+
+		// Adding points according to the answer time and the difficulty of the question
+		currUserGameData.points += StatisticsManager::calculateRoundPoints(answerTime, this->m_gameSettings.timePerQuestion, currUserGameData.currentQuestion.getDifficulty());
 	}
 	else if (answerId == TIME_EXPIRED_ANSWER_ID)
 	{
-		// TODO: Maybe implement some logic related to answers thtat weren't really answered by the user...
+		// TODO: Maybe implement some logic related to answers that weren't really answered by the user...
 		currUserGameData.wrongAnswerCount++;
 	}
 	else
@@ -57,7 +62,7 @@ void Game::submitAnswer(const std::shared_ptr<LoggedUser>& user, const uint& ans
 	}
 	else												// If no questions remained
 	{
-		currUserGameData.currentQuestion = Question(L"NO QUESTIONS REMAINED!", vector<AnswerItem>(), 0);
+		currUserGameData.currentQuestion = Question(L"NO QUESTIONS REMAINED!", vector<AnswerItem>(), 0, QuestionDifficulty::Easy);
 		this->m_numFinished++;
 	}
 }

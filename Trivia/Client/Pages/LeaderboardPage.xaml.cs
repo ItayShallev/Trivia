@@ -14,6 +14,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Client.ViewModels;
 
 namespace Client.Pages
 {
@@ -23,87 +24,84 @@ namespace Client.Pages
     
     public partial class LeaderboardPage : Page
     {
-        public LeaderboardPage()
+        public string Username { get; set; }
+
+        public LeaderboardPage(string username)
         {
             InitializeComponent();
+
+            Username = username;
         }
 
         private void LeaderboardPage_OnLoaded(object sender, RoutedEventArgs e)
         {
-            const int NUM_MAX_PLAYERS = 5;
-            
-            // build and send the request
-            Helper.SendRequest(Constants.GetHighScoreRequestId, "");
-
-
-            ///////// TODO: DEBUG TO CHECK DESERIALIZER
-            // receive the response info
-            ResponseInfo respInfo = Helper.GetResponseInfo(Communicator.Connection.ReceiveMessage());
-
-            // if the response is not the wanted response
-            if (respInfo.ResponseId != Constants.GetHighScoreResponseId)
-            {
-                // build an error list
-                List<string> errorList = BuildErrorList(NUM_MAX_PLAYERS);
-
-                // set the text elements
-                //SetTxtElements(errorList);
-
-                return;
-            }
-
-            // extract the high score response from the response info
-            GetHighScoreResponse highScoreResp = JsonSerializer.Deserialize<GetHighScoreResponse>(respInfo.Message);
-
-            // get the players list from the response
-            List<string> players = highScoreResp.Statistics;
-
-            // make sure we have the wanted amount of players
-            MakeListXelements(players, NUM_MAX_PLAYERS);
-
-            // set the txt boxes values accordingly
-            //SetTxtElements(players);
-
+            AddHighScoresEntries();
         }
 
-        private void MakeListXelements(List<string> list, int x)
+        private void AddHighScoresEntries()
         {
-            if (x == list.Count) // no need to change anything
-            {
-                return;
-            }
-            else if (x > list.Count) // need to add elements
-            {
-                // get the number of elements that needs to be added
-                int numElementsToAdd = x - list.Count;
+            // Sending GetHighScoresRequest
+            Helper.SendRequest(Constants.GetHighScoreRequestId, JsonSerializer.Serialize(new GetHighScoreRequest()));
+            GetHighScoreResponse getHighScoreResponse = Helper.GetResponse<GetHighScoreResponse>();
 
-                // add the elements
-                for (int i = 0; i < numElementsToAdd; i++)
+            List<HighScoreRow> highScores = getHighScoreResponse.Statistics;
+
+            // Iterating over the rows and adding entries to the leaderboard
+            List<LeaderboardEntry> leaderBoardEntries = [];
+            bool currentUserFound = false;
+
+            foreach (HighScoreRow highScoreRow in highScores)
+            {
+                if (highScoreRow.Username == Username)
                 {
-                    list.Add("TBD");
+                    currentUserFound = true;
+                }
+
+                LeaderboardEntry newLeaderboardEntry = new LeaderboardEntry(highScoreRow.Username,
+                    highScoreRow.NumGamesPlayed, highScoreRow.NumCorrectAnswers,
+                    highScoreRow.NumWrongAnswers, highScoreRow.AverageAnswerTime, highScoreRow.Points,
+                    highScoreRow.Rank);
+
+                leaderBoardEntries.Add(newLeaderboardEntry);
+            }
+
+            // Checking if the current user is in the leaderboard and adding him if not
+            if (!currentUserFound)
+            {
+                // Sending getPersonalStats request
+                Helper.SendRequest(Constants.GetPersonalStatisticsRequestId, JsonSerializer.Serialize(new GetPersonalStatisticsRequest()));
+                GetPersonalStatisticsResponse getPersonalStatisticsResponse = Helper.GetResponse<GetPersonalStatisticsResponse>();
+
+                HighScoreRow currentUserHighScoreRow = getPersonalStatisticsResponse.Statistics;
+
+                LeaderboardEntry currentUserLeaderboardEntry = new LeaderboardEntry(currentUserHighScoreRow.Username,
+                    currentUserHighScoreRow.NumGamesPlayed, currentUserHighScoreRow.NumCorrectAnswers,
+                    currentUserHighScoreRow.NumWrongAnswers, currentUserHighScoreRow.AverageAnswerTime, currentUserHighScoreRow.Points,
+                    currentUserHighScoreRow.Rank);
+
+                // Adding the current user's statistics record to the leaderboard
+                leaderBoardEntries.Add(currentUserLeaderboardEntry);
+            }
+
+            LeaderboardDataGrid.ItemsSource = leaderBoardEntries;
+
+            // Highlight the current user's entry
+            HighlightCurrentUserEntry();
+        }
+
+        private void HighlightCurrentUserEntry()
+        {
+            foreach (LeaderboardEntry row in LeaderboardDataGrid.Items)
+            {
+                // Checking if the current user was found in the list
+                if (row.Username == Username)
+                {
+                    row.IsHighlighted = true;
+                    row.Username += " (You)";
+
+                    return;
                 }
             }
-            else // unused currently
-            {
-                // remove the extra elements
-                list.RemoveRange(x, list.Count - x);
-            }
-        }
-
-        private List<string> BuildErrorList(int numElements)
-        {
-            // build a new list
-            List<string> errorList = new List<string>();
-
-            // make numElements amount of error elements
-            for (int i = 0; i < numElements; i++)
-            {
-                // add error
-                errorList.Add("ERROR");
-            }
-
-            // return the error list
-            return errorList;
         }
 
         private void GoBackArrow_OnGoBackClicked(object sender, RoutedEventArgs e)

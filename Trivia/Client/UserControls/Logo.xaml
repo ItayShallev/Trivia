@@ -16,6 +16,24 @@
             HorizontalAlignment="Center"
             VerticalAlignment="Center"
             RenderOptions.BitmapScalingMode="HighQuality"
-            Source="pack://siteoforigin:,,,/Media/TriviaLogo.png" />
+            Source="pack://siteoforigin:,,,/Media/TriviaLogo.png">
+            <Image.Style>
+                <Style TargetType="{x:Type Image}">
+                    <Style.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Effect">
+                                <Setter.Value>
+                                    <DropShadowEffect
+                                        BlurRadius="15"
+                                        Opacity="1"
+                                        ShadowDepth="0"
+                                        Color="WhiteSmoke" />
+                                </Setter.Value>
+                            </Setter>
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </Image.Style>
+        </Image>
     </Grid>
 </UserControl>

@@ -52,7 +52,8 @@ RequestResult GameRequestHandler::getQuestion(RequestInfo reqInfo)
 	GetQuestionResponse questionResp = {
 		status,
 		nextQuestion.getQuestion(),
-		nextQuestion.getPossibleAnswers()
+		nextQuestion.getPossibleAnswers(),
+		nextQuestion.getDifficulty()
 	};
 
 	// build and return the request result
@@ -74,10 +75,19 @@ RequestResult GameRequestHandler::submitAnswer(RequestInfo reqInfo)
 		this->m_game->getPlayers()[this->m_user].currentQuestion.getCorrectAnswerId()
 	};
 
+	// Checking if the game has ended
+	if (this->m_game->hasGameEnded())
+	{
+		// Sending the game results to the DB
+		this->m_gameManager.getDatabase()->submitGameStatistics(this->m_game->getPlayers());
+
+		// Deleting the game
+		this->m_gameManager.deleteGame(this->m_game->getGameId());
+	}
+
 	// build and return the request result
 	return Helper::buildRequestResult(JsonResponsePacketSerializer::serializeResponse(submitResp),
 		std::shared_ptr<GameRequestHandler>(this, [](GameRequestHandler*) {}));
-
 }
 
 RequestResult GameRequestHandler::getGameResult(RequestInfo reqInfo)

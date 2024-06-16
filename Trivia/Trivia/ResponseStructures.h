@@ -60,16 +60,15 @@ void to_json(json& j, const GetPlayersInRoomResponse& response);
 struct GetHighScoreResponse
 {
 	uint status = 1;
-	vector<string> statistics;
+	vector<HighScoreRow> statistics;
 };
-
 void to_json(json& j, const GetHighScoreResponse& response);
 
 
 struct GetPersonalStatsResponse
 {
 	uint status = 1;
-	vector<string> statistics;
+	HighScoreRow statistics;
 };
 void to_json(json& j, const GetPersonalStatsResponse& response);
 
@@ -138,6 +137,7 @@ struct GetQuestionResponse
 	uint status = 1;
 	wstring question;
 	vector<AnswerItem> answers;
+	QuestionDifficulty difficulty;
 };
 void to_json(json& j, const GetQuestionResponse& response);
 

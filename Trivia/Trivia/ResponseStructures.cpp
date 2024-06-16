@@ -30,6 +30,20 @@ void to_json(json& j, const PlayerResults& response)
 	};
 }
 
+// HighScoreRow
+void to_json(json& j, const HighScoreRow& response)
+{
+	j = json{
+		{"username", response.username},
+		{"numGamesPlayed", response.numGamesPlayed},
+		{"numCorrectAnswers", response.numCorrectAnswers},
+		{"numWrongAnswers", response.numWrongAnswers},
+		{"averageAnswerTime", response.averageAnswerTime},
+		{"points", response.points},
+		{"rank", response.rank},
+	};
+}
+
 // AnswerItem
 void to_json(json& j, const AnswerItem& response)
 {
@@ -152,7 +166,8 @@ void to_json(json& j, const GetQuestionResponse& response)
 	j = json{
 		{"status", response.status},
 		{"question", response.question},
-		{"answers", response.answers}
+		{"answers", response.answers},
+		{"difficulty", response.difficulty}
 	};
 }
 

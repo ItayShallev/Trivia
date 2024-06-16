@@ -73,5 +73,18 @@ struct GameData
 	uint correctAnswerCount = 0;
 	uint wrongAnswerCount = 0;
 	double averageAnswerTime = 0.0;
+	int points = 0;
 };
 
+
+struct HighScoreRow
+{
+	string username;
+	uint numGamesPlayed = 0;
+	uint numCorrectAnswers = 0;
+	uint numWrongAnswers = 0;
+	double averageAnswerTime = 0.0;
+	uint points = 0;
+	uint rank = 0;
+};
+void to_json(json& j, const HighScoreRow& response);

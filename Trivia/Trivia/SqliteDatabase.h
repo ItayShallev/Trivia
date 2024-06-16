@@ -20,7 +20,7 @@ public:
 	virtual bool close() override;
 
 	// ********************************************* USERS table queries *********************************************
-	static int doesUserExistsCallback(void* data, int argc, char** argv, char** azColName);						  // *
+	static int doesUserExistCallback(void* data, int argc, char** argv, char** azColName);						  // *
 	virtual bool doesUserExist(const string& username) override;												  // *
 																												  // *
 	static int doesPasswordMatchCallback(void* data, int argc, char** argv, char** azColName);					  // *
@@ -39,10 +39,16 @@ public:
 	virtual uint getNumOfPlayerGames(const string& username) override;											   // *
 	virtual uint getPlayerScore(const string& username) override;												   // *
 																												   // *
-	virtual vector<string> getUserStatistics(const string& username) override;									   // *
+	static int getUserStatisticsCallback(void* data, int argc, char** argv, char** azColName);					   // *
+	virtual HighScoreRow getUserStatistics(const string& username) override;									   // *
 																												   // *
 	static int getHighScoresCallback(void* data, int argc, char** argv, char** azColName);						   // *
-	virtual vector<string> getHighScores() override;															   // *
+	virtual vector<HighScoreRow> getHighScores() override;														   // *
+																												   // *
+	void addUserStatisticsRecord(const string& username);													       // *
+																												   // *
+	void submitUserGameStatistics(const std::pair<std::shared_ptr<LoggedUser>, GameData>& user);				   // *
+	virtual void submitGameStatistics(const map<std::shared_ptr<LoggedUser>, GameData>& users) override;		   // *
 	// ****************************************************************************************************************
 
 	// ************************************************* GAME queries *************************************************

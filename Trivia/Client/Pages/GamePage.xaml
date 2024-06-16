@@ -39,20 +39,39 @@
                     </Grid>
 
                     <Grid Grid.Row="2">
-                        <TextBlock
-                            x:Name="TimerTextBlock"
-                            Margin="0,0,50,0"
-                            HorizontalAlignment="Right"
-                            VerticalAlignment="Center"
-                            FontSize="35"
-                            FontWeight="Medium">
-                            <TextBlock.Text>
-                                <MultiBinding StringFormat="{}{0:F1}/{1}">
-                                    <Binding Path="TimeElapsed" RelativeSource="{RelativeSource AncestorType=local:GamePage}" />
-                                    <Binding Path="RoomData.TimePerQuestion" RelativeSource="{RelativeSource AncestorType=local:GamePage}" />
-                                </MultiBinding>
-                            </TextBlock.Text>
-                        </TextBlock>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+                        
+                        <Grid Column="0">
+                            <TextBlock 
+                                x:Name="DifficultyTextBlock"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                FontSize="30"
+                                Foreground="DodgerBlue"
+                                FontStyle="Italic"
+                                Text="Question Difficulty"
+                                FontWeight="Medium">
+                            </TextBlock>
+                        </Grid>
+
+                        <Grid Column="1">
+                            <TextBlock 
+                                x:Name="TimerTextBlock"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                FontSize="35"
+                                FontWeight="Medium">
+                                <TextBlock.Text>
+                                    <MultiBinding StringFormat="{}{0:F1}/{1}">
+                                        <Binding Path="TimeElapsed" RelativeSource="{RelativeSource AncestorType=local:GamePage}" />
+                                        <Binding Path="RoomData.TimePerQuestion" RelativeSource="{RelativeSource AncestorType=local:GamePage}" />
+                                    </MultiBinding>
+                                </TextBlock.Text>
+                            </TextBlock>
+                        </Grid>
                     </Grid>
 
                     <Grid Grid.Row="3">

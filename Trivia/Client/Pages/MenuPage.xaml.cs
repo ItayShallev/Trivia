@@ -54,17 +54,9 @@ namespace Client.Pages
         }
 
 
-        private void BtnPersonalStats_OnClick(object sender, RoutedEventArgs e)
-        {
-            PersonalStatsPage personalStatsPage = new PersonalStatsPage(this._username);
-            _timer.Dispose();       // Pausing the getRooms requests from being sent to the server
-            NavigationService.Navigate(personalStatsPage);
-        }
-
-
         private void BtnLeaderboard_OnClick(object sender, RoutedEventArgs e)
         {
-            LeaderboardPage leaderboardPage = new LeaderboardPage();
+            LeaderboardPage leaderboardPage = new LeaderboardPage(Username);
             _timer.Dispose();       // Pausing the getRooms requests from being sent to the server
             NavigationService.Navigate(leaderboardPage);
         }

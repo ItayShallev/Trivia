@@ -157,7 +157,7 @@ bool SqliteDatabase::close()
  @param		azColName		An array of strings containing the column names of the result set
  @return	Always returns 0
  */
-int SqliteDatabase::doesUserExistsCallback(void* data, int argc, char** argv, char** azColName)
+int SqliteDatabase::doesUserExistCallback(void* data, int argc, char** argv, char** azColName)
 {
 	*(static_cast<bool*>(data)) = std::stoi(argv[0]) != 0;
 
@@ -173,16 +173,12 @@ int SqliteDatabase::doesUserExistsCallback(void* data, int argc, char** argv, ch
 bool SqliteDatabase::doesUserExist(const string& username)
 {
 	string doesUserExistsQuery = R"(
-					BEGIN TRANSACTION;
-					
 					SELECT COUNT(*) FROM USERS
 					WHERE USERNAME = ')" + username + R"(';
-					
-					END TRANSACTION;
 					)";
 
 	bool doesUserExist = false;
-	executeSqlStatement(doesUserExistsQuery, doesUserExistsCallback, &doesUserExist);
+	executeSqlStatement(doesUserExistsQuery, doesUserExistCallback, &doesUserExist);
 
 	return doesUserExist;
 }
@@ -213,12 +209,8 @@ int SqliteDatabase::doesPasswordMatchCallback(void* data, int argc, char** argv,
 bool SqliteDatabase::doesPasswordMatch(const string& username, const string& password)
 {
 	string doesPasswordMatchQuery = R"(
-					BEGIN TRANSACTION;
-					
 					SELECT PASSWORD FROM USERS
 					WHERE USERNAME = ')" + username + R"(';
-					
-					END TRANSACTION;
 					)";
 
 	string userPassword;
@@ -250,6 +242,9 @@ bool SqliteDatabase::addNewUser(const string& username, const string& password, 
 					)";
 
 	executeSqlStatement(addNewUserStatement, nullptr, nullptr);
+
+	// Adding a new statistics record for the user in the STATISTICS table
+	addUserStatisticsRecord(username);
 
 	return true;
 }
@@ -296,12 +291,8 @@ int SqliteDatabase::floatCallback(void* data, int argc, char** argv, char** azCo
 float SqliteDatabase::getPlayerAverageAnswerTime(const string& username)
 {
 	string statement = R"(
-					BEGIN TRANSACTION;
-					
 					SELECT AVERAGE_ANSWER_TIME FROM STATISTICS
 					WHERE USERNAME = ')" + username + R"(';
-					
-					END TRANSACTION;
 					)";
 	
 	float answerTime = 0;
@@ -319,12 +310,8 @@ float SqliteDatabase::getPlayerAverageAnswerTime(const string& username)
 uint SqliteDatabase::getNumOfCorrectAnswers(const string& username)
 {
 	const string statement = R"(
-					BEGIN TRANSACTION;
-					
 					SELECT NUM_CORRECT_ANSWERS FROM STATISTICS
 					WHERE USERNAME = ')" + username + R"(';
-					
-					END TRANSACTION;
 					)";
 
 	int correctAnswers = 0;
@@ -342,12 +329,8 @@ uint SqliteDatabase::getNumOfCorrectAnswers(const string& username)
 uint SqliteDatabase::getNumOfTotalAnswers(const string& username)
 {
 	const string statement = R"(
-					BEGIN TRANSACTION;
-					
 					SELECT NUM_QUESTIONS_ANSWERED FROM STATISTICS
 					WHERE USERNAME = ')" + username + R"(';
-					
-					END TRANSACTION;
 					)";
 
 	int numQuestionsAnswered = 0;
@@ -364,12 +347,8 @@ uint SqliteDatabase::getNumOfTotalAnswers(const string& username)
 uint SqliteDatabase::getNumOfPlayerGames(const string& username)
 {
 	const string statement = R"(
-					BEGIN TRANSACTION;
-					
 					SELECT NUM_GAMES_PLAYED FROM STATISTICS
 					WHERE USERNAME = ')" + username + R"(';
-					
-					END TRANSACTION;
 					)";
 
 	int numOfPlayerGames = 0;
@@ -377,7 +356,6 @@ uint SqliteDatabase::getNumOfPlayerGames(const string& username)
 
 	return numOfPlayerGames;
 }
-
 
 
 /**
@@ -388,12 +366,8 @@ uint SqliteDatabase::getNumOfPlayerGames(const string& username)
 uint SqliteDatabase::getPlayerScore(const string& username)
 {
 	const string statement = R"(
-					BEGIN TRANSACTION;
-					
-					SELECT POINTS_EARNED FROM STATISTICS
+					SELECT POINTS FROM STATISTICS
 					WHERE USERNAME = ')" + username + R"(';
-					
-					END TRANSACTION;
 					)";
 
 	int numOfPlayerPoints = 0;
@@ -403,19 +377,49 @@ uint SqliteDatabase::getPlayerScore(const string& username)
 }
 
 
+int SqliteDatabase::getUserStatisticsCallback(void* data, int argc, char** argv, char** azColName)
+{
+	HighScoreRow* highScores = static_cast<HighScoreRow*>(data);
+	char* end;
+
+	int x = strtoul(argv[6], &end, BASE_10);
+
+	*highScores = { argv[0],								// Username
+					strtoul(argv[1], &end, BASE_10),		// Number of games played
+					strtoul(argv[2], &end, BASE_10),		// Number of correct answers
+					strtoul(argv[3], &end, BASE_10),		// Number of wrong answers
+					strtod(argv[4], &end),					// Average answer timer
+					strtoul(argv[5], &end, BASE_10),		// points
+					strtoul(argv[6], &end, BASE_10) };		// Rank
+
+	return 0;
+}
+
+
 /**
  * @brief	Returns the statistics of the user with the given username
  * @param	username		The username of the user to get its statistics
  * @return	A vector containing the user all-time statistics
  */
-vector<string> SqliteDatabase::getUserStatistics(const string& username)
+HighScoreRow SqliteDatabase::getUserStatistics(const string& username)
 {
-	vector<string> userStatistics;
+	const string statement = R"(
+					WITH RankedScores AS (
+						SELECT
+						USERNAME, NUM_GAMES_PLAYED, NUM_CORRECT_ANSWERS, NUM_WRONG_ANSWERS, AVERAGE_ANSWER_TIME, POINTS,
+						ROW_NUMBER() OVER (ORDER BY POINTS DESC, AVERAGE_ANSWER_TIME ASC) as rank
+						FROM STATISTICS
+						WHERE NUM_GAMES_PLAYED >= )" + to_string(LEADERBOARD_MIN_GAMES_TO_QUALIFY) + R"(
+					)
 
-	userStatistics.push_back(to_string(this->getPlayerScore(username)));					// Points earned
-	userStatistics.push_back(to_string(this->getNumOfPlayerGames(username)));				// Number of Games Played
-	userStatistics.push_back(to_string(this->getNumOfCorrectAnswers(username)));			// Number of Correct Answers
-	userStatistics.push_back(to_string(this->getPlayerAverageAnswerTime(username)));		// Average Answer Time
+					SELECT * FROM RankedScores
+					WHERE USERNAME = ')" + username + R"('
+					ORDER BY rank;
+					)";
+
+	HighScoreRow userStatistics;
+
+	executeSqlStatement(statement, getUserStatisticsCallback, &userStatistics);
 
 	return userStatistics;
 }
@@ -423,38 +427,110 @@ vector<string> SqliteDatabase::getUserStatistics(const string& username)
 
 int SqliteDatabase::getHighScoresCallback(void* data, int argc, char** argv, char** azColName)
 {
-	(static_cast<vector<string>*>(data))->push_back(argv[0]);		// Pushing the username of the current user in the leaderboard into the vector
+	vector<HighScoreRow>* highScores = static_cast<vector<HighScoreRow>*>(data);
+
+	char* end;
+	HighScoreRow highScoreRow{ argv[0],									// Username
+								strtoul(argv[1], &end, BASE_10),		// Number of games played
+								strtoul(argv[2], &end, BASE_10),		// Number of correct answers
+								strtoul(argv[3], &end, BASE_10),		// Number of wrong answers
+								strtod(argv[4], &end),					// Average answer timer
+								strtoul(argv[5], &end, BASE_10),		// points
+								strtoul(argv[6], &end, BASE_10) };		// Rank
+
+	highScores->push_back(highScoreRow);
 
 	return 0;
 }
 
 
 /**
- * @brief	Returns a leaderboard containing the 5 best users
- * @return	A vector containing the usernames of the 5 best users
+ * @brief	Returns a leaderboard of the best users
+ * @return	A vector containing the usernames of the best users
  */
-vector<string> SqliteDatabase::getHighScores()
+vector<HighScoreRow> SqliteDatabase::getHighScores()
 {
 	const string statement = R"(
-					BEGIN TRANSACTION;
-					
 					SELECT
-					USERNAME,
-					(NUM_GAMES_WON / NUM_GAMES_PLAYED) * )" + to_string(WINS_WEIGHT) + R"( As WinRate,
-					(1 - (NUM_GAMES_WON / NUM_GAMES_PLAYED)) * (1.0 / AVERAGE_ANSWER_TIME) * )" + to_string(AVERAGE_ANSWER_TIME_WEIGHT) + R"( AS LeaderboardScore
+					USERNAME, NUM_GAMES_PLAYED, NUM_CORRECT_ANSWERS, NUM_WRONG_ANSWERS, AVERAGE_ANSWER_TIME, POINTS,
+					ROW_NUMBER() OVER (ORDER BY POINTS DESC, AVERAGE_ANSWER_TIME ASC) as rank
 					FROM STATISTICS
 					WHERE NUM_GAMES_PLAYED >= )" + to_string(LEADERBOARD_MIN_GAMES_TO_QUALIFY) + R"(
-					GROUP BY USERNAME
-					ORDER BY LeaderboardScore DESC
-					LIMIT )" + to_string(LEADERBOARD_SIZE) + R"(;
 
+					ORDER BY POINTS DESC, AVERAGE_ANSWER_TIME ASC
+					LIMIT )" + to_string(LEADERBOARD_SIZE) + R"(;
+					)";
+
+	vector<HighScoreRow> highScores;
+	executeSqlStatement(statement, getHighScoresCallback, &highScores);
+
+	//// Setting the ranks
+	//int currentRank = 1;
+	//for (HighScoreRow& row : highScores)
+	//{
+	//	row.rank = currentRank++;
+	//}
+
+	return highScores;
+}
+
+
+void SqliteDatabase::addUserStatisticsRecord(const string& username)
+{
+	// Creating a record in the STATISTICS table for the user
+	const string createUserRecordStatement = R"(
+									    BEGIN TRANSACTION;
+
+									    INSERT INTO STATISTICS
+									    (USERNAME, NUM_GAMES_PLAYED, NUM_QUESTIONS_ANSWERED, 
+									     NUM_CORRECT_ANSWERS, NUM_WRONG_ANSWERS, AVERAGE_ANSWER_TIME, POINTS)
+									    VALUES (')" + username + R"(', 0, 0, 0, 0, 0.0, 0);
+
+									    END TRANSACTION;
+									)";
+
+	// Executing the statement
+	executeSqlStatement(createUserRecordStatement, nullptr, nullptr);
+}
+
+
+void SqliteDatabase::submitUserGameStatistics(const std::pair<std::shared_ptr<LoggedUser>, GameData>& user)
+{
+	GameData userGameData = user.second;
+
+	uint numQuestionsAnsweredThisGame = userGameData.correctAnswerCount + userGameData.wrongAnswerCount;
+	double totalAnswerTimeThisGame = userGameData.averageAnswerTime * numQuestionsAnsweredThisGame;
+
+	string statement = R"(
+					BEGIN TRANSACTION;
+
+					UPDATE STATISTICS
+					SET NUM_GAMES_PLAYED = NUM_GAMES_PLAYED + 1,
+					NUM_CORRECT_ANSWERS = NUM_CORRECT_ANSWERS + )" + to_string(userGameData.correctAnswerCount) + R"(,
+					NUM_WRONG_ANSWERS = NUM_WRONG_ANSWERS + )" + to_string(userGameData.wrongAnswerCount) + R"(,
+					AVERAGE_ANSWER_TIME = ((AVERAGE_ANSWER_TIME * NUM_QUESTIONS_ANSWERED) + )" + to_string(totalAnswerTimeThisGame) + ")"
+											"/ (NUM_QUESTIONS_ANSWERED + " + to_string(numQuestionsAnsweredThisGame) + R"(),
+					NUM_QUESTIONS_ANSWERED = NUM_QUESTIONS_ANSWERED + )" + to_string(numQuestionsAnsweredThisGame) + R"(,
+					POINTS = POINTS + )" + to_string(userGameData.points) + R"(
+
+					WHERE USERNAME = ')" + user.first->getUserName() + R"(';
+					
 					END TRANSACTION;
 					)";
 
-	vector<string> highScores;
-	executeSqlStatement(statement, getHighScoresCallback, &highScores);
+	executeSqlStatement(statement, nullptr, nullptr);
+}
 
-	return highScores;
+
+void SqliteDatabase::submitGameStatistics(const map<std::shared_ptr<LoggedUser>, GameData>& users)
+{
+	for (auto user : users)
+	{
+		const string currentUsername = user.first->getUserName();
+
+		// Modifying the user's record at the STATISTICS table
+		submitUserGameStatistics(user);
+	}
 }
 
 
@@ -472,6 +548,7 @@ bool SqliteDatabase::compileSqliteStatement(sqlite3_stmt*& statement, const stri
 
 	return true;
 }
+
 
 vector<Question> SqliteDatabase::processGetQuestionsResults(sqlite3_stmt* statement)
 {
@@ -492,7 +569,7 @@ vector<Question> SqliteDatabase::processGetQuestionsResults(sqlite3_stmt* statem
 
 		// Creating AnswerItems vector and setting an ID for each answer
 		vector<AnswerItem> possibleAnswers;
-		for (int i = 1; i <= 4; ++i)
+		for (int i = CORRECT_ANSWER_INDEX; i <= INCORRECT_ANSWER_3_INDEX; ++i)
 		{
 			string currentAnswer = reinterpret_cast<const char*>(sqlite3_column_text(statement, i));
 
@@ -508,6 +585,10 @@ vector<Question> SqliteDatabase::processGetQuestionsResults(sqlite3_stmt* statem
 		// Setting the correct answer id
 		newQuestion.setCorrectAnswerId(0);
 
+		// Setting the question difficulty
+		string stringQuestionDifficulty = reinterpret_cast<const char*>(sqlite3_column_text(statement, DIFFICULTY_INDEX));
+		newQuestion.setDifficulty(Question::getDifficultyFromString(stringQuestionDifficulty));
+
 		questions.push_back(newQuestion);
 	}
 
@@ -521,7 +602,7 @@ vector<Question> SqliteDatabase::getRandomQuestions(const uint& numberOfQuestion
 	set<int> questionsIds = Helper::generateRandomNumbersSet(numberOfQuestions, QUESTIONS_TABLE_STARTING_ID, TIMES_TO_REQUEST_QUESTIONS * MAX_QUESTIONS_PER_REQUEST);
 
 	// Constructing the query with placeholders for the question ids
-	string query = "SELECT QUESTION, CORRECT_ANSWER, INCORRECT_ANSWER_1, INCORRECT_ANSWER_2, INCORRECT_ANSWER_3 FROM QUESTIONS WHERE ID IN (";
+	string query = "SELECT QUESTION, CORRECT_ANSWER, INCORRECT_ANSWER_1, INCORRECT_ANSWER_2, INCORRECT_ANSWER_3, DIFFICULTY FROM QUESTIONS WHERE ID IN (";
 	for (auto it = questionsIds.begin(); it != questionsIds.end(); ++it)
 	{
 		if (it != questionsIds.begin())

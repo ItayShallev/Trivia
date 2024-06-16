@@ -72,6 +72,13 @@ namespace Client.Communication
             return "Closed";
         }
 
+        public static string QuestionDifficultyToStringDifficulty(Constants.QuestionDifficulty questionDifficulty)
+        {
+            if (questionDifficulty == Constants.QuestionDifficulty.Easy) return "Easy";
+            if (questionDifficulty == Constants.QuestionDifficulty.Medium) return "Medium";
+            return "Hard";
+        }
+
         public static bool IsValidEmailAddress(string s)
         {
             Regex regex = new Regex(@"^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$");

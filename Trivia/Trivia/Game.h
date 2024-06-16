@@ -14,7 +14,7 @@ using std::map;
 class Game
 {
 public:
-	Game(const uint& gameId, const map<std::shared_ptr<LoggedUser>, GameData>& players, const vector<Question>& questions);
+	Game(const uint& gameId, const map<std::shared_ptr<LoggedUser>, GameData>& players, const vector<Question>& questions, const RoomData& gameSettings);
 
 	Question getQuestionForUser(const std::shared_ptr<LoggedUser>& user);
 	void submitAnswer(const std::shared_ptr<LoggedUser>& user, const uint& answerId, const double& answerTime);
@@ -30,4 +30,5 @@ private:
 	map<std::shared_ptr<LoggedUser>, GameData> m_players;
 	vector<Question> m_questions;
 	uint m_numFinished;
+	RoomData m_gameSettings;
 };
