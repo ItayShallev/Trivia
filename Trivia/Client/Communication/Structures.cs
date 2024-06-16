@@ -72,9 +72,9 @@ namespace Client.Communication
     {
         [JsonPropertyName("roomId")] public uint RoomId { get; set; } = 0;
 
-        public GetPlayersInRoomRequest(uint roomID)
+        public GetPlayersInRoomRequest(uint roomId)
         {
-            RoomId = roomID;
+            RoomId = roomId;
         }
     }
 
@@ -82,9 +82,9 @@ namespace Client.Communication
     {
         [JsonPropertyName("roomId")] public uint RoomId { get; set; } = 0;
 
-        public JoinRoomRequest(uint roomID)
+        public JoinRoomRequest(uint roomId)
         {
-            RoomId = roomID;
+            RoomId = roomId;
         }
     }
 
@@ -198,7 +198,7 @@ namespace Client.Communication
     public struct GetRoomsResponse
     {
         [JsonPropertyName("status")] public uint Status { get; set; } = 1;
-        [JsonPropertyName("rooms")] public List<RoomData> Rooms { get; set; } = new List<RoomData>();
+        [JsonPropertyName("rooms")] public List<RoomData> Rooms { get; set; } = [];
 
         public GetRoomsResponse(uint status, List<RoomData> rooms)
         {
@@ -209,7 +209,7 @@ namespace Client.Communication
 
     public struct GetPlayersInRoomResponse
     {
-        [JsonPropertyName("players")] public List<string> Players { get; set; } = new List<string>();
+        [JsonPropertyName("players")] public List<string> Players { get; set; } = [];
 
         public GetPlayersInRoomResponse(List<string> players)
         {
@@ -230,9 +230,9 @@ namespace Client.Communication
     public struct GetPersonalStatisticsResponse
     {
         [JsonPropertyName("status")] public uint Status { get; set; } = 1;
-        [JsonPropertyName("statistics")] public List<string> Statistics { get; set; } = new List<string>();
+        [JsonPropertyName("statistics")] public HighScoreRow Statistics { get; set; }
 
-        public GetPersonalStatisticsResponse(uint status, List<string> statistics)
+        public GetPersonalStatisticsResponse(uint status, HighScoreRow statistics)
         {
             Status = status;
             Statistics = statistics;

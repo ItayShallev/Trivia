@@ -44,19 +44,43 @@ namespace Client.Pages
             Helper.SendRequest(Constants.GetHighScoreRequestId, JsonSerializer.Serialize(new GetHighScoreRequest()));
             GetHighScoreResponse getHighScoreResponse = Helper.GetResponse<GetHighScoreResponse>();
 
-            //// get the players list from the response
             List<HighScoreRow> highScores = getHighScoreResponse.Statistics;
 
             // Iterating over the rows and adding entries to the leaderboard
             List<LeaderboardEntry> leaderBoardEntries = [];
+            bool currentUserFound = false;
+
             foreach (HighScoreRow highScoreRow in highScores)
             {
+                if (highScoreRow.Username == Username)
+                {
+                    currentUserFound = true;
+                }
+
                 LeaderboardEntry newLeaderboardEntry = new LeaderboardEntry(highScoreRow.Username,
                     highScoreRow.NumGamesPlayed, highScoreRow.NumCorrectAnswers,
                     highScoreRow.NumWrongAnswers, highScoreRow.AverageAnswerTime, highScoreRow.Points,
                     highScoreRow.Rank);
 
                 leaderBoardEntries.Add(newLeaderboardEntry);
+            }
+
+            // Checking if the current user is in the leaderboard and adding him if not
+            if (!currentUserFound)
+            {
+                // Sending getPersonalStats request
+                Helper.SendRequest(Constants.GetPersonalStatisticsRequestId, JsonSerializer.Serialize(new GetPersonalStatisticsRequest()));
+                GetPersonalStatisticsResponse getPersonalStatisticsResponse = Helper.GetResponse<GetPersonalStatisticsResponse>();
+
+                HighScoreRow currentUserHighScoreRow = getPersonalStatisticsResponse.Statistics;
+
+                LeaderboardEntry currentUserLeaderboardEntry = new LeaderboardEntry(currentUserHighScoreRow.Username,
+                    currentUserHighScoreRow.NumGamesPlayed, currentUserHighScoreRow.NumCorrectAnswers,
+                    currentUserHighScoreRow.NumWrongAnswers, currentUserHighScoreRow.AverageAnswerTime, currentUserHighScoreRow.Points,
+                    currentUserHighScoreRow.Rank);
+
+                // Adding the current user's statistics record to the leaderboard
+                leaderBoardEntries.Add(currentUserLeaderboardEntry);
             }
 
             LeaderboardDataGrid.ItemsSource = leaderBoardEntries;

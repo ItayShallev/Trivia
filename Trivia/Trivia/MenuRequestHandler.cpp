@@ -133,7 +133,7 @@ RequestResult MenuRequestHandler::getPlayersInRoom(RequestInfo reqInfo)
 RequestResult MenuRequestHandler::getPersonalStats(RequestInfo reqInfo)
 {
 	// get the user statistics
-	vector<string> userStats = this->m_handlerFactory.getStatisticsManager().getUserStatistics(this->m_user->getUserName());
+	HighScoreRow userStats = this->m_handlerFactory.getStatisticsManager().getUserStatistics(this->m_user->getUserName());
 
 	//  build the response
 	GetPersonalStatsResponse personalStatsResp = GetPersonalStatsResponse{ 1, userStats };

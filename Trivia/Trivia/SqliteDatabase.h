@@ -39,7 +39,8 @@ public:
 	virtual uint getNumOfPlayerGames(const string& username) override;											   // *
 	virtual uint getPlayerScore(const string& username) override;												   // *
 																												   // *
-	virtual vector<string> getUserStatistics(const string& username) override;									   // *
+	static int getUserStatisticsCallback(void* data, int argc, char** argv, char** azColName);					   // *
+	virtual HighScoreRow getUserStatistics(const string& username) override;									   // *
 																												   // *
 	static int getHighScoresCallback(void* data, int argc, char** argv, char** azColName);						   // *
 	virtual vector<HighScoreRow> getHighScores() override;														   // *

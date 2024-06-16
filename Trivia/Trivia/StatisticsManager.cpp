@@ -24,7 +24,7 @@ vector<HighScoreRow> StatisticsManager::getHighScore() const
  * @param	username		The username of the user to get its statistics
  * @return	A vector containing the user all-time statistics
  */
-vector<string> StatisticsManager::getUserStatistics(const string& username) const
+HighScoreRow StatisticsManager::getUserStatistics(const string& username) const
 {
 	return this->m_database->getUserStatistics(username);
 }

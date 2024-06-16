@@ -68,7 +68,7 @@ void to_json(json& j, const GetHighScoreResponse& response);
 struct GetPersonalStatsResponse
 {
 	uint status = 1;
-	vector<string> statistics;
+	HighScoreRow statistics;
 };
 void to_json(json& j, const GetPersonalStatsResponse& response);
 
