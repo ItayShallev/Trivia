@@ -7,6 +7,7 @@ using System.Text.Json.Serialization;
 using System.Numerics;
 using System.Runtime.InteropServices.ComTypes;
 using System.Windows.Ink;
+using System.Runtime.Intrinsics;
 
 namespace Client.Communication
 {
@@ -347,7 +348,19 @@ namespace Client.Communication
         {
             Status = status;
         }
+    }
 
+
+    public struct GetGameResultsResponse
+    {
+        [JsonPropertyName("status")] public uint Status { get; set; } = 0;
+        [JsonPropertyName("playerResults")] public List<PlayerResults> Results { get; set; }
+
+        public GetGameResultsResponse(uint status, List<PlayerResults> results)
+        {
+            Status = status;
+            Results = results;
+        }
     }
 
     public struct ErrorResponse
@@ -427,4 +440,22 @@ namespace Client.Communication
             Rank = rank;
         }
     }
+
+    public struct PlayerResults
+    {
+        [JsonPropertyName("username")] public string Username { get; set; }
+        [JsonPropertyName("correctAnswerCount")] public uint CorrectAnswerCount { get; set; }
+        [JsonPropertyName("wrongAnswerCount")] public uint WrongAnswerCount { get; set; }
+
+        [JsonPropertyName("averageAnswerTime")] public double AverageAnswerTime { get; set; }
+
+
+        public PlayerResults(string username, uint correctAnswerCount, uint wrongAnswerCount, double averageAnswerTime)
+        {
+            Username = username;
+            CorrectAnswerCount = correctAnswerCount;
+            WrongAnswerCount = wrongAnswerCount;
+            AverageAnswerTime = averageAnswerTime;
+        }
+    };
 }

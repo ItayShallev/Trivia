@@ -62,6 +62,8 @@ namespace Client.Pages
 
         private void DisplayNextQuestion()
         {
+
+
             Helper.SendRequest(Constants.GetQuestionRequestId, JsonSerializer.Serialize(new GetQuestionRequest()));
             GetQuestionResponse getQuestionResponse = Helper.GetResponse<GetQuestionResponse>();
 
@@ -91,11 +93,6 @@ namespace Client.Pages
                 ButtonAnswer3.Tag = getQuestionResponse.Answers[arr[3]].AnswerId;
 
                 StartTimer();
-            }
-            else
-            {
-                // Navigating the user to the results page
-                //////////////////////////////////////////
             }
         }
 
@@ -190,15 +187,24 @@ namespace Client.Pages
             {
                 // Displaying the next question
                 DisplayNextQuestion();
+
+                // Enabling the answer buttons
+                SetIsEnabledPropertyForAnswerButtons(true);
+            }
+            else // there are no more questions for the user
+            {
+                // go to the end game page 
+                EndGamePage endgamePage = new EndGamePage(this.Username);
+                NavigationService.Navigate(endgamePage);
             }
 
-            // Enabling the answer buttons
-            SetIsEnabledPropertyForAnswerButtons(true);
+            
         }
 
 
         private void GoBackArrow_OnGoBackClicked(object sender, RoutedEventArgs e)
         {
+
             // Sending a Leave Game request
             Helper.SendRequest(Constants.LeaveGameRequestId,
                 JsonSerializer.Serialize(new LeaveGameRequest()));

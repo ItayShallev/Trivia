@@ -133,13 +133,14 @@ namespace Client.Pages
 
         private void GoBackArrow_OnGoBackClicked(object sender, RoutedEventArgs e)
         {
+            Timer.Dispose();       // Pausing the getRoomState requests from being sent to the server
+            
             // Sending a CloseRoom request
             Helper.SendRequest(Constants.CloseRoomRequestId, JsonSerializer.Serialize(new CloseRoomRequest(this.RoomData.Id)));
             CloseRoomResponse closeRoomResponse = Helper.GetResponse<CloseRoomResponse>();
 
             if (closeRoomResponse.Status == 1)
             {
-                Timer.Dispose();       // Pausing the getRoomState requests from being sent to the server
 
                 // Navigating the user back to the menu page
                 MenuPage menuPage = new MenuPage(Username);
