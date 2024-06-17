@@ -6,7 +6,7 @@
 RequestResult LoginRequestHandler::login(RequestInfo reqInfo)
 {
 	// get the manager
-	LoginManager manager = m_handlerFactory.getLoginManager();
+	LoginManager& manager = m_handlerFactory.getLoginManager();
 	
 	// create a login request
 	LoginRequest loginReq = JsonRequestPacketDeserializer::deserializeLoginRequest(reqInfo.buffer);
@@ -36,7 +36,7 @@ RequestResult LoginRequestHandler::signup(RequestInfo reqInfo)
 	RequestResult reqResult;
 
 	// get the manager
-	LoginManager manager = m_handlerFactory.getLoginManager();
+	LoginManager& manager = m_handlerFactory.getLoginManager();
 
 	// create a signup request
 	SignupRequest signupReq = JsonRequestPacketDeserializer::deserializeSignupRequest(reqInfo.buffer);

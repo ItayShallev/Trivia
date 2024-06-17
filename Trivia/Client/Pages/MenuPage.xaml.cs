@@ -139,6 +139,8 @@ namespace Client.Pages
             Helper.SendRequest(Constants.LogoutRequestId, JsonSerializer.Serialize(new LogoutRequest(Username)));
             LogoutResponse logoutResponse = Helper.GetResponse<LogoutResponse>();
 
+            _timer.Dispose();       // Pausing the getRooms requests from being sent to the server
+
             // Navigating the user back to the authentication page
             AuthenticationPage authenticationPage = new AuthenticationPage();
             NavigationService.Navigate(authenticationPage);

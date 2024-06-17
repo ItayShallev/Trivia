@@ -1,7 +1,7 @@
 #include "RequestHandlerFactory.h"
 
 RequestHandlerFactory::RequestHandlerFactory(IDatabase* database)
-	: m_database(database), m_loginManger(database, vector<LoggedUser>()), m_StatisticsManager(database), m_gameManager(GameManager(database)) { }
+	: m_database(database), m_loginManger(database, vector<std::shared_ptr<LoggedUser>>()), m_StatisticsManager(database), m_gameManager(GameManager(database)) { }
 
 std::shared_ptr<LoginRequestHandler> RequestHandlerFactory::createLoginRequestHandler()
 {

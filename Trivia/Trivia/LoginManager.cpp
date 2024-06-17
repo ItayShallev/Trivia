@@ -8,7 +8,7 @@ using std::find_if;
  * @param	database		The database to set to the new LoginManager object
  * @param	loggedUsers		The logged users vector to set to the new LoginManager object (can be an empty vector)
  */
-LoginManager::LoginManager(IDatabase* database, const vector<LoggedUser>& loggedUsers) : m_database(database), m_loggedUsers(loggedUsers) { }
+LoginManager::LoginManager(IDatabase* database, const vector<std::shared_ptr<LoggedUser>>& loggedUsers) : m_database(database), m_loggedUsers(loggedUsers) { }
 
 
 /**
@@ -18,9 +18,15 @@ LoginManager::LoginManager(IDatabase* database, const vector<LoggedUser>& logged
  * @param	mail		The mail to set to the new user
  * @return	True if the user was successfully signed up, false otherwise
  */
-bool LoginManager::signup(const string& username, const string& password, const string& mail) const
+bool LoginManager::signup(const string& username, const string& password, const string& mail)
 {
-	if (this->m_database->addNewUser(username, password, mail)) return true;
+	if (this->m_database->addNewUser(username, password, mail))
+	{
+		this->m_loggedUsers.emplace_back(std::make_shared<LoggedUser>(username));		// Adding the user to the logged users vector (emplace back constructs a new LoggedUser object automatically)
+
+		return true;
+	}
+
 	return false;
 }
 
@@ -36,7 +42,7 @@ bool LoginManager::login(const string& username, const string& password)
 	// Checking if the user exists and checking if the given password matches to the user's
 	if (this->m_database->doesUserExist(username) && this->m_database->doesPasswordMatch(username, password))
 	{
-		this->m_loggedUsers.emplace_back(username);		// Adding the user to the logged users vector (emplace back constructs a new LoggedUser object automatically)
+		this->m_loggedUsers.emplace_back(std::make_shared<LoggedUser>(username));		// Adding the user to the logged users vector (emplace back constructs a new LoggedUser object automatically)
 		return true;
 	}
 
@@ -52,16 +58,13 @@ bool LoginManager::login(const string& username, const string& password)
 bool LoginManager::logout(const string& username)
 {
 	// Finding the user in the logged users vector that has the given username
-	auto it = find_if(this->m_loggedUsers.begin(), this->m_loggedUsers.end(), [&username](const LoggedUser& user)
+	for (auto userIterator = this->m_loggedUsers.begin(); userIterator != this->m_loggedUsers.end(); ++userIterator)
 	{
-		return user.getUserName() == username;
-	});
-
-	// Checking if the user was found
-	if (it != this->m_loggedUsers.end())
-	{
-		this->m_loggedUsers.erase(it);		// Deleting the user from the logged users vector
-		return true;
+		if ((*userIterator)->getUserName() == username)
+		{
+			this->m_loggedUsers.erase(userIterator);		// Deleting the user from the logged users vector
+			return true;
+		}
 	}
 
 	return false;
