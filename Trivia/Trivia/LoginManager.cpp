@@ -42,6 +42,15 @@ bool LoginManager::login(const string& username, const string& password)
 	// Checking if the user exists and checking if the given password matches to the user's
 	if (this->m_database->doesUserExist(username) && this->m_database->doesPasswordMatch(username, password))
 	{
+		// Checking if the user already logged to the system
+		for (auto userIterator = this->m_loggedUsers.begin(); userIterator != this->m_loggedUsers.end(); ++userIterator)
+		{
+			if ((*userIterator)->getUserName() == username)
+			{
+				return false;		// Cannot log into an account that already logged
+			}
+		}
+
 		this->m_loggedUsers.emplace_back(std::make_shared<LoggedUser>(username));		// Adding the user to the logged users vector (emplace back constructs a new LoggedUser object automatically)
 		return true;
 	}

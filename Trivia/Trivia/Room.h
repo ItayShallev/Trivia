@@ -12,7 +12,7 @@ private:
 public:
 	Room(uint id);
 	Room(const RoomData& metadata);
-	void addUser(std::shared_ptr<LoggedUser> user);
+	bool addUser(std::shared_ptr<LoggedUser> user);
 	void removeUser(std::shared_ptr<LoggedUser> user);
 	vector<string> getAllUsers();
 

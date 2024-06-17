@@ -61,6 +61,7 @@ namespace Client.Communication
         public static Constants.RoomStatus StringStatusToRoomStatus(string status)
         {
             if (status == "Waiting") return Constants.RoomStatus.Waiting;
+            if (status == "Full") return Constants.RoomStatus.Full;
             if (status == "Playing") return Constants.RoomStatus.Playing;
             return Constants.RoomStatus.Closed;
         }
@@ -68,6 +69,7 @@ namespace Client.Communication
         public static string RoomStatusToStringStatus(Constants.RoomStatus roomStatus)
         {
             if (roomStatus == Constants.RoomStatus.Waiting) return "Waiting";
+            if (roomStatus == Constants.RoomStatus.Full) return "Full";
             if (roomStatus == Constants.RoomStatus.Playing) return "Playing";
             return "Closed";
         }

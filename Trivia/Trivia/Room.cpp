@@ -22,13 +22,23 @@ Room::Room(const RoomData& metadata)
 	this->m_metadata = metadata;
 }
 
-void Room::addUser(std::shared_ptr<LoggedUser> user)
+bool Room::addUser(std::shared_ptr<LoggedUser> user)
 {
 	// if there is room to add users
 	if (m_users.size() < getMaxPlayers())
 	{
 		m_users.push_back(user);
+
+		// Checking if the user took the last seat
+		if (m_users.size() == getMaxPlayers())
+		{
+			this->setRoomStatus(RoomStatus::Full);
+		}
+
+		return true;
 	}
+
+	return false;
 }
 
 void Room::removeUser(std::shared_ptr<LoggedUser> user)
@@ -36,6 +46,12 @@ void Room::removeUser(std::shared_ptr<LoggedUser> user)
 	// remove the user from the vector
 	auto userIndex = find(m_users.begin(), m_users.end(), user);
 	m_users.erase(userIndex);
+
+	// If the room is full (and the game hasn't started yet) , changing the room status
+	if (this->getRoomStatus() == RoomStatus::Full)
+	{
+		this->setRoomStatus(RoomStatus::Waiting);
+	}
 }
 
 vector<string> Room::getAllUsers()
