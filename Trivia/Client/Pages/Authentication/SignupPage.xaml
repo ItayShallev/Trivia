@@ -8,8 +8,8 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:userControls="clr-namespace:Client.UserControls"
     Title="SignupPage"
-    d:DesignHeight="1140"
-    d:DesignWidth="675"
+    d:DesignHeight="900"
+    d:DesignWidth="1600"
     mc:Ignorable="d">
 
     <Grid>
@@ -34,68 +34,100 @@
                     </Grid>
 
                     <Grid VerticalAlignment="Center" Row="1">
-                        <userControls:Logo ImageSize="350"/>
+                        <userControls:Logo />
                     </Grid>
 
                     <Grid VerticalAlignment="Center" Row="2">
-                        <TextBlock
-                            Margin="30"
-                            HorizontalAlignment="Center"
-                            VerticalAlignment="Center"
-                            FontSize="40"
-                            FontWeight="Bold"
-                            Text="Looks Like You're a New User!" />
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="25*" />
+                            <ColumnDefinition Width="150*" />
+                            <ColumnDefinition Width="25*" />
+                        </Grid.ColumnDefinitions>
 
-                        <TextBlock
-                            HorizontalAlignment="Center"
-                            VerticalAlignment="Bottom"
-                            FontSize="25"
-                            FontWeight="SemiBold"
-                            Text="Please Fill Our Your Info to Continue!" />
+                        <Grid Column="1" Row="0">
+                            <Viewbox MaxWidth="500" HorizontalAlignment="Center">
+                                <StackPanel>
+                                    <TextBlock
+                                        FontSize="15"
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Top"
+                                        FontWeight="Medium"
+                                        Text="Looks Like You're a New User!" />
+
+                                    <TextBlock
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Bottom"
+                                        FontWeight="Normal"
+                                        Text="Please Fill Your Info to Continue" />
+                                </StackPanel>
+                            </Viewbox>
+                        </Grid>
                     </Grid>
 
                     <Grid Row="3">
-                        <StackPanel>
-                            <PasswordBox
-                                x:Name="pswdPasswordBox"
-                                Width="300"
-                                Margin="0,10,0,5"
-                                HorizontalAlignment="Center"
-                                VerticalAlignment="Top"
-                                materialDesign:HintAssist.Hint="Enter Password"
-                                BorderBrush="{DynamicResource MaterialDesignDivider}"
-                                BorderThickness="2"
-                                FontSize="18"
-                                PasswordChanged="PswdPasswordBox_OnPasswordChanged"
-                                Style="{StaticResource MaterialDesignOutlinedPasswordBox}" />
+                        <Grid.RowDefinitions>
+                            <RowDefinition />
+                            <RowDefinition />
+                            <RowDefinition />
+                        </Grid.RowDefinitions>
 
-                            <TextBox
-                                x:Name="txtMail"
-                                Width="300"
-                                Margin="0,5,0,5"
-                                HorizontalAlignment="Center"
-                                VerticalAlignment="Top"
-                                materialDesign:HintAssist.Hint="Enter Email"
-                                BorderBrush="{DynamicResource MaterialDesignDivider}"
-                                BorderThickness="2"
-                                FontSize="18"
-                                TextChanged="TxtMail_OnChanged"
-                                Style="{StaticResource MaterialDesignOutlinedTextBox}" />
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="2*" />
+                            <ColumnDefinition Width="5*" />
+                            <ColumnDefinition Width="2*" />
+                        </Grid.ColumnDefinitions>
 
-                            <Button
-                                x:Name="BtnSignup"
-                                Width="300"
-                                Height="53"
-                                Margin="0,30,0,0"
-                                materialDesign:ButtonAssist.CornerRadius="10"
-                                materialDesign:ShadowAssist.ShadowDepth="Depth0"
-                                Click="BtnSignup_OnClick"
-                                Content="Signup"
-                                FontSize="18"
-                                IsDefault="True"
-                                IsEnabled="False"
-                                Style="{StaticResource MaterialDesignFlatMidBgButton}" />
-                        </StackPanel>
+                        <Grid Column="1" Row="0">
+                            <Viewbox MaxWidth="400">
+                                <PasswordBox
+                                    x:Name="pswdPasswordBox"
+                                    Width="300"
+                                    Margin="0,15,0,5"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Top"
+                                    materialDesign:HintAssist.Hint="Enter Password"
+                                    BorderBrush="{DynamicResource MaterialDesignDivider}"
+                                    BorderThickness="2"
+                                    FontSize="18"
+                                    PasswordChanged="PswdPasswordBox_OnPasswordChanged"
+                                    Style="{StaticResource MaterialDesignOutlinedPasswordBox}" />
+                            </Viewbox>
+                        </Grid>
+
+                        <Grid Column="1" Row="1">
+                            <Viewbox MaxWidth="400">
+                                <TextBox
+                                    x:Name="txtMail"
+                                    Width="300"
+                                    Margin="0,5,0,15"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Top"
+                                    materialDesign:HintAssist.Hint="Enter Email"
+                                    BorderBrush="{DynamicResource MaterialDesignDivider}"
+                                    BorderThickness="2"
+                                    FontSize="18"
+                                    Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                                    TextChanged="TxtMail_OnChanged" />
+                            </Viewbox>
+                        </Grid>
+
+                        <Grid Column="1" Row="2">
+                            <Viewbox MaxWidth="400" VerticalAlignment="Top">
+                                <Button
+                                    x:Name="BtnSignup"
+                                    Width="300"
+                                    Height="53"
+                                    Margin="15"
+                                    materialDesign:ButtonAssist.CornerRadius="10"
+                                    materialDesign:ShadowAssist.ShadowDepth="Depth0"
+                                    Click="BtnSignup_OnClick"
+                                    Content="Signup"
+                                    FontSize="18"
+                                    IsDefault="True"
+                                    IsEnabled="False"
+                                    Style="{StaticResource MaterialDesignFlatMidBgButton}" />
+                            </Viewbox>
+                        </Grid>
                     </Grid>
                 </Grid>
             </materialDesign:DialogHost>

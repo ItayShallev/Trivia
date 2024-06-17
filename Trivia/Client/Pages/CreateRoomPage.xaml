@@ -8,8 +8,8 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:userControls="clr-namespace:Client.UserControls"
     Title="CreateRoomPage"
-    d:DesignHeight="1140"
-    d:DesignWidth="675"
+    d:DesignHeight="900"
+    d:DesignWidth="1600"
     mc:Ignorable="d">
 
     <Grid>
@@ -21,243 +21,284 @@
             <materialDesign:DialogHost x:Name="DialogHost" CloseOnClickAway="True">
                 <Grid>
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="0.6*" />
-                        <RowDefinition Height="0.5*" />
-                        <RowDefinition Height="1*" />
-                        <RowDefinition Height="3*" />
-                        <RowDefinition Height="3*" />
+                        <RowDefinition Height="5*" />
+                        <RowDefinition Height="4*" />
+                        <RowDefinition Height="5*" />
+                        <RowDefinition Height="30*" />
+                        <RowDefinition Height="5*" />
                     </Grid.RowDefinitions>
 
                     <Grid Row="0">
-                        <userControls:Logo HorizontalAlignment="Left" ImageSize="150" />
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="1*" />
+                            <ColumnDefinition Width="2*" />
+                            <ColumnDefinition Width="1*" />
+                        </Grid.ColumnDefinitions>
 
-                        <TextBlock
-                            x:Name="CreatingRoomHeader"
-                            HorizontalAlignment="Center"
-                            VerticalAlignment="Center"
-                            FontFamily="Montserrat"
-                            FontSize="24"
-                            FontWeight="Bold"
-                            Text="Creating Room" />
+                        <Grid Column="0">
+                            <userControls:Logo HorizontalAlignment="Center" />
+                        </Grid>
 
-                        <userControls:ThreeDots />
+                        <Grid Column="1">
+                            <Viewbox MaxWidth="450">
+                                <TextBlock
+                                    x:Name="UserGreetingTextBlock"
+                                    Margin="20,0,20,0"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    FontFamily="Montserrat"
+                                    FontWeight="Bold"
+                                    Text="Creating Room" />
+                            </Viewbox>
+                        </Grid>
+
+                        <Grid HorizontalAlignment="Right" Column="2">
+                            <userControls:ThreeDots />
+                        </Grid>
                     </Grid>
 
-                    <Grid VerticalAlignment="Top" Row="1">
-                        <userControls:GoBackArrow Margin="40,0,5,5" GoBackClicked="GoBackArrow_OnGoBackClicked" />
+                    <Grid Row="1">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="1*" />
+                            <ColumnDefinition Width="2*" />
+                            <ColumnDefinition Width="1*" />
+                        </Grid.ColumnDefinitions>
+
+                        <Grid HorizontalAlignment="Center" Column="0">
+                            <Viewbox>
+                                <userControls:GoBackArrow GoBackClicked="GoBackArrow_OnGoBackClicked" />
+                            </Viewbox>
+                        </Grid>
                     </Grid>
 
                     <Grid Row="2">
-                        <TextBlock
-                            HorizontalAlignment="Center"
-                            VerticalAlignment="Center"
-                            FontSize="35"
-                            FontWeight="Medium"
-                            Text="Enter the room's settings" />
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="2*" />
+                            <ColumnDefinition Width="3*" />
+                            <ColumnDefinition Width="2*" />
+                        </Grid.ColumnDefinitions>
+
+                        <Grid Column="1">
+                            <Viewbox MaxWidth="350">
+                                <TextBlock
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    FontWeight="Medium"
+                                    Text="Room Settings" />
+                            </Viewbox>
+                        </Grid>
                     </Grid>
 
                     <Grid Row="3">
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="1*" />
-                            <RowDefinition Height="1*" />
-                            <RowDefinition Height="1*" />
-                            <RowDefinition Height="1*" />
-                        </Grid.RowDefinitions>
+                        <Viewbox MaxWidth="600" Margin="10">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="10*" />
+                                    <RowDefinition Height="10*" />
+                                    <RowDefinition Height="10*" />
+                                    <RowDefinition Height="10*" />
+                                </Grid.RowDefinitions>
 
-                        <Grid Row="0">
-                            <TextBox
-                                x:Name="RoomNameTextBox"
-                                Width="300"
-                                HorizontalAlignment="Center"
-                                VerticalAlignment="Center"
-                                materialDesign:HintAssist.Hint="Enter Room Name"
-                                BorderBrush="{DynamicResource MaterialDesignDivider}"
-                                BorderThickness="4"
-                                FontSize="18"
-                                Style="{StaticResource MaterialDesignOutlinedTextBox}"
-                                TextChanged="RoomNameTextBox_OnTextChanged" />
-                        </Grid>
+                                <Grid Margin="0,20,0,20" Row="0">
+                                    <TextBox
+                                        x:Name="RoomNameTextBox"
+                                        Width="300"
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center"
+                                        materialDesign:HintAssist.Hint="Enter Room Name"
+                                        BorderBrush="{DynamicResource MaterialDesignDivider}"
+                                        BorderThickness="4"
+                                        FontSize="18"
+                                        Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                                        TextChanged="RoomNameTextBox_OnTextChanged" />
+                                </Grid>
 
-                        <Grid Row="1">
-                            <ComboBox
-                                x:Name="MaxPlayersComboBox"
-                                Width="300"
-                                Height="50"
-                                Margin="15"
-                                HorizontalContentAlignment="Center"
-                                VerticalContentAlignment="Center"
-                                FontSize="20"
-                                FontWeight="Medium"
-                                Cursor="Hand"
-                                MaxDropDownHeight="220"
-                                SelectedIndex="0"
-                                SelectionChanged="MaxPlayersComboBox_OnSelectionChanged">
-                                <ComboBox.Resources>
+                                <Grid Margin="0,20,0,20" Row="1">
+                                    <ComboBox
+                                        x:Name="MaxPlayersComboBox"
+                                        Width="300"
+                                        Height="50"
+                                        Margin="15"
+                                        HorizontalContentAlignment="Center"
+                                        VerticalContentAlignment="Center"
+                                        Cursor="Hand"
+                                        FontSize="20"
+                                        FontWeight="Medium"
+                                        MaxDropDownHeight="220"
+                                        SelectedIndex="0"
+                                        SelectionChanged="MaxPlayersComboBox_OnSelectionChanged">
+                                        <ComboBox.Resources>
 
-                                    <Style TargetType="ComboBoxItem">
-                                        <Setter Property="FontSize" Value="14" />
-                                        <Setter Property="Cursor" Value="Hand" />
-                                        <Setter Property="Foreground" Value="Black" />
-                                        <Setter Property="Padding" Value="5" />
-                                        <Setter Property="Template">
-                                            <Setter.Value>
-                                                <ControlTemplate TargetType="ComboBoxItem">
-                                                    <Border Background="Transparent">
-                                                        <ContentPresenter />
-                                                    </Border>
-                                                </ControlTemplate>
-                                            </Setter.Value>
-                                        </Setter>
-                                        <Style.Triggers>
-                                            <Trigger Property="IsMouseOver" Value="True">
-                                                <Setter Property="Background" Value="#FFCCE5FF" />
-                                            </Trigger>
-                                        </Style.Triggers>
-                                    </Style>
-                                </ComboBox.Resources>
+                                            <Style TargetType="ComboBoxItem">
+                                                <Setter Property="FontSize" Value="14" />
+                                                <Setter Property="Cursor" Value="Hand" />
+                                                <Setter Property="Foreground" Value="Black" />
+                                                <Setter Property="Padding" Value="5" />
+                                                <Setter Property="Template">
+                                                    <Setter.Value>
+                                                        <ControlTemplate TargetType="ComboBoxItem">
+                                                            <Border Background="Transparent">
+                                                                <ContentPresenter />
+                                                            </Border>
+                                                        </ControlTemplate>
+                                                    </Setter.Value>
+                                                </Setter>
+                                                <Style.Triggers>
+                                                    <Trigger Property="IsMouseOver" Value="True">
+                                                        <Setter Property="Background" Value="#FFCCE5FF" />
+                                                    </Trigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </ComboBox.Resources>
 
-                                <ComboBoxItem Content="Select number of players" />
-                                <ComboBoxItem Content="1" />
-                                <ComboBoxItem Content="2" />
-                                <ComboBoxItem Content="3" />
-                                <ComboBoxItem Content="4" />
-                                <ComboBoxItem Content="5" />
-                                <ComboBoxItem Content="6" />
-                                <ComboBoxItem Content="7" />
-                                <ComboBoxItem Content="8" />
-                                <ComboBoxItem Content="9" />
-                                <ComboBoxItem Content="10" />
-                                <ComboBoxItem Content="11" />
-                                <ComboBoxItem Content="12" />
-                                <ComboBoxItem Content="13" />
-                                <ComboBoxItem Content="14" />
-                                <ComboBoxItem Content="15" />
-                            </ComboBox>
-                        </Grid>
+                                        <ComboBoxItem Content="Select number of players" />
+                                        <ComboBoxItem Content="1" />
+                                        <ComboBoxItem Content="2" />
+                                        <ComboBoxItem Content="3" />
+                                        <ComboBoxItem Content="4" />
+                                        <ComboBoxItem Content="5" />
+                                        <ComboBoxItem Content="6" />
+                                        <ComboBoxItem Content="7" />
+                                        <ComboBoxItem Content="8" />
+                                        <ComboBoxItem Content="9" />
+                                        <ComboBoxItem Content="10" />
+                                        <ComboBoxItem Content="11" />
+                                        <ComboBoxItem Content="12" />
+                                        <ComboBoxItem Content="13" />
+                                        <ComboBoxItem Content="14" />
+                                        <ComboBoxItem Content="15" />
+                                    </ComboBox>
+                                </Grid>
 
-                        <Grid Row="2">
-                            <Grid HorizontalAlignment="Center">
-                                <StackPanel VerticalAlignment="Center" Orientation="Horizontal">
-                                    <StackPanel Orientation="Vertical">
+                                <Grid Margin="0,20,0,20" Row="2">
+                                    <Grid HorizontalAlignment="Center">
+
                                         <Border
                                             HorizontalAlignment="Center"
                                             VerticalAlignment="Center"
                                             BorderBrush="DodgerBlue"
                                             BorderThickness="2"
                                             CornerRadius="10">
-                                            <StackPanel VerticalAlignment="Center">
-                                                <TextBlock
-                                                    Margin="5"
-                                                    HorizontalAlignment="Center"
-                                                    VerticalAlignment="Top"
-                                                    FontSize="18"
-                                                    FontWeight="Medium"
-                                                    Foreground="#2196f3"
-                                                    Text="Time Per Question" />
-    
-                                                <Slider
-                                                    x:Name="TimePerQuestionSlider"
-                                                    Width="300"
-                                                    Margin="15"
+                                            <StackPanel VerticalAlignment="Center" Orientation="Horizontal">
+                                                <StackPanel Orientation="Vertical">
+
+                                                    <StackPanel VerticalAlignment="Center">
+                                                        <TextBlock
+                                                            Margin="5"
+                                                            HorizontalAlignment="Center"
+                                                            VerticalAlignment="Top"
+                                                            FontSize="18"
+                                                            FontWeight="Medium"
+                                                            Foreground="#2196f3"
+                                                            Text="Time Per Question" />
+
+                                                        <Slider
+                                                            x:Name="TimePerQuestionSlider"
+                                                            Width="300"
+                                                            Margin="15"
+                                                            VerticalAlignment="Center"
+                                                            materialDesign:SliderAssist.OnlyShowFocusVisualWhileDragging="False"
+                                                            Cursor="Hand"
+                                                            IsSnapToTickEnabled="True"
+                                                            Maximum="30"
+                                                            Minimum="10"
+                                                            Style="{StaticResource MaterialDesignSlider}"
+                                                            TickFrequency="1"
+                                                            Value="15" />
+                                                    </StackPanel>
+                                                </StackPanel>
+
+                                                <Label
+                                                    x:Name="TimePerQuestionLabel"
+                                                    Width="50"
+                                                    Height="50"
+                                                    Margin="20"
                                                     VerticalAlignment="Center"
-                                                    materialDesign:SliderAssist.OnlyShowFocusVisualWhileDragging="False"
-                                                    Cursor="Hand"
-                                                    IsSnapToTickEnabled="True"
-                                                    Maximum="30"
-                                                    Minimum="10"
-                                                    Style="{StaticResource MaterialDesignSlider}"
-                                                    TickFrequency="1"
-                                                    Value="15" />
+                                                    HorizontalContentAlignment="Center"
+                                                    VerticalContentAlignment="Center"
+                                                    Content="{Binding ElementName=TimePerQuestionSlider, Path=Value}"
+                                                    FontSize="30"
+                                                    FontWeight="Medium"
+                                                    Foreground="#2196f3" />
                                             </StackPanel>
                                         </Border>
-                                    </StackPanel>
+                                    </Grid>
+                                </Grid>
 
-                                    <Label
-                                        x:Name="TimePerQuestionLabel"
-                                        Width="50"
-                                        Height="50"
-                                        Margin="20"
-                                        VerticalAlignment="Center"
-                                        HorizontalContentAlignment="Center"
-                                        VerticalContentAlignment="Center"
-                                        Content="{Binding ElementName=TimePerQuestionSlider, Path=Value}"
-                                        FontSize="30"
-                                        FontWeight="Medium"
-                                        Foreground="#2196f3" />
-                                </StackPanel>
-                            </Grid>
-                        </Grid>
-
-                        <Grid Row="3">
-                            <Grid HorizontalAlignment="Center">
-                                <StackPanel VerticalAlignment="Center" Orientation="Horizontal">
-                                    <StackPanel Orientation="Vertical">
+                                <Grid Margin="0,20,0,20" Row="3">
+                                    <Grid HorizontalAlignment="Center">
                                         <Border
                                             HorizontalAlignment="Center"
                                             VerticalAlignment="Center"
                                             BorderBrush="DodgerBlue"
                                             BorderThickness="2"
                                             CornerRadius="10">
-                                            <StackPanel VerticalAlignment="Center">
-                                                <TextBlock
-                                                    Margin="5"
-                                                    HorizontalAlignment="Center"
-                                                    VerticalAlignment="Top"
-                                                    FontSize="18"
-                                                    FontWeight="Medium"
-                                                    Foreground="#2196f3"
-                                                    Text="Question Count" />
+                                            <StackPanel VerticalAlignment="Center" Orientation="Horizontal">
+                                                <StackPanel Orientation="Vertical">
+                                                    <StackPanel VerticalAlignment="Center">
+                                                        <TextBlock
+                                                            Margin="5"
+                                                            HorizontalAlignment="Center"
+                                                            VerticalAlignment="Top"
+                                                            FontSize="18"
+                                                            FontWeight="Medium"
+                                                            Foreground="#2196f3"
+                                                            Text="Question Count" />
 
-                                                <Slider
-                                                    x:Name="QuestionCountSlider"
-                                                    Width="300"
-                                                    Margin="15"
+                                                        <Slider
+                                                            x:Name="QuestionCountSlider"
+                                                            Width="300"
+                                                            Margin="15"
+                                                            VerticalAlignment="Center"
+                                                            materialDesign:SliderAssist.OnlyShowFocusVisualWhileDragging="False"
+                                                            Cursor="Hand"
+                                                            IsSnapToTickEnabled="True"
+                                                            Maximum="100"
+                                                            Minimum="5"
+                                                            Style="{StaticResource MaterialDesignSlider}"
+                                                            TickFrequency="1"
+                                                            Value="25" />
+                                                    </StackPanel>
+                                                </StackPanel>
+
+                                                <Label
+                                                    x:Name="QuestionCountLabel"
+                                                    Width="50"
+                                                    Height="50"
+                                                    Margin="20"
+                                                    HorizontalAlignment="Right"
                                                     VerticalAlignment="Center"
-                                                    materialDesign:SliderAssist.OnlyShowFocusVisualWhileDragging="False"
-                                                    Cursor="Hand"
-                                                    IsSnapToTickEnabled="True"
-                                                    Maximum="100"
-                                                    Minimum="5"
-                                                    Style="{StaticResource MaterialDesignSlider}"
-                                                    TickFrequency="1"
-                                                    Value="25" />
+                                                    HorizontalContentAlignment="Center"
+                                                    VerticalContentAlignment="Center"
+                                                    Content="{Binding ElementName=QuestionCountSlider, Path=Value}"
+                                                    FontSize="30"
+                                                    FontWeight="Medium"
+                                                    Foreground="#2196f3" />
                                             </StackPanel>
                                         </Border>
-                                    </StackPanel>
 
-                                    <Label
-                                        x:Name="QuestionCountLabel"
-                                        Width="50"
-                                        Height="50"
-                                        Margin="20"
-                                        HorizontalAlignment="Right"
-                                        VerticalAlignment="Center"
-                                        HorizontalContentAlignment="Center"
-                                        VerticalContentAlignment="Center"
-                                        Content="{Binding ElementName=QuestionCountSlider, Path=Value}"
-                                        FontSize="30"
-                                        FontWeight="Medium"
-                                        Foreground="#2196f3" />
-                                </StackPanel>
+                                    </Grid>
+                                </Grid>
                             </Grid>
-                        </Grid>
+                        </Viewbox>
                     </Grid>
 
                     <Grid Row="4">
-                        <Button
-                            x:Name="BtnCreateRoom"
-                            Width="300"
-                            Height="53"
-                            Margin="0,50,0,0"
-                            VerticalAlignment="Top"
-                            materialDesign:ButtonAssist.CornerRadius="10"
-                            materialDesign:ShadowAssist.ShadowDepth="Depth0"
-                            Click="BtnCreateRoom_Click"
-                            Content="Create Room"
-                            FontSize="18"
-                            IsDefault="True"
-                            IsEnabled="False"
-                            Style="{StaticResource MaterialDesignFlatMidBgButton}" />
+                        <Viewbox>
+                            <Button
+                                x:Name="BtnCreateRoom"
+                                Width="300"
+                                Height="53"
+                                Margin="15"
+                                materialDesign:ButtonAssist.CornerRadius="10"
+                                materialDesign:ShadowAssist.ShadowDepth="Depth0"
+                                Click="BtnCreateRoom_Click"
+                                Content="Create Room"
+                                FontSize="18"
+                                IsDefault="True"
+                                IsEnabled="False"
+                                Style="{StaticResource MaterialDesignFlatMidBgButton}" />
+                        </Viewbox>
                     </Grid>
                 </Grid>
             </materialDesign:DialogHost>

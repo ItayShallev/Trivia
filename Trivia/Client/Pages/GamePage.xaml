@@ -8,8 +8,8 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:userControls="clr-namespace:Client.UserControls"
     Title="GamePage"
-    d:DesignHeight="1140"
-    d:DesignWidth="675"
+    d:DesignHeight="900"
+    d:DesignWidth="1600"
     mc:Ignorable="d">
 
     <Grid>
@@ -21,120 +21,283 @@
             <materialDesign:DialogHost x:Name="DialogHost" CloseOnClickAway="True">
                 <Grid>
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="1*" />
-                        <RowDefinition Height="0.8*" />
-                        <RowDefinition Height="1*" />
-                        <RowDefinition Height="2*" />
+                        <RowDefinition Height="5*" />
+                        <RowDefinition Height="4*" />
+                        <RowDefinition Height="3*" />
                         <RowDefinition Height="7*" />
-                        <RowDefinition Height="1*" />
+                        <RowDefinition Height="30*" />
                     </Grid.RowDefinitions>
 
                     <Grid Row="0">
-                        <userControls:Logo HorizontalAlignment="Left" ImageSize="150" />
-                        <userControls:ThreeDots />
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="1*" />
+                            <ColumnDefinition Width="2*" />
+                            <ColumnDefinition Width="1*" />
+                        </Grid.ColumnDefinitions>
+
+                        <Grid Column="0">
+                            <userControls:Logo HorizontalAlignment="Center" />
+                        </Grid>
+
+                        <Grid HorizontalAlignment="Right" Column="2">
+                            <userControls:ThreeDots />
+                        </Grid>
                     </Grid>
 
-                    <Grid VerticalAlignment="Top" Row="1">
-                        <userControls:GoBackArrow Margin="40,0,5,5" GoBackClicked="GoBackArrow_OnGoBackClicked" />
+
+                    <Grid Row="1">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="1*" />
+                            <ColumnDefinition Width="2*" />
+                            <ColumnDefinition Width="1*" />
+                        </Grid.ColumnDefinitions>
+
+                        <Grid HorizontalAlignment="Center" Column="0">
+                            <Viewbox>
+                                <userControls:GoBackArrow GoBackClicked="GoBackArrow_OnGoBackClicked" />
+                            </Viewbox>
+                        </Grid>
                     </Grid>
 
                     <Grid Grid.Row="2">
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition />
-                            <ColumnDefinition />
+                            <ColumnDefinition Width="5*" />
+                            <ColumnDefinition Width="6*" />
+                            <ColumnDefinition Width="5*" />
                         </Grid.ColumnDefinitions>
-                        
+
                         <Grid Column="0">
-                            <TextBlock 
-                                x:Name="DifficultyTextBlock"
-                                HorizontalAlignment="Center"
-                                VerticalAlignment="Center"
-                                FontSize="30"
-                                Foreground="DodgerBlue"
-                                FontStyle="Italic"
-                                Text="Question Difficulty"
-                                FontWeight="Medium">
-                            </TextBlock>
+                            <Viewbox>
+                                <TextBlock
+                                    x:Name="DifficultyTextBlock"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    FontStyle="Italic"
+                                    FontWeight="Medium"
+                                    Foreground="DodgerBlue"
+                                    Text="Question Difficulty" />
+                            </Viewbox>
                         </Grid>
 
-                        <Grid Column="1">
-                            <TextBlock 
-                                x:Name="TimerTextBlock"
-                                HorizontalAlignment="Center"
-                                VerticalAlignment="Center"
-                                FontSize="35"
-                                FontWeight="Medium">
-                                <TextBlock.Text>
-                                    <MultiBinding StringFormat="{}{0:F1}/{1}">
-                                        <Binding Path="TimeElapsed" RelativeSource="{RelativeSource AncestorType=local:GamePage}" />
-                                        <Binding Path="RoomData.TimePerQuestion" RelativeSource="{RelativeSource AncestorType=local:GamePage}" />
-                                    </MultiBinding>
-                                </TextBlock.Text>
-                            </TextBlock>
+                        <Grid Column="2">
+                            <Viewbox>
+                                <TextBlock
+                                    x:Name="TimerTextBlock"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    FontStyle="Italic"
+                                    FontWeight="Medium"
+                                    Foreground="DodgerBlue">
+                                    <TextBlock.Text>
+                                        <MultiBinding StringFormat="{}{0:F1}/{1}">
+                                            <Binding Path="TimeElapsed" RelativeSource="{RelativeSource AncestorType=local:GamePage}" />
+                                            <Binding Path="RoomData.TimePerQuestion" RelativeSource="{RelativeSource AncestorType=local:GamePage}" />
+                                        </MultiBinding>
+                                    </TextBlock.Text>
+                                </TextBlock>
+                            </Viewbox>
                         </Grid>
                     </Grid>
 
                     <Grid Grid.Row="3">
-                        <Grid Margin="20">
-                            <TextBlock
-                                x:Name="QuestionTextBlock"
-                                HorizontalAlignment="Center"
-                                VerticalAlignment="Center"
-                                FontSize="24"
-                                FontWeight="Medium"
-                                TextWrapping="Wrap" />
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="1*" />
+                                <ColumnDefinition Width="6*" />
+                                <ColumnDefinition Width="1*" />
+                            </Grid.ColumnDefinitions>
+
+                            <Grid Column="1">
+                                <Viewbox>
+                                    <Grid>
+                                        <TextBlock
+                                            x:Name="QuestionTextBlock"
+                                            HorizontalAlignment="Center"
+                                            VerticalAlignment="Center"
+                                            FontSize="20"
+                                            FontWeight="Medium"
+                                            Text="QUESTION"
+                                            TextWrapping="Wrap" />
+                                    </Grid>
+                                </Viewbox>
+                            </Grid>
                         </Grid>
                     </Grid>
 
-                    <Grid
-                        Grid.Row="4"
-                        Margin="15"
-                        VerticalAlignment="Center">
-                        <StackPanel>
-                            <Button
-                                x:Name="ButtonAnswer0"
-                                Height="53"
-                                Margin="20"
-                                materialDesign:ButtonAssist.CornerRadius="10"
-                                materialDesign:ShadowAssist.ShadowDepth="Depth0"
-                                Click="ButtonAnswer_OnClick"
-                                Style="{StaticResource MaterialDesignFlatMidBgButton}" >
-                                <TextBlock x:Name="Answer0TextBlock" Text="Answer #0" TextWrapping="Wrap" />
-                            </Button>
-                            <Button
-                                x:Name="ButtonAnswer1"
-                                Height="53"
-                                Margin="20"
-                                materialDesign:ButtonAssist.CornerRadius="10"
-                                materialDesign:ShadowAssist.ShadowDepth="Depth0"
-                                Click="ButtonAnswer_OnClick"
-                                Style="{StaticResource MaterialDesignFlatMidBgButton}" >
-                                <TextBlock x:Name="Answer1TextBlock" Text="Answer #1" TextWrapping="Wrap" />
-                            </Button>
-                            <Button
-                                x:Name="ButtonAnswer2"
-                                Height="53"
-                                Margin="20"
-                                materialDesign:ButtonAssist.CornerRadius="10"
-                                materialDesign:ShadowAssist.ShadowDepth="Depth0"
-                                Click="ButtonAnswer_OnClick"
-                                Style="{StaticResource MaterialDesignFlatMidBgButton}" >
-                                <TextBlock x:Name="Answer2TextBlock" Text="Answer #2" TextWrapping="Wrap" />
-                            </Button>
-                            <Button
-                                x:Name="ButtonAnswer3"
-                                Height="53"
-                                Margin="20"
-                                materialDesign:ButtonAssist.CornerRadius="10"
-                                materialDesign:ShadowAssist.ShadowDepth="Depth0"
-                                Click="ButtonAnswer_OnClick"
-                                Style="{StaticResource MaterialDesignFlatMidBgButton}" >
-                                <TextBlock x:Name="Answer3TextBlock" Text="Answer #3" TextWrapping="Wrap" />
-                            </Button>
-                        </StackPanel>
-                    </Grid>
+                    <Grid Margin="15" Row="4">
 
-                    <Grid Grid.Row="5" />
+                        <Grid.RowDefinitions>
+                            <RowDefinition />
+                            <RowDefinition />
+                        </Grid.RowDefinitions>
+
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+
+                        <Grid
+                            HorizontalAlignment="Right"
+                            VerticalAlignment="Bottom"
+                            Column="0"
+                            Row="0">
+                            <Viewbox Margin="15">
+                                <Button
+                                    x:Name="ButtonAnswer0"
+                                    Width="300"
+                                    Height="53"
+                                    Margin="0,10,0,10"
+                                    materialDesign:ButtonAssist.CornerRadius="10"
+                                    materialDesign:ShadowAssist.ShadowDepth="Depth0"
+                                    Click="ButtonAnswer_OnClick"
+                                    Style="{StaticResource MaterialDesignFlatMidBgButton}">
+                                    <TextBlock
+                                        x:Name="Answer0TextBlock"
+                                        Text="Answer #0"
+                                        TextWrapping="Wrap" />
+                                </Button>
+                            </Viewbox>
+                        </Grid>
+
+                        <Grid
+                            HorizontalAlignment="Left"
+                            VerticalAlignment="Bottom"
+                            Column="1"
+                            Row="0">
+                            <Viewbox Margin="15">
+                                <Button
+                                    x:Name="ButtonAnswer1"
+                                    Width="300"
+                                    Height="53"
+                                    Margin="0,10,0,10"
+                                    materialDesign:ButtonAssist.CornerRadius="10"
+                                    materialDesign:ShadowAssist.ShadowDepth="Depth0"
+                                    Click="ButtonAnswer_OnClick"
+                                    Style="{StaticResource MaterialDesignFlatMidBgButton}">
+                                    <TextBlock
+                                        x:Name="Answer1TextBlock"
+                                        Text="Answer #1"
+                                        TextWrapping="Wrap" />
+                                </Button>
+                            </Viewbox>
+                        </Grid>
+
+                        <Grid
+                            HorizontalAlignment="Right"
+                            VerticalAlignment="Top"
+                            Column="0"
+                            Row="1">
+                            <Viewbox Margin="15">
+                                <Button
+                                    x:Name="ButtonAnswer2"
+                                    Width="300"
+                                    Height="53"
+                                    Margin="0,10,0,10"
+                                    materialDesign:ButtonAssist.CornerRadius="10"
+                                    materialDesign:ShadowAssist.ShadowDepth="Depth0"
+                                    Click="ButtonAnswer_OnClick"
+                                    Style="{StaticResource MaterialDesignFlatMidBgButton}">
+                                    <TextBlock
+                                        x:Name="Answer2TextBlock"
+                                        Text="Answer #2"
+                                        TextWrapping="Wrap" />
+                                </Button>
+                            </Viewbox>
+                        </Grid>
+
+                        <Grid
+                            HorizontalAlignment="Left"
+                            VerticalAlignment="Top"
+                            Column="1"
+                            Row="1">
+                            <Viewbox Margin="15">
+                                <Button
+                                    x:Name="ButtonAnswer3"
+                                    Width="300"
+                                    Height="53"
+                                    Margin="0,10,0,10"
+                                    materialDesign:ButtonAssist.CornerRadius="10"
+                                    materialDesign:ShadowAssist.ShadowDepth="Depth0"
+                                    Click="ButtonAnswer_OnClick"
+                                    Style="{StaticResource MaterialDesignFlatMidBgButton}">
+                                    <TextBlock
+                                        x:Name="Answer3TextBlock"
+                                        Text="Answer #3"
+                                        TextWrapping="Wrap" />
+                                </Button>
+                            </Viewbox>
+                        </Grid>
+                        <!--<StackPanel>
+                            <Viewbox>
+                                <Button
+                                    x:Name="ButtonAnswer0"
+                                    Width="300"
+                                    Height="53"
+                                    Margin="0,10,0,10"
+                                    materialDesign:ButtonAssist.CornerRadius="10"
+                                    materialDesign:ShadowAssist.ShadowDepth="Depth0"
+                                    Click="ButtonAnswer_OnClick"
+                                    Style="{StaticResource MaterialDesignFlatMidBgButton}">
+                                    <TextBlock
+                                        x:Name="Answer0TextBlock"
+                                        Text="Answer #0"
+                                        TextWrapping="Wrap" />
+                                </Button>
+                            </Viewbox>
+
+                            <Viewbox>
+                                <Button
+                                    x:Name="ButtonAnswer1"
+                                    Width="300"
+                                    Height="53"
+                                    Margin="0,10,0,10"
+                                    materialDesign:ButtonAssist.CornerRadius="10"
+                                    materialDesign:ShadowAssist.ShadowDepth="Depth0"
+                                    Click="ButtonAnswer_OnClick"
+                                    Style="{StaticResource MaterialDesignFlatMidBgButton}">
+                                    <TextBlock
+                                        x:Name="Answer1TextBlock"
+                                        Text="Answer #1"
+                                        TextWrapping="Wrap" />
+                                </Button>
+                            </Viewbox>
+
+                            <Viewbox>
+                                <Button
+                                    x:Name="ButtonAnswer2"
+                                    Width="300"
+                                    Height="53"
+                                    Margin="0,10,0,10"
+                                    materialDesign:ButtonAssist.CornerRadius="10"
+                                    materialDesign:ShadowAssist.ShadowDepth="Depth0"
+                                    Click="ButtonAnswer_OnClick"
+                                    Style="{StaticResource MaterialDesignFlatMidBgButton}">
+                                    <TextBlock
+                                        x:Name="Answer2TextBlock"
+                                        Text="Answer #2"
+                                        TextWrapping="Wrap" />
+                                </Button>
+                            </Viewbox>
+
+
+                            <Viewbox>
+                                <Button
+                                    x:Name="ButtonAnswer3"
+                                    Width="300"
+                                    Height="53"
+                                    Margin="0,10,0,10"
+                                    materialDesign:ButtonAssist.CornerRadius="10"
+                                    materialDesign:ShadowAssist.ShadowDepth="Depth0"
+                                    Click="ButtonAnswer_OnClick"
+                                    Style="{StaticResource MaterialDesignFlatMidBgButton}">
+                                    <TextBlock
+                                        x:Name="Answer3TextBlock"
+                                        Text="Answer #3"
+                                        TextWrapping="Wrap" />
+                                </Button>
+                            </Viewbox>
+                        </StackPanel>-->
+                    </Grid>
                 </Grid>
             </materialDesign:DialogHost>
         </materialDesign:Card>

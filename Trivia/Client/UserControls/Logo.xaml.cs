@@ -22,13 +22,22 @@ namespace Client.UserControls
     /// </summary>
     public partial class Logo : UserControl
     {
-        public static readonly DependencyProperty ImageSizeProperty =
-            DependencyProperty.Register("ImageSize", typeof(double), typeof(Logo), new PropertyMetadata(100.0));
+        public static readonly DependencyProperty ImageWidthProperty =
+            DependencyProperty.Register("ImageWidth", typeof(double), typeof(Logo), new PropertyMetadata(1024.0));
 
-        public double ImageSize
+        public static readonly DependencyProperty ImageHeightProperty =
+            DependencyProperty.Register("ImageHeight", typeof(double), typeof(Logo), new PropertyMetadata(512.0));
+
+        public double ImageWidth
         {
-            get { return (double)GetValue(ImageSizeProperty); }
-            set { SetValue(ImageSizeProperty, value); }
+            get { return (double)GetValue(ImageWidthProperty); }
+            set { SetValue(ImageWidthProperty, value); }
+        }
+
+        public double ImageHeight
+        {
+            get { return (double)GetValue(ImageHeightProperty); }
+            set { SetValue(ImageHeightProperty, value); }
         }
 
         public Logo()

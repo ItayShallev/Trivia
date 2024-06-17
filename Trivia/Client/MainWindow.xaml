@@ -6,14 +6,11 @@
     xmlns:local="clr-namespace:Client"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     Title="Trivia"
-    Width="670"
-    Height="1140"
-    AllowsTransparency="True"
     Background="{x:Null}"
     TextElement.Foreground="{DynamicResource MaterialDesignBody}"
     WindowStartupLocation="CenterScreen"
-    WindowStyle="None"
-    
+    WindowStyle="ThreeDBorderWindow"
+    WindowState="Maximized"
     mc:Ignorable="d">
     <Grid>
         <Frame x:Name="MainFrame" NavigationUIVisibility="Hidden" />
