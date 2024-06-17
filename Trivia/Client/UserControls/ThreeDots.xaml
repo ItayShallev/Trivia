@@ -6,59 +6,59 @@
     xmlns:local="clr-namespace:Client.UserControls"
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    Width="100"
-    Height="100"
     HorizontalAlignment="Right"
     d:DesignHeight="100"
     d:DesignWidth="100"
     mc:Ignorable="d">
-    <Grid
-        Width="100"
-        Height="100"
-        HorizontalAlignment="Right">
-        <materialDesign:PopupBox
-            Width="75"
-            Height="75"
-            HorizontalAlignment="Center"
-            PlacementMode="BottomAndAlignRightEdges"
-            StaysOpen="True">
+    <Viewbox MaxWidth="400" MaxHeight="400">
+        <Grid
+            Width="100"
+            Height="100"
+            HorizontalAlignment="Right">
+            <materialDesign:PopupBox
+                Width="100"
+                Height="100"
+                HorizontalAlignment="Center"
+                PlacementMode="BottomAndAlignRightEdges"
+                StaysOpen="True">
 
-            <materialDesign:PopupBox.ToggleContent>
-                <materialDesign:PackIcon
-                    Width="75"
-                    Height="75"
-                    Kind="Menu">
-                    <materialDesign:PackIcon.Foreground>
-                        <LinearGradientBrush StartPoint="0.5,0" EndPoint="0.5,1">
-                            <GradientStop Offset="0.18" Color="#FFFFBD30" />
-                            <GradientStop Offset="0.5" Color="#FF45D8FF" />
-                            <GradientStop Offset="0.82" Color="#FFFF91B0" />
-                        </LinearGradientBrush>
-                    </materialDesign:PackIcon.Foreground>
-                </materialDesign:PackIcon>
-            </materialDesign:PopupBox.ToggleContent>
+                <materialDesign:PopupBox.ToggleContent>
+                    <materialDesign:PackIcon
+                        Width="100"
+                        Height="100"
+                        Kind="Menu">
+                        <materialDesign:PackIcon.Foreground>
+                            <LinearGradientBrush StartPoint="0.5,0" EndPoint="0.5,1">
+                                <GradientStop Offset="0.18" Color="#FFFFBD30" />
+                                <GradientStop Offset="0.5" Color="#FF45D8FF" />
+                                <GradientStop Offset="0.82" Color="#FFFF91B0" />
+                            </LinearGradientBrush>
+                        </materialDesign:PackIcon.Foreground>
+                    </materialDesign:PackIcon>
+                </materialDesign:PopupBox.ToggleContent>
 
-            <StackPanel>
-                <StackPanel
-                    Margin="16,10,0,6"
-                    HorizontalAlignment="Center"
-                    Orientation="Horizontal">
-                    <TextBlock VerticalAlignment="Center" Text="Dark Mode" />
-                    <ToggleButton
-                        Name="ThemeToggle"
-                        Margin="12,0,8,0"
-                        Click="ToggleTheme"
-                        Cursor="Hand"
-                        IsChecked="{Binding IsDarkTheme}"
-                        ToolTip="Enable Dark Mode" />
+                <StackPanel>
+                    <StackPanel
+                        Margin="16,10,0,6"
+                        HorizontalAlignment="Center"
+                        Orientation="Horizontal">
+                        <TextBlock VerticalAlignment="Center" Text="Dark Mode" />
+                        <ToggleButton
+                            Name="ThemeToggle"
+                            Margin="12,0,8,0"
+                            Click="ToggleTheme"
+                            Cursor="Hand"
+                            IsChecked="{Binding IsDarkTheme}"
+                            ToolTip="Enable Dark Mode" />
+                    </StackPanel>
+
+                    <Button
+                        x:Name="BtnExit"
+                        Click="exitApp"
+                        Content="Exit Application"
+                        ToolTip="Close Application" />
                 </StackPanel>
-
-                <Button
-                    x:Name="BtnExit"
-                    Click="exitApp"
-                    Content="Exit Application"
-                    ToolTip="Close Application" />
-            </StackPanel>
-        </materialDesign:PopupBox>
-    </Grid>
+            </materialDesign:PopupBox>
+        </Grid>
+    </Viewbox>
 </UserControl>

@@ -8,8 +8,8 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:userControls="clr-namespace:Client.UserControls"
     Title="MenuPage"
-    d:DesignHeight="1140"
-    d:DesignWidth="675"
+    d:DesignHeight="900"
+    d:DesignWidth="1600"
     Loaded="MenuPage_OnLoaded"
     mc:Ignorable="d">
 
@@ -33,65 +33,89 @@
             <materialDesign:DialogHost>
                 <Grid>
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="1*" />
-                        <RowDefinition Height="0.7*" />
-                        <RowDefinition Height="1.3*" />
-                        <RowDefinition Height="7*" />
-                        <RowDefinition Height="1*" />
+                        <RowDefinition Height="5*" />
+                        <RowDefinition Height="4*" />
+                        <RowDefinition Height="5*" />
+                        <RowDefinition Height="30*" />
+                        <RowDefinition Height="5*" />
                     </Grid.RowDefinitions>
 
                     <Grid Row="0">
-                        <userControls:Logo HorizontalAlignment="Left" ImageSize="150" />
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="1*" />
+                            <ColumnDefinition Width="2*" />
+                            <ColumnDefinition Width="1*" />
+                        </Grid.ColumnDefinitions>
 
-                        <TextBlock
-                            x:Name="UserGreetingTextBlock"
-                            HorizontalAlignment="Center"
-                            VerticalAlignment="Center"
-                            FontFamily="Montserrat"
-                            FontSize="24"
-                            FontWeight="Bold"
-                            Text="Welcome USER" />
+                        <Grid Column="0">
+                            <userControls:Logo HorizontalAlignment="Center" />
+                        </Grid>
 
-                        <Grid HorizontalAlignment="Right">
+                        <Grid Column="1">
+                            <Viewbox MaxWidth="450">
+                                <TextBlock
+                                    x:Name="UserGreetingTextBlock"
+                                    Margin="20,0,20,0"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    FontFamily="Montserrat"
+                                    FontWeight="Bold"
+                                    Text="Welcome USER" />
+                            </Viewbox>
+                        </Grid>
+
+                        <Grid HorizontalAlignment="Right" Column="2">
                             <userControls:ThreeDots />
                         </Grid>
                     </Grid>
 
-                    <Grid VerticalAlignment="Top" Row="1">
-                        <userControls:GoBackArrow Margin="40,0,5,5" GoBackClicked="GoBackArrow_OnGoBackClicked" />
-                    </Grid>
-
-                    <Grid HorizontalAlignment="Right" Row="2">
+                    <Grid Row="1">
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition />
-                            <ColumnDefinition />
+                            <ColumnDefinition Width="1*" />
+                            <ColumnDefinition Width="2*" />
+                            <ColumnDefinition Width="1*" />
                         </Grid.ColumnDefinitions>
 
-                        <Grid Column="1">
-                            <Button
-                                x:Name="BtnLeaderboard"
-                                Width="70"
-                                Height="70"
-                                Margin="10"
-                                materialDesign:ButtonAssist.CornerRadius="10"
-                                materialDesign:ShadowAssist.ShadowDepth="Depth0"
-                                Background="Green"
-                                BorderThickness="0"
-                                Click="BtnLeaderboard_OnClick">
-                                <materialDesign:PackIcon
-                                    Width="30"
-                                    Height="30"
-                                    Kind="Podium" />
-                            </Button>
+                        <Grid HorizontalAlignment="Center" Column="0">
+                            <Viewbox>
+                                <userControls:GoBackArrow GoBackClicked="GoBackArrow_OnGoBackClicked" />
+                            </Viewbox>
+                        </Grid>
+                    </Grid>
 
-                            <TextBlock
-                                Margin="10"
-                                HorizontalAlignment="Center"
-                                VerticalAlignment="Bottom"
-                                FontSize="12"
-                                FontWeight="Medium"
-                                Foreground="Green"
-                                Text="Leaderboard" />
+                    <Grid
+                        Margin="0,0,10,0"
+                        HorizontalAlignment="Right"
+                        Row="2">
+                        <Grid>
+                            <Viewbox>
+                                <StackPanel>
+                                    <Button
+                                        x:Name="BtnLeaderboard"
+                                        Width="70"
+                                        Height="70"
+                                        Margin="10"
+                                        materialDesign:ButtonAssist.CornerRadius="10"
+                                        materialDesign:ShadowAssist.ShadowDepth="Depth0"
+                                        Background="Green"
+                                        BorderThickness="0"
+                                        Click="BtnLeaderboard_OnClick">
+                                        <materialDesign:PackIcon
+                                            Width="30"
+                                            Height="30"
+                                            Kind="Podium" />
+                                    </Button>
+
+                                    <TextBlock
+                                        Margin="10"
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Bottom"
+                                        FontSize="16"
+                                        FontWeight="Medium"
+                                        Foreground="Green"
+                                        Text="Leaderboard" />
+                                </StackPanel>
+                            </Viewbox>
                         </Grid>
                     </Grid>
 
@@ -103,139 +127,153 @@
 
                         <Grid Row="0">
                             <Separator VerticalAlignment="Bottom" />
-                            
-                            <TextBlock
-                                HorizontalAlignment="Center"
-                                VerticalAlignment="Center"
-                                FontSize="35"
-                                FontWeight="Medium"
-                                Text="Rooms List" />
+
+                            <Viewbox>
+                                <StackPanel>
+                                    <TextBlock
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center"
+                                        FontWeight="Medium"
+                                        Foreground="DimGray"
+                                        Text="Rooms" />
+                                </StackPanel>
+                            </Viewbox>
+
                         </Grid>
 
                         <Grid Row="1">
-                            <StackPanel>
-                                <DataGrid
-                                    x:Name="RoomsListDataGrid"
-                                    Margin="10"
-                                    AutoGenerateColumns="False"
-                                    CanUserAddRows="False"
-                                    CanUserDeleteRows="False"
-                                    CanUserReorderColumns="False"
-                                    CanUserResizeColumns="False"
-                                    CanUserSortColumns="True"
-                                    GridLinesVisibility="All"
-                                    IsReadOnly="True"
-                                    SelectionChanged="RoomClicked"
-                                    SelectionMode="Single"
-                                    SelectionUnit="FullRow">
+                            <DataGrid
+                                x:Name="RoomsListDataGrid"
+                                Width="Auto"
+                                Margin="10"
+                                AutoGenerateColumns="False"
+                                CanUserAddRows="False"
+                                CanUserDeleteRows="False"
+                                CanUserReorderColumns="False"
+                                CanUserResizeColumns="True"
+                                CanUserSortColumns="True"
+                                GridLinesVisibility="All"
+                                IsReadOnly="True"
+                                SelectionChanged="RoomClicked"
+                                SelectionMode="Single"
+                                SelectionUnit="FullRow">
 
-                                    <DataGrid.Resources>
-                                        <Style x:Key="CenterAlignedTextBlock" TargetType="TextBlock">
-                                            <Setter Property="HorizontalAlignment" Value="Center" />
-                                            <Setter Property="VerticalAlignment" Value="Center" />
-                                        </Style>
-                                    </DataGrid.Resources>
+                                <DataGrid.Resources>
+                                    <Style x:Key="CenterAlignedTextBlock" TargetType="TextBlock">
+                                        <Setter Property="HorizontalAlignment" Value="Center" />
+                                        <Setter Property="VerticalAlignment" Value="Center" />
+                                    </Style>
+                                </DataGrid.Resources>
 
-                                    <DataGrid.ColumnHeaderStyle>
-                                        <Style TargetType="DataGridColumnHeader">
-                                            <Setter Property="Height" Value="50" />
-                                            <Setter Property="HorizontalContentAlignment" Value="Center" />
-                                            <Setter Property="FontSize" Value="14" />
-                                            <Setter Property="FontWeight" Value="SemiBold" />
-                                            <Setter Property="Margin" Value="0,0,0,5" />
-                                            <Setter Property="Padding" Value="5,5,10,5" />
-                                            <Setter Property="BorderBrush" Value="Transparent" />
-                                            <Setter Property="BorderThickness" Value="0,0,0,0" />
-                                            <Setter Property="Cursor" Value="Arrow" />
+                                <DataGrid.ColumnHeaderStyle>
+                                    <Style TargetType="DataGridColumnHeader">
+                                        <Setter Property="Height" Value="50" />
+                                        <Setter Property="HorizontalContentAlignment" Value="Center" />
+                                        <Setter Property="FontSize" Value="14" />
+                                        <Setter Property="FontWeight" Value="SemiBold" />
+                                        <Setter Property="Margin" Value="0,0,0,5" />
+                                        <Setter Property="Padding" Value="5,5,10,5" />
+                                        <Setter Property="BorderBrush" Value="Transparent" />
+                                        <Setter Property="BorderThickness" Value="0,0,0,0" />
+                                        <Setter Property="Cursor" Value="Arrow" />
 
-                                            <Style.Triggers>
-                                                <Trigger Property="IsMouseOver" Value="True">
-                                                    <Setter Property="BorderThickness" Value="0,0,0,4" />
-                                                    <Setter Property="BorderBrush" Value="CornflowerBlue" />
-                                                </Trigger>
-                                            </Style.Triggers>
-                                        </Style>
-                                    </DataGrid.ColumnHeaderStyle>
+                                        <Setter Property="Template">
+                                            <Setter.Value>
+                                                <ControlTemplate TargetType="{x:Type DataGridColumnHeader}">
+                                                    <Border
+                                                        Background="{TemplateBinding Background}"
+                                                        BorderBrush="{TemplateBinding BorderBrush}"
+                                                        BorderThickness="{TemplateBinding BorderThickness}">
+                                                        <TextBlock
+                                                            HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                                            VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                                            FontSize="{TemplateBinding FontSize}"
+                                                            FontWeight="{TemplateBinding FontWeight}"
+                                                            Text="{TemplateBinding Content}"
+                                                            TextAlignment="Center"
+                                                            TextWrapping="Wrap" />
+                                                    </Border>
+                                                </ControlTemplate>
+                                            </Setter.Value>
+                                        </Setter>
 
-                                    <DataGrid.RowStyle>
-                                        <Style TargetType="DataGridRow">
-                                            <Setter Property="Background" Value="White" />
-                                            <Setter Property="Foreground" Value="Black" />
-                                            <Setter Property="BorderBrush" Value="LightGray" />
-                                            <Setter Property="BorderThickness" Value="0,0,0,2" />
-                                            <Setter Property="Margin" Value="0,2" />
-                                            <Setter Property="MinHeight" Value="48" />
-                                            <Setter Property="HorizontalContentAlignment" Value="Center" />
-                                            <Setter Property="VerticalAlignment" Value="Center" />
-                                            <Setter Property="Cursor" Value="Hand" />
-                                            <Setter Property="FontSize" Value="14" />
-                                            <Setter Property="FontWeight" Value="SemiBold" />
-                                            <Style.Triggers>
-                                                <Trigger Property="IsMouseOver" Value="True">
-                                                    <Setter Property="BorderThickness" Value="0,0,0,4" />
-                                                    <Setter Property="BorderBrush" Value="DarkOrange" />
-                                                </Trigger>
-                                            </Style.Triggers>
-                                        </Style>
-                                    </DataGrid.RowStyle>
+                                        <Style.Triggers>
+                                            <Trigger Property="IsMouseOver" Value="True">
+                                                <Setter Property="BorderThickness" Value="0,0,0,4" />
+                                                <Setter Property="BorderBrush" Value="CornflowerBlue" />
+                                            </Trigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </DataGrid.ColumnHeaderStyle>
 
-                                    <DataGrid.Columns>
-                                        <DataGridTextColumn
-                                            Width="*"
-                                            Binding="{Binding Name}"
-                                            ElementStyle="{StaticResource CenterAlignedTextBlock}"
-                                            Header="Room Name" />
-                                        <DataGridTextColumn
-                                            Width="*"
-                                            Binding="{Binding Admin}"
-                                            ElementStyle="{StaticResource CenterAlignedTextBlock}"
-                                            Header="Admin" />
-                                        <DataGridTextColumn
-                                            Width="*"
-                                            Binding="{Binding RoomStatus}"
-                                            ElementStyle="{StaticResource CenterAlignedTextBlock}"
-                                            Header="Status" />
-                                        <DataGridTextColumn
-                                            Width="*"
-                                            Binding="{Binding QuestionCount}"
-                                            ElementStyle="{StaticResource CenterAlignedTextBlock}"
-                                            Header="Question Count" />
-                                        <DataGridTextColumn
-                                            Width="*"
-                                            Binding="{Binding QuestionTimeout}"
-                                            ElementStyle="{StaticResource CenterAlignedTextBlock}"
-                                            Header="Timeout" />
-                                    </DataGrid.Columns>
-                                </DataGrid>
-                            </StackPanel>
+                                <DataGrid.RowStyle>
+                                    <Style TargetType="DataGridRow">
+                                        <Setter Property="Background" Value="White" />
+                                        <Setter Property="Foreground" Value="Black" />
+                                        <Setter Property="BorderBrush" Value="LightGray" />
+                                        <Setter Property="BorderThickness" Value="0,0,0,2" />
+                                        <Setter Property="Margin" Value="0,2" />
+                                        <Setter Property="MinHeight" Value="48" />
+                                        <Setter Property="HorizontalContentAlignment" Value="Center" />
+                                        <Setter Property="VerticalAlignment" Value="Center" />
+                                        <Setter Property="Cursor" Value="Hand" />
+                                        <Setter Property="FontSize" Value="14" />
+                                        <Setter Property="FontWeight" Value="SemiBold" />
+
+                                        <Style.Triggers>
+                                            <Trigger Property="IsMouseOver" Value="True">
+                                                <Setter Property="BorderThickness" Value="0,0,0,4" />
+                                                <Setter Property="BorderBrush" Value="DarkOrange" />
+                                            </Trigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </DataGrid.RowStyle>
+
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn
+                                        Width="*"
+                                        Binding="{Binding Name}"
+                                        ElementStyle="{StaticResource CenterAlignedTextBlock}"
+                                        Header="Room Name" />
+                                    <DataGridTextColumn
+                                        Width="*"
+                                        Binding="{Binding Admin}"
+                                        ElementStyle="{StaticResource CenterAlignedTextBlock}"
+                                        Header="Admin" />
+                                    <DataGridTextColumn
+                                        Width="*"
+                                        Binding="{Binding RoomStatus}"
+                                        ElementStyle="{StaticResource CenterAlignedTextBlock}"
+                                        Header="Status" />
+                                    <DataGridTextColumn
+                                        Width="*"
+                                        Binding="{Binding QuestionCount}"
+                                        ElementStyle="{StaticResource CenterAlignedTextBlock}"
+                                        Header="Question Count" />
+                                    <DataGridTextColumn
+                                        Width="*"
+                                        Binding="{Binding QuestionTimeout}"
+                                        ElementStyle="{StaticResource CenterAlignedTextBlock}"
+                                        Header="Timeout" />
+                                </DataGrid.Columns>
+                            </DataGrid>
                         </Grid>
                     </Grid>
 
                     <Grid Row="4">
-                        <Button
-                            x:Name="BtnCreateRoom"
-                            Width="200"
-                            Height="50"
-                            Margin="0,10,0,20"
-                            materialDesign:ButtonAssist.CornerRadius="5"
-                            materialDesign:ShadowAssist.ShadowDepth="Depth2"
-                            Click="BtnCreateRoom_Click"
-                            Content="Create Room"
-                            FontSize="15"
-                            Style="{StaticResource MaterialDesignFlatMidBgButton}" />
-
-                        <TextBlock
-                            x:Name="txtErrorHeader"
-                            Width="102"
-                            Height="26"
-                            Margin="0,7,0,0"
-                            HorizontalAlignment="Center"
-                            VerticalAlignment="Top"
-                            FontSize="20"
-                            Text="TextBlock"
-                            TextAlignment="Center"
-                            TextWrapping="Wrap"
-                            Visibility="Hidden" />
+                        <Viewbox>
+                            <Button
+                                x:Name="BtnCreateRoom"
+                                Width="300"
+                                Height="53"
+                                Margin="15"
+                                materialDesign:ButtonAssist.CornerRadius="5"
+                                materialDesign:ShadowAssist.ShadowDepth="Depth2"
+                                Click="BtnCreateRoom_Click"
+                                Content="Create Room"
+                                FontSize="18"
+                                Style="{StaticResource MaterialDesignFlatMidBgButton}" />
+                        </Viewbox>
                     </Grid>
                 </Grid>
             </materialDesign:DialogHost>
