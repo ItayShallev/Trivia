@@ -35,6 +35,13 @@ RequestResult RoomMemberRequestHandler::leaveRoom(RequestInfo reqInfo)
 {
 	// remove the user from the room
 	this->m_room.removeUser(this->m_user);
+
+	// Checking if the current user was the last to leave the room
+	if (this->m_room.getUsers().empty())
+	{
+		// Deleting the room from memory
+		this->m_roomManager.deleteRoom(this->m_room.getId());
+	}
 	 
 	// create a new menu request handler
 	std::shared_ptr<MenuRequestHandler> newHandler = this->m_handlerFactory->createMenuRequestHandler(this->m_user);
