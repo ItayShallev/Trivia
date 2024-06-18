@@ -10,11 +10,13 @@ namespace Client.ViewModels
     {
         public string Username { get; set; }
         public bool IsAdmin { get; set; }
+        public bool IsHighlighted { get; set; }
 
-        public UserEntry(string username, bool isAdmin)
+        public UserEntry(string username, bool isAdmin, bool isHighlighted)
         {
             Username = username;
             IsAdmin = isAdmin;
+            IsHighlighted = isHighlighted;
         }
     }
 }

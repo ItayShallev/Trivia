@@ -103,7 +103,6 @@ namespace Client.Pages
 
             if (leaveRoomResponse.Status == 1)
             {
-
                 // Navigating the user back to the menu page
                 MenuPage menuPage = new MenuPage(Username);
                 NavigationService.Navigate(menuPage);
@@ -117,7 +116,7 @@ namespace Client.Pages
             // Iterating over the users list and creating a UserEntry item for each one
             foreach (string user in users)
             {
-                UserEntry newUserEntry = new UserEntry(user, user == RoomData.Admin);
+                UserEntry newUserEntry = new UserEntry(user, user == RoomData.Admin, user == Username);
                 userEntries.Add(newUserEntry);
             }
 
@@ -145,7 +144,7 @@ namespace Client.Pages
                 {
                     _timer.Dispose();
 
-                    GamePage gamePage = new GamePage(Username, RoomData);
+                    GamePage gamePage = new GamePage(Username, RoomData, UsersCount);
                     NavigationService.Navigate(gamePage);
                 }
                 else if (UsersCount != getRoomStateResponse.Players.Count)

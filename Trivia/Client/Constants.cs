@@ -78,5 +78,8 @@ namespace Client
         public const string GetQuestionResponseId = "16";
         public const string GetGameResultResponseId = "17";
         public const string ErrorResponseId = "18";
+
+        // ************************** GENERAL *************************
+        public const double FLOAT_DIFFERENCE_TOLERANCE = 1e-9;
     }
 }

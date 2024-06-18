@@ -14,6 +14,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Client.Communication;
+using Client.ViewModels;
 
 namespace Client.Pages
 {
@@ -23,80 +24,83 @@ namespace Client.Pages
     public partial class EndGamePage : Page
     {
         private string _username;
+        private RoomData _roomData;
         private Timer _timer;
-        public EndGamePage(string username)
+        private uint _usersCount;
+
+
+        public EndGamePage(string username, RoomData roomData, uint usersCount)
         {
             InitializeComponent();
 
-            secondPlaceTXT.Visibility = Visibility.Hidden;
-            thirdPlaceTXT.Visibility = Visibility.Hidden;
-
-
-            _timer = new Timer(UpdateResults, null, 0, 3000);
+            _timer = new Timer(UpdateUI, null, 0, 3000);
             _username = username;
+            _roomData = roomData;
+            _usersCount = usersCount;
         }
 
-        private void UpdateResults(object state)
+        private bool IsResultsListUpdateNeeded(List<PlayerResults> playerResults)
+        {
+            // To prevent users from being removed from the results list when they leave the game
+            if (playerResults.Count != ResultsDataGrid.Items.Count)
+            {
+                // If all users have a Result record in the list - stopping to update the list due to a change in the users count
+                return ResultsDataGrid.Items.Count != _usersCount;
+            }
+
+            List<GameResultsEntry> gameResultEntries = ResultsDataGrid.ItemsSource as List<GameResultsEntry>;
+
+            // Iterating over the results list and comparing it to the one that the server responded with
+            for (int i = 0; ((i < gameResultEntries.Count) && (i < playerResults.Count)); i++)
+            {
+                // Checking if some info changed in the current game result
+                if (gameResultEntries[i].NumCorrectAnswers != playerResults[i].CorrectAnswerCount ||
+                    gameResultEntries[i].NumWrongAnswers != playerResults[i].WrongAnswerCount ||
+                    Math.Abs(gameResultEntries[i].AverageAnswerTime - playerResults[i].AverageAnswerTime) > Constants.FLOAT_DIFFERENCE_TOLERANCE ||
+                    gameResultEntries[i].Points != playerResults[i].Points)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        private void UpdateResults(List<PlayerResults> playerResults)
+        {
+            List<GameResultsEntry> gameResultsEntries = [];
+
+            // Iterating over the rooms list and creating a RoomEntry item for each one
+            foreach (PlayerResults playerResult in playerResults)
+            {
+                GameResultsEntry newGameResultsEntry = new GameResultsEntry(playerResult.Username, playerResult.CorrectAnswerCount,
+                    playerResult.WrongAnswerCount, playerResult.AverageAnswerTime, playerResult.Points, playerResult.Rank, playerResult.Username == _username);
+                gameResultsEntries.Add(newGameResultsEntry);
+            }
+
+            ResultsDataGrid.ItemsSource = gameResultsEntries;
+        }
+
+        private void UpdateUI(object state)
         {
             // send a game results query
-            Helper.SendRequest(Constants.GetGameResultRequestId, JsonSerializer.Serialize(""));
-            GetGameResultsResponse gameResultsResponse = Helper.GetResponse<GetGameResultsResponse>();
+            Helper.SendRequest(Constants.GetGameResultRequestId, JsonSerializer.Serialize(new GetGameResultsRequest()));
+            GetGameResultsResponse getGameResultsResponse = Helper.GetResponse<GetGameResultsResponse>();
 
-            Application.Current.Dispatcher.Invoke(
-                () => // To change the UI looks, the program needs to switch to the UI thread
+            if (IsResultsListUpdateNeeded(getGameResultsResponse.Results))
+            {
+                // Updating the results list UI
+                Application.Current.Dispatcher.Invoke(() =>     // To change the UI looks, the program needs to switch to the UI thread
                 {
-                    List<PlayerResults> playerResults = gameResultsResponse.Results;
-
-                    // sort the list by average answer time
-                    playerResults.Sort((a, b) => a.AverageAnswerTime.CompareTo(b.AverageAnswerTime));
-
-                    // set the 1st place text
-                    PlayerResults firstPlaceResults = playerResults[0];
-                    string firstPlaceTextInfo =
-                        $"1st Place: {firstPlaceResults.Username} with Correct Answers / Wrong Answers: '{firstPlaceResults.CorrectAnswerCount} / {firstPlaceResults.WrongAnswerCount}' With a Total Average Time of: '{firstPlaceResults.AverageAnswerTime} seconds'";
-                    firstPlaceTXT.Text = firstPlaceTextInfo;
-
-                    if (playerResults.Count >= 3) // there are at least 3 people
-                    {
-                        // enable 2nd place text visibility
-                        secondPlaceTXT.Visibility = Visibility.Visible;
-
-                        // set the 2nd place text
-                        PlayerResults secondPlaceResults = playerResults[1];
-                        string secondPlaceTextInfo =
-                            $"2nd Place: {secondPlaceResults.Username} with Correct Answers / Wrong Answers: '{secondPlaceResults.CorrectAnswerCount} / {secondPlaceResults.WrongAnswerCount}' With a Total Average Time of: '{secondPlaceResults.AverageAnswerTime} seconds'";
-                        secondPlaceTXT.Text = secondPlaceTextInfo;
-
-
-                        // enable 3rd place text visibility 
-                        thirdPlaceTXT.Visibility = Visibility.Visible;
-
-                        // set the 3rd place text
-                        PlayerResults thirdPlaceResults = playerResults[2];
-                        string thirdPlaceTextInfo =
-                            $"3rd Place: {thirdPlaceResults.Username} with Correct Answers / Wrong Answers: '{thirdPlaceResults.CorrectAnswerCount} / {thirdPlaceResults.WrongAnswerCount}' With a Total Average Time of: '{thirdPlaceResults.AverageAnswerTime} seconds'";
-                        thirdPlaceTXT.Text = thirdPlaceTextInfo;
-
-                    }
-                    else if (playerResults.Count >= 2)
-                    {
-                        // enable 2nd place text visibility
-                        secondPlaceTXT.Visibility = Visibility.Visible;
-
-                        // set 2nd place text 
-                        PlayerResults secondPlaceResults = playerResults[1];
-                        string secondPlaceTextInfo =
-                            $"2nd Place: {secondPlaceResults.Username} with Correct Answers / Wrong Answers: '{secondPlaceResults.CorrectAnswerCount} / {secondPlaceResults.WrongAnswerCount}' With a Total Average Time of: '{secondPlaceResults.AverageAnswerTime} seconds'";
-                        secondPlaceTXT.Text = secondPlaceTextInfo;
-                    }
+                    UpdateResults(getGameResultsResponse.Results);
                 });
+            }
         }
 
-        private void GoBackArrow_OnGoBackClicked(object sender, RoutedEventArgs e)
+        private void BtnWaitingRoom_OnClick(object sender, RoutedEventArgs e)
         {
             // dispose of the timer
             _timer.Dispose();
-
 
             // Sending a Leave Game request
             Helper.SendRequest(Constants.LeaveGameRequestId,
@@ -105,9 +109,16 @@ namespace Client.Pages
 
             if (leaveGameResponse.Status == 1)
             {
-                // Navigating the user back to the menu page
-                MenuPage menuPage = new MenuPage(this._username);
-                NavigationService.Navigate(menuPage);
+                if (_username == _roomData.Admin)       // If the user is the admin of the room
+                {
+                    AdminWaitingRoomPage adminWaitingRoomPage = new AdminWaitingRoomPage(_roomData, _username);
+                    NavigationService.Navigate(adminWaitingRoomPage);
+                }
+                else                                    // If the user is a regular member in the room
+                {
+                    MemberWaitingRoomPage memberWaitingRoomPage = new MemberWaitingRoomPage(_roomData, _username);
+                    NavigationService.Navigate(memberWaitingRoomPage);
+                }
             }
         }
     }

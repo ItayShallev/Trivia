@@ -32,6 +32,7 @@ namespace Client.Pages
         private string Username { get; set; }
         private int AnswersCount { get; set; }
         public RoomData RoomData { get; set; }
+        public uint UsersCount { get; set; }
 
         private DispatcherTimer QuestionTimer { get; set; }
         private double _timeElapsed;
@@ -50,20 +51,19 @@ namespace Client.Pages
         }
 
 
-        public GamePage(string username, RoomData roomData)
+        public GamePage(string username, RoomData roomData, uint userCount)
         {
             InitializeComponent();
 
             Username = username;
             RoomData = roomData;
+            UsersCount = userCount;
 
             DisplayNextQuestion();
         }
 
         private void DisplayNextQuestion()
         {
-
-
             Helper.SendRequest(Constants.GetQuestionRequestId, JsonSerializer.Serialize(new GetQuestionRequest()));
             GetQuestionResponse getQuestionResponse = Helper.GetResponse<GetQuestionResponse>();
 
@@ -194,11 +194,9 @@ namespace Client.Pages
             else // there are no more questions for the user
             {
                 // go to the end game page 
-                EndGamePage endgamePage = new EndGamePage(this.Username);
+                EndGamePage endgamePage = new EndGamePage(this.Username, RoomData, UsersCount);
                 NavigationService.Navigate(endgamePage);
             }
-
-            
         }
 
 

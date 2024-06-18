@@ -30,7 +30,7 @@ HighScoreRow StatisticsManager::getUserStatistics(const string& username) const
 }
 
 
-int StatisticsManager::calculateRoundPoints(const double& answerTime, const uint& timePerQuestion, const QuestionDifficulty& difficulty)
+uint StatisticsManager::calculateRoundPoints(const double& answerTime, const uint& timePerQuestion, const QuestionDifficulty& difficulty)
 {
-	return static_cast<int>(round((1 - ((answerTime / timePerQuestion) / 2)) * Helper::getPointsPossibleForDifficulty(difficulty)));
+	return static_cast<uint>(round((1 - ((answerTime / timePerQuestion) / 2)) * Helper::getPointsPossibleForDifficulty(difficulty)));
 }

@@ -60,9 +60,11 @@ void to_json(json& j, const RoomData& response);
 struct PlayerResults
 {
 	string username;
-	uint correctAnswerCount;
-	uint wrongAnswerCount;
-	double averageAnswerTime;
+	uint correctAnswerCount = 0;
+	uint wrongAnswerCount = 0;
+	double averageAnswerTime = 0.0;
+	uint points = 0;
+	uint rank = 0;
 };
 void to_json(json& j, const PlayerResults& response);
 
@@ -73,7 +75,7 @@ struct GameData
 	uint correctAnswerCount = 0;
 	uint wrongAnswerCount = 0;
 	double averageAnswerTime = 0.0;
-	int points = 0;
+	uint points = 0;
 };
 
 
