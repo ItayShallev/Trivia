@@ -26,8 +26,9 @@ namespace Client
         public enum RoomStatus
         {
             Waiting = 0,
-            Playing = 1,
-            Closed = 2 // future use?
+            Full = 1,
+            Playing = 2,
+            Closed = 3,
         };
 
         public enum QuestionDifficulty

@@ -175,8 +175,12 @@ RequestResult MenuRequestHandler::joinRoom(RequestInfo reqInfo)
 			// get the room
 			Room& currRoom = this->m_handlerFactory.getRoomManager().getRoom(currRoomData.id);
 
-			// join the room
-			currRoom.addUser(this->m_user);
+			// Tyring to join the room
+			if (!currRoom.addUser(this->m_user))		// If the room joining has failed - send error response
+			{
+				return Helper::buildRequestResult(JsonResponsePacketSerializer::serializeResponse(ErrorResponse()),
+					std::shared_ptr<MenuRequestHandler>(this, [](MenuRequestHandler*) {}));
+			}
 
 			// set the wanted room
 			wantedRoom = &currRoom;

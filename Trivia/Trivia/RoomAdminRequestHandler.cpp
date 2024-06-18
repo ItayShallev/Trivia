@@ -1,5 +1,4 @@
 #include "RoomAdminRequestHandler.h"
-
 #include "Helper.h"
 #include "JsonResponsePacketSerializer.h"
 
@@ -37,6 +36,20 @@ RequestResult RoomAdminRequestHandler::handleRequest(RequestInfo reqInfo)
 
 RequestResult RoomAdminRequestHandler::closeRoom(RequestInfo reqInfo)
 {
+    this->m_room.removeUser(this->m_user);
+
+    // Checking if the admin was the only one in the room
+    if (this->m_room.getUsers().empty())
+    {
+	    // Deleting the room from memory
+		this->m_roomManager.deleteRoom(this->m_room.getId());
+    }
+    else
+    {
+		// Changing the room status to closed to notify the participants that the room was closed, and they need to leave it
+        this->m_room.setRoomStatus(RoomStatus::Closed);
+    }
+
 	// change the room status to closed
     this->m_room.setRoomStatus(RoomStatus::Closed);
 
@@ -49,16 +62,14 @@ RequestResult RoomAdminRequestHandler::closeRoom(RequestInfo reqInfo)
 
 RequestResult RoomAdminRequestHandler::startGame(RequestInfo reqInfo)
 {
-    // TODO: check if that's all you need to do
     // change the room status to playing
     this->m_room.setRoomStatus(RoomStatus::Playing);
 
-    // TODO: check if room state changed
     // get the room state
     RoomState currRoomState = this->m_roomManager.getRoomState(this->m_room);
 
     // create the game
-	std::shared_ptr<Game> game = this->m_handlerFactory->getGameManager().createGame(this->m_room);         // TODO: PASS THE ROOM_DATA so the Game class would have that information
+	std::shared_ptr<Game> game = this->m_handlerFactory->getGameManager().createGame(this->m_room);
 
     // create a new game handler
     std::shared_ptr<GameRequestHandler> newGameHandler = this->m_handlerFactory->createGameRequestHandler(game, this->m_user);

@@ -104,7 +104,7 @@ namespace Client.Pages
             // Iterating over the rooms list and creating a RoomEntry item for each one
             foreach (RoomData roomData in rooms)
             {
-                if (roomData.RoomStatus == Constants.RoomStatus.Waiting)
+                if (roomData.RoomStatus == Constants.RoomStatus.Waiting || roomData.RoomStatus == Constants.RoomStatus.Full)
                 {
                     RoomEntry newRoomEntry = new RoomEntry(roomData.Name, roomData.Admin,
                         Helper.RoomStatusToStringStatus(roomData.RoomStatus),

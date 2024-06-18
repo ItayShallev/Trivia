@@ -225,6 +225,10 @@
                                                 <Setter Property="BorderThickness" Value="0,0,0,4" />
                                                 <Setter Property="BorderBrush" Value="DarkOrange" />
                                             </Trigger>
+
+                                            <DataTrigger Binding="{Binding RoomStatus}" Value="Full">
+                                                <Setter Property="Cursor" Value="No" />
+                                            </DataTrigger>
                                         </Style.Triggers>
                                     </Style>
                                 </DataGrid.RowStyle>
