@@ -95,13 +95,14 @@ namespace Client.Pages
 
         private void LeaveRoom()
         {
+            _timer.Dispose();       // Pausing the getRoomState requests from being sent to the server
+            
             // Sending a LeaveRoom request
             Helper.SendRequest(Constants.LeaveRoomRequestId, JsonSerializer.Serialize(new LeaveRoomRequest()));
             LeaveRoomResponse leaveRoomResponse = Helper.GetResponse<LeaveRoomResponse>();
 
             if (leaveRoomResponse.Status == 1)
             {
-                _timer.Dispose();       // Pausing the getRoomState requests from being sent to the server
 
                 // Navigating the user back to the menu page
                 MenuPage menuPage = new MenuPage(Username);

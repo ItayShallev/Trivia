@@ -1,0 +1,107 @@
+﻿<Page
+    x:Class="Client.Pages.EndGamePage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:UserControls="clr-namespace:Client.UserControls"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:Client.Pages"
+    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    Title="LeaderboardPage"
+    d:DesignHeight="900"
+    d:DesignWidth="1600"
+    mc:Ignorable="d">
+
+    <Grid>
+        <materialDesign:Card
+            Margin="25"
+            materialDesign:ShadowAssist.ShadowDepth="Depth4"
+            Background="{DynamicResource MaterialDesignPaper}"
+            UniformCornerRadius="15">
+            <materialDesign:DialogHost>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="5*" />
+                        <RowDefinition Height="4*" />
+                        <RowDefinition Height="40*" />
+                    </Grid.RowDefinitions>
+
+                    <Grid Row="0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="1*" />
+                            <ColumnDefinition Width="2*" />
+                            <ColumnDefinition Width="1*" />
+                        </Grid.ColumnDefinitions>
+
+                        <Grid Column="0">
+                            <UserControls:Logo HorizontalAlignment="Center" />
+                        </Grid>
+
+                        <Grid Column="1">
+                            <Viewbox MaxWidth="450">
+                                <TextBlock
+                                    x:Name="LeaderboardHeader"
+                                    Margin="20,0,20,0"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    FontFamily="Montserrat"
+                                    FontWeight="Bold"
+                                    Text="Results" />
+                            </Viewbox>
+                        </Grid>
+
+                        <Grid Column="2">
+                            <UserControls:ThreeDots />
+                        </Grid>
+                    </Grid>
+
+                    <Grid Row="2">
+                        <Separator Margin="15,0,15,0" VerticalAlignment="Top" />
+                        <UserControls:GoBackArrow
+                            Margin="818,601,0,0"
+                            HorizontalAlignment="Left"
+                            VerticalAlignment="Top"
+                            GoBackClicked="GoBackArrow_OnGoBackClicked" />
+                        <TextBlock
+                            x:Name="LeaveTXT"
+                            Margin="655,616,0,0"
+                            HorizontalAlignment="Left"
+                            VerticalAlignment="Top"
+                            FontSize="48"
+                            RenderTransformOrigin="1.464,0.719"
+                            Text="Leave"
+                            TextAlignment="Center"
+                            TextWrapping="Wrap" />
+                        <TextBlock
+                            x:Name="firstPlaceTXT"
+                            Margin="697,180,0,0"
+                            HorizontalAlignment="Left"
+                            VerticalAlignment="Top"
+                            FontSize="20"
+                            Text="FIRST_PLACE_RESULTS: "
+                            TextAlignment="Right"
+                            TextWrapping="Wrap" />
+                        <TextBlock
+                            x:Name="secondPlaceTXT"
+                            Margin="697,280,0,0"
+                            HorizontalAlignment="Left"
+                            VerticalAlignment="Top"
+                            FontSize="20"
+                            Text="AWAITING RESULTS..."
+                            TextAlignment="Right"
+                            TextWrapping="Wrap" />
+                        <TextBlock
+                            x:Name="thirdPlaceTXT"
+                            Margin="697,380,0,0"
+                            HorizontalAlignment="Left"
+                            VerticalAlignment="Top"
+                            FontSize="20"
+                            Text="AWAITING RESULTS..."
+                            TextAlignment="Right"
+                            TextWrapping="Wrap" />
+                    </Grid>
+                </Grid>
+            </materialDesign:DialogHost>
+        </materialDesign:Card>
+    </Grid>
+</Page>
