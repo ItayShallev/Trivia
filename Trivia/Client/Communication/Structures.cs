@@ -151,6 +151,7 @@ namespace Client.Communication
 
     public struct LeaveGameRequest { }
 
+    public struct GetGameResultsRequest { }
 
     // ******************* RESPONSE STRUCTURES *******************
 
@@ -446,16 +447,19 @@ namespace Client.Communication
         [JsonPropertyName("username")] public string Username { get; set; }
         [JsonPropertyName("correctAnswerCount")] public uint CorrectAnswerCount { get; set; }
         [JsonPropertyName("wrongAnswerCount")] public uint WrongAnswerCount { get; set; }
-
         [JsonPropertyName("averageAnswerTime")] public double AverageAnswerTime { get; set; }
+        [JsonPropertyName("points")] public uint Points { get; set; }
+        [JsonPropertyName("rank")] public uint Rank { get; set; }
 
 
-        public PlayerResults(string username, uint correctAnswerCount, uint wrongAnswerCount, double averageAnswerTime)
+        public PlayerResults(string username, uint correctAnswerCount, uint wrongAnswerCount, double averageAnswerTime, uint points, uint rank)
         {
             Username = username;
             CorrectAnswerCount = correctAnswerCount;
             WrongAnswerCount = wrongAnswerCount;
             AverageAnswerTime = averageAnswerTime;
+            Points = points;
+            Rank = rank;
         }
     };
 }

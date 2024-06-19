@@ -227,8 +227,13 @@
                                             <Setter Property="BorderBrush" Value="DarkOrange" />
                                         </Trigger>
 
-                                        <DataTrigger Binding="{Binding IsAdmin}" Value="True">
+                                        <DataTrigger Binding="{Binding IsHighlighted}" Value="True">
                                             <Setter Property="Background" Value="Gold" />
+                                        </DataTrigger>
+
+                                        <DataTrigger Binding="{Binding IsAdmin}" Value="True">
+                                            <Setter Property="BorderBrush" Value="Red" />
+                                            <Setter Property="BorderThickness" Value="0,0,0,4" />
                                         </DataTrigger>
                                     </Style.Triggers>
                                 </Style>

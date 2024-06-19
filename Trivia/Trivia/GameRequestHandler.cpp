@@ -94,6 +94,7 @@ RequestResult GameRequestHandler::getGameResult(RequestInfo reqInfo)
 {
 	vector<PlayerResults> playerResults;
 	map<std::shared_ptr<LoggedUser>, GameData> players = this->m_game->getPlayers();
+
 	for (const auto& player : players)
 	{
 		// get the current username
@@ -104,18 +105,34 @@ RequestResult GameRequestHandler::getGameResult(RequestInfo reqInfo)
 			currUsername,
 			player.second.correctAnswerCount,
 			player.second.wrongAnswerCount,
-			player.second.averageAnswerTime
+			player.second.averageAnswerTime,
+			player.second.points,
+			0						// Will be assigned later...
 		};
 
 		// add the result to the vector
 		playerResults.push_back(currPlayerResults);
+	}
 
+	// Sorting the players by number of points
+	std::sort(playerResults.begin(), playerResults.end(),
+		[](const PlayerResults& playerResults, const PlayerResults& otherPlayerResults)
+		{
+			if (playerResults.points == otherPlayerResults.points)
+			{
+				return playerResults.averageAnswerTime < otherPlayerResults.averageAnswerTime;
+			}
+			return playerResults.points > otherPlayerResults.points;
+		});
+
+	// Assigning ranks based on the vector's order
+	for (int i = 0; i < playerResults.size(); ++i)
+	{
+		playerResults[i].rank = i + 1;
 	}
 
 	// build the game results response
 	GetGameResultResponse gameResultResp = { 1, playerResults };
-
-
 
 	// build and return the request result
 	return Helper::buildRequestResult(JsonResponsePacketSerializer::serializeResponse(gameResultResp),
@@ -125,11 +142,31 @@ RequestResult GameRequestHandler::getGameResult(RequestInfo reqInfo)
 
 RequestResult GameRequestHandler::leaveGame(RequestInfo reqInfo)
 {
-	// remove the user from the game
-	this->m_game->removeUser(this->m_user);
+	Room& gameRoom = this->m_handlerFactory->getRoomManager().getRoom(this->m_game->getGameId());		// Room and game in a room have the same id
 
-	// create a new menu request handler	
-	std::shared_ptr<MenuRequestHandler> newHandler = this->m_handlerFactory->createMenuRequestHandler(this->m_user);
+	// Resetting the room status to let users in the menu see the room (only the admin hasn't closed it)
+	if (gameRoom.getRoomStatus() != RoomStatus::Closed)
+	{
+		if (gameRoom.getUsers().size() < gameRoom.getRoomData().maxPlayers)
+		{
+			gameRoom.setRoomStatus(RoomStatus::Waiting);
+		}
+		else
+		{
+			gameRoom.setRoomStatus(RoomStatus::Full);
+		}
+	}
+
+	// creating a new waiting room handler
+	std::shared_ptr<IRequestHandler> newHandler = nullptr;
+	if (this->m_user->getUserName() == gameRoom.getAdmin())		// If the user is the admin of the room
+	{
+		newHandler = this->m_handlerFactory->createRoomAdminRequestHandler(this->m_user, gameRoom);
+	}
+	else			// User is a room member
+	{
+		newHandler = this->m_handlerFactory->createRoomMemberRequestHandler(this->m_user, gameRoom);
+	}
 
 	// build and return the request result
 	return Helper::buildRequestResult(JsonResponsePacketSerializer::serializeResponse(LeaveGameResponse()), newHandler);

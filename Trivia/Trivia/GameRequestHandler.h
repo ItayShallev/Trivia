@@ -23,6 +23,4 @@ private:
 	RequestResult submitAnswer(RequestInfo reqInfo);
 	RequestResult getGameResult(RequestInfo reqInfo);
 	RequestResult leaveGame(RequestInfo reqInfo);
-
 };
-

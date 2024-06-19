@@ -99,61 +99,6 @@
                         </Viewbox>
                     </Grid>
 
-                    <!--<Grid Grid.Row="3" Margin="15">
-                        <Separator VerticalAlignment="Top" />
-
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="344*" />
-                                <ColumnDefinition Width="247*" />
-                            </Grid.ColumnDefinitions>
-                            <Grid.RowDefinitions>
-                                <RowDefinition />
-                                <RowDefinition />
-                                <RowDefinition />
-                            </Grid.RowDefinitions>
-
-                            <Grid
-                                Grid.ColumnSpan="2"
-                                Margin="10,10,10,10"
-                                Row="0">
-                                <TextBlock FontSize="20" FontWeight="Medium">
-                                    <TextBlock.Text>
-                                        <MultiBinding StringFormat="Room name: {0}">
-                                            <Binding Path="RoomData.Name" />
-                                        </MultiBinding>
-                                    </TextBlock.Text>
-                                </TextBlock>
-                            </Grid>
-
-                            <Grid
-                                Grid.ColumnSpan="2"
-                                Margin="10,10,10,10"
-                                Row="1">
-                                <TextBlock FontSize="20" FontWeight="Medium">
-                                    <TextBlock.Text>
-                                        <MultiBinding StringFormat="Number of questions: {0}">
-                                            <Binding Path="RoomData.NumOfQuestionsInGame" />
-                                        </MultiBinding>
-                                    </TextBlock.Text>
-                                </TextBlock>
-                            </Grid>
-
-                            <Grid
-                                Grid.ColumnSpan="2"
-                                Margin="10,10,10,10"
-                                Row="2">
-                                <TextBlock FontSize="20" FontWeight="Medium">
-                                    <TextBlock.Text>
-                                        <MultiBinding StringFormat="Time Per Question: {0} seconds">
-                                            <Binding Path="RoomData.TimePerQuestion" />
-                                        </MultiBinding>
-                                    </TextBlock.Text>
-                                </TextBlock>
-                            </Grid>
-                        </Grid>
-                    </Grid>-->
-
                     <Grid Grid.Row="3" Margin="5">
                         <Separator VerticalAlignment="Top" />
 
@@ -199,88 +144,6 @@
 
                         <Separator VerticalAlignment="Bottom" />
                     </Grid>
-
-                    <!--<Grid Grid.Row="4" Margin="15">
-                        <Separator VerticalAlignment="Top" />
-
-                        <StackPanel>
-                            <DataGrid
-                                x:Name="UsersListDataGrid"
-                                Margin="10"
-                                AutoGenerateColumns="False"
-                                CanUserAddRows="False"
-                                CanUserDeleteRows="False"
-                                CanUserReorderColumns="False"
-                                CanUserResizeColumns="False"
-                                CanUserSortColumns="True"
-                                GridLinesVisibility="All"
-                                IsReadOnly="True"
-                                SelectionUnit="Cell">
-
-                                <DataGrid.Resources>
-                                    <Style x:Key="CenterAlignedTextBlock" TargetType="TextBlock">
-                                        <Setter Property="HorizontalAlignment" Value="Center" />
-                                        <Setter Property="VerticalAlignment" Value="Center" />
-                                    </Style>
-                                </DataGrid.Resources>
-
-                                <DataGrid.ColumnHeaderStyle>
-                                    <Style TargetType="DataGridColumnHeader">
-                                        <Setter Property="Height" Value="50" />
-                                        <Setter Property="HorizontalContentAlignment" Value="Center" />
-                                        <Setter Property="FontSize" Value="20" />
-                                        <Setter Property="FontWeight" Value="SemiBold" />
-                                        <Setter Property="Margin" Value="0,0,0,5" />
-                                        <Setter Property="Padding" Value="5,5,10,5" />
-                                        <Setter Property="BorderBrush" Value="Transparent" />
-                                        <Setter Property="BorderThickness" Value="0,0,0,0" />
-                                        <Setter Property="Cursor" Value="Arrow" />
-
-                                        <Style.Triggers>
-                                            <Trigger Property="IsMouseOver" Value="True">
-                                                <Setter Property="BorderThickness" Value="0,0,0,4" />
-                                                <Setter Property="BorderBrush" Value="CornflowerBlue" />
-                                            </Trigger>
-                                        </Style.Triggers>
-                                    </Style>
-                                </DataGrid.ColumnHeaderStyle>
-
-                                <DataGrid.RowStyle>
-                                    <Style TargetType="DataGridRow">
-                                        <Setter Property="Background" Value="White" />
-                                        <Setter Property="Foreground" Value="Black" />
-                                        <Setter Property="BorderBrush" Value="LightGray" />
-                                        <Setter Property="BorderThickness" Value="0,0,0,2" />
-                                        <Setter Property="Margin" Value="0,2" />
-                                        <Setter Property="MinHeight" Value="48" />
-                                        <Setter Property="HorizontalContentAlignment" Value="Center" />
-                                        <Setter Property="VerticalAlignment" Value="Center" />
-                                        <Setter Property="Cursor" Value="Hand" />
-                                        <Setter Property="FontSize" Value="20" />
-                                        <Setter Property="FontWeight" Value="SemiBold" />
-                                        <Style.Triggers>
-                                            <Trigger Property="IsMouseOver" Value="True">
-                                                <Setter Property="BorderThickness" Value="0,0,0,4" />
-                                                <Setter Property="BorderBrush" Value="DarkOrange" />
-                                            </Trigger>
-
-                                            <DataTrigger Binding="{Binding IsAdmin}" Value="True">
-                                                <Setter Property="Background" Value="Gold" />
-                                            </DataTrigger>
-                                        </Style.Triggers>
-                                    </Style>
-                                </DataGrid.RowStyle>
-
-                                <DataGrid.Columns>
-                                    <DataGridTextColumn
-                                        Width="*"
-                                        Binding="{Binding Username}"
-                                        ElementStyle="{StaticResource CenterAlignedTextBlock}"
-                                        Header="Username" />
-                                </DataGrid.Columns>
-                            </DataGrid>
-                        </StackPanel>
-                    </Grid>-->
 
                     <Grid Grid.Row="4" Margin="15">
                         <DataGrid
@@ -364,8 +227,13 @@
                                             <Setter Property="BorderBrush" Value="DarkOrange" />
                                         </Trigger>
 
-                                        <DataTrigger Binding="{Binding IsAdmin}" Value="True">
+                                        <DataTrigger Binding="{Binding IsHighlighted}" Value="True">
                                             <Setter Property="Background" Value="Gold" />
+                                        </DataTrigger>
+
+                                        <DataTrigger Binding="{Binding IsAdmin}" Value="True">
+                                            <Setter Property="BorderBrush" Value="Red" />
+                                            <Setter Property="BorderThickness" Value="0,0,0,4" />
                                         </DataTrigger>
                                     </Style.Triggers>
                                 </Style>

@@ -60,7 +60,7 @@ namespace Client.Pages
                 LeaderboardEntry newLeaderboardEntry = new LeaderboardEntry(highScoreRow.Username,
                     highScoreRow.NumGamesPlayed, highScoreRow.NumCorrectAnswers,
                     highScoreRow.NumWrongAnswers, highScoreRow.AverageAnswerTime, highScoreRow.Points,
-                    highScoreRow.Rank);
+                    highScoreRow.Rank, highScoreRow.Username == Username);
 
                 leaderBoardEntries.Add(newLeaderboardEntry);
             }
@@ -77,31 +77,13 @@ namespace Client.Pages
                 LeaderboardEntry currentUserLeaderboardEntry = new LeaderboardEntry(currentUserHighScoreRow.Username,
                     currentUserHighScoreRow.NumGamesPlayed, currentUserHighScoreRow.NumCorrectAnswers,
                     currentUserHighScoreRow.NumWrongAnswers, currentUserHighScoreRow.AverageAnswerTime, currentUserHighScoreRow.Points,
-                    currentUserHighScoreRow.Rank);
+                    currentUserHighScoreRow.Rank, true);
 
                 // Adding the current user's statistics record to the leaderboard
                 leaderBoardEntries.Add(currentUserLeaderboardEntry);
             }
 
             LeaderboardDataGrid.ItemsSource = leaderBoardEntries;
-
-            // Highlight the current user's entry
-            HighlightCurrentUserEntry();
-        }
-
-        private void HighlightCurrentUserEntry()
-        {
-            foreach (LeaderboardEntry row in LeaderboardDataGrid.Items)
-            {
-                // Checking if the current user was found in the list
-                if (row.Username == Username)
-                {
-                    row.IsHighlighted = true;
-                    row.Username += " (You)";
-
-                    return;
-                }
-            }
         }
 
         private void GoBackArrow_OnGoBackClicked(object sender, RoutedEventArgs e)

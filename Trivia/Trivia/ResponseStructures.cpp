@@ -26,7 +26,9 @@ void to_json(json& j, const PlayerResults& response)
 		{"username", response.username},
 		{"correctAnswerCount", response.correctAnswerCount},
 		{"wrongAnswerCount", response.wrongAnswerCount},
-		{"averageAnswerTime", response.averageAnswerTime}
+		{"averageAnswerTime", std::round(response.averageAnswerTime * 100.0) / 100.0},
+		{"points", response.points},
+		{"rank", response.rank}
 	};
 }
 
@@ -38,7 +40,7 @@ void to_json(json& j, const HighScoreRow& response)
 		{"numGamesPlayed", response.numGamesPlayed},
 		{"numCorrectAnswers", response.numCorrectAnswers},
 		{"numWrongAnswers", response.numWrongAnswers},
-		{"averageAnswerTime", response.averageAnswerTime},
+		{"averageAnswerTime", std::round(response.averageAnswerTime * 100.0) / 100.0},
 		{"points", response.points},
 		{"rank", response.rank},
 	};
