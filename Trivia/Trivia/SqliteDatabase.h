@@ -4,6 +4,10 @@
 #include "sqlite3.h"
 
 
+using std::pair;
+using std::shared_ptr;
+
+
 class SqliteDatabase : public IDatabase
 {
 public:
@@ -47,8 +51,8 @@ public:
 																												   // *
 	void addUserStatisticsRecord(const string& username);													       // *
 																												   // *
-	void submitUserGameStatistics(const std::pair<std::shared_ptr<LoggedUser>, GameData>& user);				   // *
-	virtual void submitGameStatistics(const map<std::shared_ptr<LoggedUser>, GameData>& users) override;		   // *
+	void submitUserGameStatistics(const pair<shared_ptr<LoggedUser>, GameData>& user);							   // *
+	virtual void submitGameStatistics(const map<shared_ptr<LoggedUser>, GameData>& users) override;				   // *
 	// ****************************************************************************************************************
 
 	// ************************************************* GAME queries *************************************************
@@ -56,7 +60,6 @@ public:
 	virtual vector<Question> processGetQuestionsResults(sqlite3_stmt* statement);								   // *
 	virtual vector<Question> getRandomQuestions(const uint& numberOfQuestions) override;						   // *
 	// ****************************************************************************************************************
-
 
 private:
 	sqlite3* _db;

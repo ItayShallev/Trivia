@@ -2,14 +2,15 @@
 
 #include <string>
 #include <vector>
-
 #include "GameStructures.h"
 #include "LoggedUser.h"
 #include "Question.h"
 
+
 using std::string;
 using std::vector;
 using std::map;
+using std::shared_ptr;
 
 
 class IDatabase
@@ -32,7 +33,7 @@ public:
 
 	virtual HighScoreRow getUserStatistics(const string& username) = 0;
 	virtual vector<HighScoreRow> getHighScores() = 0;
-	virtual void submitGameStatistics(const map<std::shared_ptr<LoggedUser>, GameData>& users) = 0;
+	virtual void submitGameStatistics(const map<shared_ptr<LoggedUser>, GameData>& users) = 0;
 
 	virtual vector<Question> getRandomQuestions(const uint& numberOfQuestions) = 0;
 };

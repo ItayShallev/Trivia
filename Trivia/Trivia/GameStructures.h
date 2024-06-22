@@ -1,6 +1,5 @@
 #pragma once
 
-
 #include <string>
 #include <vector>
 #include <memory>
@@ -13,6 +12,7 @@
 using std::string;
 using std::vector;
 using nlohmann::json;
+using std::shared_ptr;
 
 
 typedef vector<unsigned char> Buffer;
@@ -30,7 +30,7 @@ struct RequestInfo
 struct RequestResult
 {
 	Buffer response;
-	std::shared_ptr<IRequestHandler> newHandler;
+	shared_ptr<IRequestHandler> newHandler;
 };
 
 
@@ -76,6 +76,8 @@ struct GameData
 	uint wrongAnswerCount = 0;
 	double averageAnswerTime = 0.0;
 	uint points = 0;
+
+	bool leftGame = false;
 };
 
 

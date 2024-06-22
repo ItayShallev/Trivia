@@ -78,7 +78,7 @@
 
                         <Grid HorizontalAlignment="Center" Column="0">
                             <Viewbox>
-                                <userControls:GoBackArrow GoBackClicked="GoBackArrow_OnGoBackClicked" />
+                                <userControls:GoBackArrow IconKind="Home" GoBackClicked="GoBackArrow_OnGoBackClicked" />
                             </Viewbox>
                         </Grid>
                     </Grid>

@@ -13,6 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Client.Pages;
+using MaterialDesignThemes.Wpf;
 
 namespace Client.UserControls
 {
@@ -21,7 +22,35 @@ namespace Client.UserControls
     /// </summary>
     public partial class GoBackArrow : UserControl
     {
+        public PackIconKind IconKind
+        {
+            get { return (PackIconKind)GetValue(IconKindProperty); }
+            set { SetValue(IconKindProperty, value); }
+        }
+
+        public Brush IconColor
+        {
+            get { return (Brush)GetValue(IconColorProperty); }
+            set { SetValue(IconColorProperty, value); }
+        }
+
+        public Brush ButtonBackground
+        {
+            get { return (Brush)GetValue(ButtonBackgroundProperty); }
+            set { SetValue(ButtonBackgroundProperty, value); }
+        }
+
+        public static readonly DependencyProperty IconKindProperty =
+            DependencyProperty.Register("IconKind", typeof(PackIconKind), typeof(GoBackArrow), new PropertyMetadata(PackIconKind.ArrowLeftBox));
+
+        public static readonly DependencyProperty IconColorProperty =
+            DependencyProperty.Register("IconColor", typeof(Brush), typeof(GoBackArrow), new PropertyMetadata(Brushes.White));
+
+        public static readonly DependencyProperty ButtonBackgroundProperty =
+            DependencyProperty.Register("ButtonBackground", typeof(Brush), typeof(GoBackArrow), new PropertyMetadata(Brushes.DodgerBlue));
+
         public event RoutedEventHandler GoBackClicked;      // Custom event
+
 
         public GoBackArrow()
         {

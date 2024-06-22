@@ -1,7 +1,7 @@
 #include "Question.h"
 
 
-Question::Question() : m_question(L""), m_possibleAnswers(vector<AnswerItem>()), m_answerId(0) { }
+Question::Question() : m_question(L""), m_possibleAnswers(vector<AnswerItem>()), m_answerId(0), m_difficulty(QuestionDifficulty::Easy) { }
 
 
 Question::Question(const wstring& question, const vector<AnswerItem>& possibleAnswers, const uint& answerId, const QuestionDifficulty& questionDifficulty)

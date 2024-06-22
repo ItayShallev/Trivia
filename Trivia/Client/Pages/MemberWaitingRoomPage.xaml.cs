@@ -31,12 +31,6 @@ namespace Client.Pages
         private RoomData _roomData;
         private Timer _timer;
 
-        public string Username
-        {
-            get { return _username; }
-            set { _username = value; }
-        }
-
         public uint UsersCount
         {
             get { return _usersCount; }
@@ -72,6 +66,13 @@ namespace Client.Pages
             }
         }
 
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
 
         public MemberWaitingRoomPage(RoomData roomData, string username)
         {
@@ -81,16 +82,9 @@ namespace Client.Pages
             RoomData = roomData;
             MaxUsers = roomData.MaxPlayers;
 
-            Username = username;
+            _username = username;
 
-            _timer = new Timer(UpdateUI, null, 0, 3000);
-        }
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        protected void OnPropertyChanged([CallerMemberName] string propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            _timer = new Timer(UpdateUI, null, 0, Constants.REQUEST_INTERVAL);
         }
 
         private void LeaveRoom()
@@ -104,7 +98,7 @@ namespace Client.Pages
             if (leaveRoomResponse.Status == 1)
             {
                 // Navigating the user back to the menu page
-                MenuPage menuPage = new MenuPage(Username);
+                MenuPage menuPage = new MenuPage(_username);
                 NavigationService.Navigate(menuPage);
             }
         }
@@ -116,7 +110,7 @@ namespace Client.Pages
             // Iterating over the users list and creating a UserEntry item for each one
             foreach (string user in users)
             {
-                UserEntry newUserEntry = new UserEntry(user, user == RoomData.Admin, user == Username);
+                UserEntry newUserEntry = new UserEntry(user, user == RoomData.Admin, user == _username);
                 userEntries.Add(newUserEntry);
             }
 
@@ -144,7 +138,7 @@ namespace Client.Pages
                 {
                     _timer.Dispose();
 
-                    GamePage gamePage = new GamePage(Username, RoomData, UsersCount);
+                    GamePage gamePage = new GamePage(_username, RoomData, UsersCount);
                     NavigationService.Navigate(gamePage);
                 }
                 else if (UsersCount != getRoomStateResponse.Players.Count)

@@ -33,7 +33,7 @@ namespace Client.Pages
         {
             InitializeComponent();
 
-            _timer = new Timer(UpdateUI, null, 0, 3000);
+            _timer = new Timer(UpdateUI, null, 0, Constants.REQUEST_INTERVAL);
             _username = username;
             _roomData = roomData;
             _usersCount = usersCount;

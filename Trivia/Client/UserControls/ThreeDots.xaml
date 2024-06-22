@@ -54,7 +54,7 @@
 
                     <Button
                         x:Name="BtnExit"
-                        Click="exitApp"
+                        Click="ExitApp"
                         Content="Exit Application"
                         ToolTip="Close Application" />
                 </StackPanel>

@@ -16,8 +16,7 @@ public:
 	vector<HighScoreRow> getHighScore() const;
 	HighScoreRow getUserStatistics(const string& username) const;
 
-	static uint calculateRoundPoints(const double& answerTime, const uint& timePerQuestion, const QuestionDifficulty& difficulty);
-
+	static uint calculatePoints(const double& answerTime, const uint& timePerQuestion, const QuestionDifficulty& difficulty);
 
 private:
 	IDatabase* m_database;

@@ -9,8 +9,8 @@
     Background="{x:Null}"
     TextElement.Foreground="{DynamicResource MaterialDesignBody}"
     WindowStartupLocation="CenterScreen"
-    WindowStyle="ThreeDBorderWindow"
     WindowState="Maximized"
+    WindowStyle="ThreeDBorderWindow"
     mc:Ignorable="d">
     <Grid>
         <Frame x:Name="MainFrame" NavigationUIVisibility="Hidden" />

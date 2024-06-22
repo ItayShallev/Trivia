@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Configuration;
 using System.Diagnostics;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
@@ -24,7 +26,7 @@ namespace Client.Pages
     /// <summary>
     /// Interaction logic for MenuPage.xaml
     /// </summary>
-    public partial class MenuPage : Page
+    public partial class MenuPage : Page, INotifyPropertyChanged
     {
         private string _username;
         private Timer _timer;
@@ -33,42 +35,54 @@ namespace Client.Pages
         public string Username
         {
             get { return _username; }
-            set { _username = value; }
+            set
+            {
+                if (_username != value)
+                {
+                    _username = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
 
         public MenuPage(string username)
         {
             InitializeComponent();
-            _username = username;
+            DataContext = this;
+
+            Username = username;
 
             // MenuPage_Loaded started the timer...
-
-            UserGreetingTextBlock.Text = "Welcome " + this._username + "!";
         }
-
 
         private void MenuPage_OnLoaded(object sender, RoutedEventArgs e)
         {
-            _timer = new Timer(UpdateUI, null, 0, 3000);
+            _timer = new Timer(UpdateUI, null, 0, Constants.REQUEST_INTERVAL);
         }
-
 
         private void BtnLeaderboard_OnClick(object sender, RoutedEventArgs e)
         {
-            LeaderboardPage leaderboardPage = new LeaderboardPage(Username);
             _timer.Dispose();       // Pausing the getRooms requests from being sent to the server
+
+            LeaderboardPage leaderboardPage = new LeaderboardPage(Username);
             NavigationService.Navigate(leaderboardPage);
         }
 
-
         private void BtnCreateRoom_Click(object sender, RoutedEventArgs e)
         {
-            CreateRoomPage createRoomPage = new CreateRoomPage(Username);
             _timer.Dispose();       // Pausing the getRooms requests from being sent to the server
+
+            CreateRoomPage createRoomPage = new CreateRoomPage(Username);
             NavigationService.Navigate(createRoomPage);
         }
-
 
         private bool IsRoomsListUpdateNeeded(List<RoomData> rooms)
         {
@@ -95,8 +109,6 @@ namespace Client.Pages
 
             return false;
         }
-
-
         private void UpdateRoomsList(List<RoomData> rooms)
         {
             List<RoomEntry> roomEntries = new List<RoomEntry>();
@@ -116,7 +128,6 @@ namespace Client.Pages
             RoomsListDataGrid.ItemsSource = roomEntries;
         }
 
-
         private void UpdateUI(object state)
         {
             Helper.SendRequest(Constants.GetRoomsRequestId, JsonSerializer.Serialize(new GetRoomsRequest()));
@@ -133,7 +144,6 @@ namespace Client.Pages
             }
         }
 
-
         private void GoBackArrow_OnGoBackClicked(object sender, RoutedEventArgs e)
         {
             Helper.SendRequest(Constants.LogoutRequestId, JsonSerializer.Serialize(new LogoutRequest(Username)));
@@ -145,7 +155,6 @@ namespace Client.Pages
             AuthenticationPage authenticationPage = new AuthenticationPage();
             NavigationService.Navigate(authenticationPage);
         }
-
 
         private void RoomClicked(object sender, SelectionChangedEventArgs e)
         {

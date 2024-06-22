@@ -29,10 +29,13 @@ namespace Client.Pages
     public partial class GamePage : Page, INotifyPropertyChanged
     {
         static Random rnd = new Random();
-        private string Username { get; set; }
-        private int AnswersCount { get; set; }
+
+        private string _username;
+        private int _answerCount;
         public RoomData RoomData { get; set; }
-        public uint UsersCount { get; set; }
+        private uint _userCount;
+        private bool _userLeft;
+
 
         private DispatcherTimer QuestionTimer { get; set; }
         private double _timeElapsed;
@@ -50,14 +53,23 @@ namespace Client.Pages
             }
         }
 
+        public event PropertyChangedEventHandler? PropertyChanged;
+
+        protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
 
         public GamePage(string username, RoomData roomData, uint userCount)
         {
             InitializeComponent();
 
-            Username = username;
+            _username = username;
             RoomData = roomData;
-            UsersCount = userCount;
+            _userCount = userCount;
+            _userLeft = false;
+            _answerCount = 0;
 
             DisplayNextQuestion();
         }
@@ -133,7 +145,6 @@ namespace Client.Pages
             }
         }
 
-
         private void SetIsEnabledPropertyForAnswerButtons(bool value)
         {
             ButtonAnswer0.IsHitTestVisible = value;
@@ -171,10 +182,16 @@ namespace Client.Pages
             }
 
             // Incrementing the answers count
-            AnswersCount++;
+            _answerCount++;
 
             // Waiting a second to let the user see if his answer is correct or incorrect
             await Task.Delay(1000);
+
+            // Checking if the user left the game while the answer correctness was shown
+            if (_userLeft)
+            {
+                return;
+            }
 
             // Resetting the buttons' colors
             ButtonAnswer0.Background = new SolidColorBrush(Colors.DodgerBlue);
@@ -183,7 +200,7 @@ namespace Client.Pages
             ButtonAnswer3.Background = new SolidColorBrush(Colors.DodgerBlue);
 
             // Checking if there are more questions for the user
-            if (AnswersCount < RoomData.NumOfQuestionsInGame)
+            if (_answerCount < RoomData.NumOfQuestionsInGame)
             {
                 // Displaying the next question
                 DisplayNextQuestion();
@@ -194,15 +211,13 @@ namespace Client.Pages
             else // there are no more questions for the user
             {
                 // go to the end game page 
-                EndGamePage endgamePage = new EndGamePage(this.Username, RoomData, UsersCount);
+                EndGamePage endgamePage = new EndGamePage(_username, RoomData, _userCount);
                 NavigationService.Navigate(endgamePage);
             }
         }
 
-
         private void GoBackArrow_OnGoBackClicked(object sender, RoutedEventArgs e)
         {
-
             // Sending a Leave Game request
             Helper.SendRequest(Constants.LeaveGameRequestId,
                 JsonSerializer.Serialize(new LeaveGameRequest()));
@@ -210,17 +225,22 @@ namespace Client.Pages
 
             if (leaveGameResponse.Status == 1)
             {
-                // Navigating the user back to the menu page
-                MenuPage menuPage = new MenuPage(Username);
-                NavigationService.Navigate(menuPage);
+                StopTimer();
+
+                _userLeft = true;
+
+                // If the user is the admin
+                if (_username == RoomData.Admin)
+                {
+                    AdminWaitingRoomPage adminWaitingRoomPage = new AdminWaitingRoomPage(RoomData, _username);
+                    NavigationService.Navigate(adminWaitingRoomPage);
+                }
+                else
+                {
+                    MemberWaitingRoomPage memberWaitingRoomPage = new MemberWaitingRoomPage(RoomData, _username);
+                    NavigationService.Navigate(memberWaitingRoomPage);
+                }
             }
-        }
-
-        public event PropertyChangedEventHandler? PropertyChanged;
-
-        protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
         private async void ButtonAnswer_OnClick(object sender, RoutedEventArgs e)

@@ -1,6 +1,12 @@
 #include "RoomManager.h"
 
-using std::pair;
+
+using std::unique_ptr;
+using std::make_unique;
+using std::move;
+using std::make_pair;
+
+
 uint RoomManager::roomID = 0;
 
 
@@ -16,23 +22,26 @@ uint RoomManager::generateRoomID()
 	return retRoomID;
 }
 
-void RoomManager::createRoom(std::shared_ptr<LoggedUser> host, RoomData& roomMetadata)
+
+void RoomManager::createRoom(shared_ptr<LoggedUser> host, RoomData& roomMetadata)
 {
 	// create a new room with the metadata
-	std::unique_ptr<Room> newRoom = std::make_unique<Room>(roomMetadata);
+	unique_ptr<Room> newRoom = make_unique<Room>(roomMetadata);
 
 	// add the host
 	newRoom->addUser(host);
 
 	// inserting the room into the map, transferring the room ownership to m_rooms
-	this->m_rooms.insert(std::make_pair(roomMetadata.id, std::move(newRoom)));
+	this->m_rooms.insert(make_pair(roomMetadata.id, move(newRoom)));
 }
+
 
 void RoomManager::deleteRoom(uint roomId)
 {
 	// delete the room from the map
 	this->m_rooms.erase(roomId);
 }
+
 
 RoomState RoomManager::getRoomState(uint roomId)
 {
@@ -49,6 +58,7 @@ RoomState RoomManager::getRoomState(uint roomId)
 	};
 }
 
+
 RoomState RoomManager::getRoomState(Room& room)
 {
 	// build and return the room state
@@ -61,11 +71,13 @@ RoomState RoomManager::getRoomState(Room& room)
 	};
 }
 
+
 RoomStatus RoomManager::getRoomStatus(uint roomId)
 {
 	// return the room status
 	return m_rooms[roomId]->getRoomStatus();
 }
+
 
 vector<RoomData> RoomManager::getRooms()
 {
@@ -85,6 +97,7 @@ vector<RoomData> RoomManager::getRooms()
 	// return the rooms
 	return rooms;
 }
+
 
 Room& RoomManager::getRoom(uint roomId)
 {

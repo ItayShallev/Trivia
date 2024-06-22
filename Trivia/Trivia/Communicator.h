@@ -6,20 +6,22 @@
 #include <map>
 #include <string>
 
+
 using std::map;
 using std::string;
+using std::shared_ptr;
 
 
 class Communicator
 {
 public:
-	void startHandleRequests();
 	Communicator(RequestHandlerFactory* handlerFactory);
+	void startHandleRequests();
 
 private:
 	// members
 	SOCKET m_serverSocket;
-	map<SOCKET, std::shared_ptr<IRequestHandler>> m_clients;
+	map<SOCKET, shared_ptr<IRequestHandler>> m_clients;
 	RequestHandlerFactory m_handlerFactory;	
 
 	// methods
@@ -32,4 +34,3 @@ private:
 	static Buffer receiveDataFromSocket(SOCKET clientSoc);
 	static void sendDataToSocket(SOCKET clientSoc, Buffer data);
 };
-

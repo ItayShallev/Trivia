@@ -2,14 +2,13 @@
 
 typedef unsigned int uint;
 
-// ************************** SERVER CONSTANTS *************************
-#define SERVER_PORT 8888
-#define DEFAULT_BUFFER_SIZE 255
-#define LIMIT_OF_MAX_PLAYERS_IN_ROOM 20
+// **************************************************** SERVER CONSTANTS ***************************************************
+#define SERVER_PORT				8888
+#define DEFAULT_BUFFER_SIZE		255
 
 
 
-// ************************** ENUMS *************************
+// **************************************************** ENUMS ***************************************************
 enum RequestId
 {
 	LogoutRequestId = 0,
@@ -64,6 +63,14 @@ enum RoomStatus
 	Closed
 };
 
+enum UserStatus
+{
+	InMenu = 0,
+	InWaitingRoom,
+	InGame,
+	InResults
+};
+
 enum QuestionDifficulty
 {
 	Easy = 0,
@@ -73,7 +80,7 @@ enum QuestionDifficulty
 
 
 
-// ************************** PROTOCOL_CONSTANTS *************************
+// **************************************************** PROTOCOL CONSTANTS ***************************************************
 #define ID_BYTE_LENGTH			2
 
 #define DATA_BYTE_LENGTH		4
@@ -84,9 +91,7 @@ enum QuestionDifficulty
 
 
 
-
-
-// ************************** Database *************************
+// **************************************************** DATABASE ***************************************************
 #define USERS_TABLE_SQL_STATEMENT R"(
 CREATE TABLE USERS(USERNAME TEXT PRIMARY KEY NOT NULL,
 PASSWORD TEXT NOT NULL,
@@ -117,7 +122,6 @@ FOREIGN KEY (USERNAME) REFERENCES USERS(USERNAME));)"
 #define QUESTIONS_TABLE_STARTING_ID		1
 #define MAX_QUESTIONS_PER_REQUEST		50
 #define TIMES_TO_REQUEST_QUESTIONS		4
-#define TRIVIA_API_COOLDOWN				5
 
 #define CORRECT_ANSWER_INDEX			1
 #define INCORRECT_ANSWER_1_INDEX		2
@@ -125,20 +129,23 @@ FOREIGN KEY (USERNAME) REFERENCES USERS(USERNAME));)"
 #define INCORRECT_ANSWER_3_INDEX		4
 #define DIFFICULTY_INDEX				5
 
-#define TIME_EXPIRED_ANSWER_ID				4
+#define TIME_EXPIRED_ANSWER_ID			4
 
 
-// ************************** Game *************************
-// Leaderboard
+
+// **************************************************** GAME ***************************************************
+// ***** LEADERBOARD *****
 #define LEADERBOARD_SIZE					5
 #define LEADERBOARD_MIN_GAMES_TO_QUALIFY	0
 
-#define WINS_WEIGHT							2
-#define AVERAGE_ANSWER_TIME_WEIGHT			1
+// ***** ROOM *****
+#define LIMIT_OF_MAX_PLAYERS_IN_ROOM		15
 
+// ***** POINTS *****
 #define POINTS_POSSIBLE_FOR_EASY			100
 #define POINTS_POSSIBLE_FOR_MEDIUM			350
 #define POINTS_POSSIBLE_FOR_HARD			500
+
 
 
 // ************************** Console Colors *************************
@@ -146,6 +153,7 @@ FOREIGN KEY (USERNAME) REFERENCES USERS(USERNAME));)"
 #define WHITE	15
 #define CYAN	3
 #define GREY	7
+
 
 
 // ************************** GENERAL *************************
