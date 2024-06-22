@@ -3,10 +3,14 @@
 #include "SqliteDatabase.h"
 
 
+using std::unique_ptr;
+using std::make_unique;
+
+
 int main()
 {
 	// Creating a database instance
-	std::unique_ptr<IDatabase> db = std::make_unique<SqliteDatabase>("database.db");
+	unique_ptr<IDatabase> db = make_unique<SqliteDatabase>("database.db");
 
 	// Creating a factory that will be responsible for managing the handling of incoming requests
 	RequestHandlerFactory factory(db.get());

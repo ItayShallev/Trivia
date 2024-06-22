@@ -24,7 +24,6 @@ namespace Client.UserControls
     {
         public static readonly DependencyProperty ImageWidthProperty =
             DependencyProperty.Register("ImageWidth", typeof(double), typeof(Logo), new PropertyMetadata(1024.0));
-
         public static readonly DependencyProperty ImageHeightProperty =
             DependencyProperty.Register("ImageHeight", typeof(double), typeof(Logo), new PropertyMetadata(512.0));
 
@@ -39,6 +38,7 @@ namespace Client.UserControls
             get { return (double)GetValue(ImageHeightProperty); }
             set { SetValue(ImageHeightProperty, value); }
         }
+
 
         public Logo()
         {

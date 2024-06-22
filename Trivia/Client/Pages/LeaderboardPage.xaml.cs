@@ -24,13 +24,14 @@ namespace Client.Pages
     
     public partial class LeaderboardPage : Page
     {
-        public string Username { get; set; }
+        private string _username;
+
 
         public LeaderboardPage(string username)
         {
             InitializeComponent();
 
-            Username = username;
+            _username = username;
         }
 
         private void LeaderboardPage_OnLoaded(object sender, RoutedEventArgs e)
@@ -52,7 +53,7 @@ namespace Client.Pages
 
             foreach (HighScoreRow highScoreRow in highScores)
             {
-                if (highScoreRow.Username == Username)
+                if (highScoreRow.Username == _username)
                 {
                     currentUserFound = true;
                 }
@@ -60,7 +61,7 @@ namespace Client.Pages
                 LeaderboardEntry newLeaderboardEntry = new LeaderboardEntry(highScoreRow.Username,
                     highScoreRow.NumGamesPlayed, highScoreRow.NumCorrectAnswers,
                     highScoreRow.NumWrongAnswers, highScoreRow.AverageAnswerTime, highScoreRow.Points,
-                    highScoreRow.Rank, highScoreRow.Username == Username);
+                    highScoreRow.Rank, highScoreRow.Username == _username);
 
                 leaderBoardEntries.Add(newLeaderboardEntry);
             }

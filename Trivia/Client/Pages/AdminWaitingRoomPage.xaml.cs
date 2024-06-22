@@ -34,12 +34,8 @@ namespace Client.Pages
         private RoomData _roomData;
         private Timer _timer;
 
-        public string Username
-        {
-            get { return _username; }
-            set { _username = value; }
-        }
 
+        // Properties (for live UI updates)
         public uint UsersCount
         {
             get { return _usersCount; }
@@ -66,36 +62,25 @@ namespace Client.Pages
             }
         }
 
-        public RoomData RoomData
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
-            get { return _roomData; }
-            set { _roomData = value; }
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        public Timer Timer
-        {
-            get { return _timer; }
-            set { _timer = value; }
-        }
 
         public AdminWaitingRoomPage(RoomData roomData, string username)
         {
             InitializeComponent();
             DataContext = this;         // Setting the DataContext to the current instance
 
-            RoomData = roomData;
+            _roomData = roomData;
             MaxUsers = roomData.MaxPlayers;
 
-            Username = username;
+            _username = username;
 
-            Timer = new Timer(UpdateUI, null, 0, 3000);
-        }
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        protected void OnPropertyChanged([CallerMemberName] string propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            _timer = new Timer(UpdateUI, null, 0, Constants.REQUEST_INTERVAL);
         }
 
         private void UpdateUsersList(List<string> users)
@@ -105,7 +90,7 @@ namespace Client.Pages
             // Iterating over the users list and creating a UserEntry item for each one
             foreach (string user in users)
             {
-                UserEntry newUserEntry = new UserEntry(user, user == RoomData.Admin, user == Username);
+                UserEntry newUserEntry = new UserEntry(user, user == _roomData.Admin, user == _username);
                 userEntries.Add(newUserEntry);
             }
 
@@ -133,16 +118,16 @@ namespace Client.Pages
 
         private void GoBackArrow_OnGoBackClicked(object sender, RoutedEventArgs e)
         {
-            Timer.Dispose();       // Pausing the getRoomState requests from being sent to the server
+            _timer.Dispose();       // Pausing the getRoomState requests from being sent to the server
             
             // Sending a CloseRoom request
-            Helper.SendRequest(Constants.CloseRoomRequestId, JsonSerializer.Serialize(new CloseRoomRequest(this.RoomData.Id)));
+            Helper.SendRequest(Constants.CloseRoomRequestId, JsonSerializer.Serialize(new CloseRoomRequest(_roomData.Id)));
             CloseRoomResponse closeRoomResponse = Helper.GetResponse<CloseRoomResponse>();
 
             if (closeRoomResponse.Status == 1)
             {
                 // Navigating the user back to the menu page
-                MenuPage menuPage = new MenuPage(Username);
+                MenuPage menuPage = new MenuPage(_username);
                 NavigationService.Navigate(menuPage);
             }
         }
@@ -150,22 +135,17 @@ namespace Client.Pages
         private void BtnStartGame_Click(object sender, RoutedEventArgs e)
         {
             // Sending a start game request
-            Helper.SendRequest(Constants.StartGameRequestId, JsonSerializer.Serialize(new StartGameRequest(this.RoomData.Id)));
+            Helper.SendRequest(Constants.StartGameRequestId, JsonSerializer.Serialize(new StartGameRequest(_roomData.Id)));
             StartGameResponse startGameResponse = Helper.GetResponse<StartGameResponse>();
 
             // Checking if the server approved the start game request
             if (startGameResponse.Status == 1)
             {
-                Timer.Dispose();
+                _timer.Dispose();
 
                 // Navigating the user to the game page
-                GamePage gamePage = new GamePage(Username, RoomData, UsersCount);
+                GamePage gamePage = new GamePage(_username, _roomData, UsersCount);
                 NavigationService.Navigate(gamePage);
-            }
-            else
-            {
-                // Reinitializing the timer because the start game request failed
-                Timer = new Timer(UpdateUI, null, 0, 3000);
             }
         }
     }

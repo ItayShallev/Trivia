@@ -48,9 +48,9 @@
                             <Viewbox MaxWidth="500" HorizontalAlignment="Center">
                                 <StackPanel>
                                     <TextBlock
-                                        FontSize="15"
                                         HorizontalAlignment="Center"
                                         VerticalAlignment="Top"
+                                        FontSize="15"
                                         FontWeight="Medium"
                                         Text="Looks Like You're a New User!" />
 

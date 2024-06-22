@@ -2,9 +2,7 @@
 
 #include <string>
 
-
 using std::string;
-
 
 typedef unsigned int uint;
 

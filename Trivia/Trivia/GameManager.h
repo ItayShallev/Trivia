@@ -6,17 +6,20 @@
 #include "IDatabase.h"
 
 
+using std::shared_ptr;
+
+
 class GameManager
 {
 public:
 	GameManager(IDatabase* database);
-	std::shared_ptr<Game> createGame(const Room& room);
+	shared_ptr<Game> createGame(const Room& room);
 	void deleteGame(const uint& gameId);
 
-	std::shared_ptr<Game> getGameById(const uint& gameId) const;
+	shared_ptr<Game> getGameById(const uint& gameId) const;
 	IDatabase* getDatabase() const;
 
 private:
 	IDatabase* m_database;
-	vector<std::shared_ptr<Game>> m_games;
+	vector<shared_ptr<Game>> m_games;
 };

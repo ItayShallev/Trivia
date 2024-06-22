@@ -12,7 +12,10 @@ namespace Client
         public const string SERVER_IP = "127.0.0.1";
         public const int SERVER_PORT = 8888;
 
-        // ************************** COMMUNICATION PROTOCOL CONSTANTS *************************
+
+        // ************************** COMMUNICATION & PROTOCOL CONSTANTS *************************
+        public const int REQUEST_INTERVAL = 3000;
+
         public const int RESPONSE_ID_INDEX = 0;
         public const int RESPONSE_ID_LENGTH = 2;
         public const int MESSAGE_LENGTH_INDEX = 2;
@@ -37,6 +40,7 @@ namespace Client
             Medium = 1,
             Hard = 2
         }
+
 
         // ************************** REQUEST & RESPONSE ID'S *************************
         public const string LogoutRequestId = "00";
@@ -78,6 +82,7 @@ namespace Client
         public const string GetQuestionResponseId = "16";
         public const string GetGameResultResponseId = "17";
         public const string ErrorResponseId = "18";
+
 
         // ************************** GENERAL *************************
         public const double FLOAT_DIFFERENCE_TOLERANCE = 1e-9;

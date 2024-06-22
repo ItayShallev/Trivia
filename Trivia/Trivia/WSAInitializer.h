@@ -10,4 +10,3 @@ public:
 	WSAInitializer();
 	~WSAInitializer();
 };
-

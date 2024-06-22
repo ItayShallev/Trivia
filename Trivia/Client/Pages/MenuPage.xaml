@@ -54,13 +54,15 @@
                         <Grid Column="1">
                             <Viewbox MaxWidth="450">
                                 <TextBlock
-                                    x:Name="UserGreetingTextBlock"
-                                    Margin="20,0,20,0"
+                                    Margin="5"
                                     HorizontalAlignment="Center"
-                                    VerticalAlignment="Center"
-                                    FontFamily="Montserrat"
-                                    FontWeight="Bold"
-                                    Text="Welcome USER" />
+                                    FontWeight="Medium">
+                                    <TextBlock.Text>
+                                        <MultiBinding StringFormat="{}Welcome {0}!">
+                                            <Binding Path="Username" />
+                                        </MultiBinding>
+                                    </TextBlock.Text>
+                                </TextBlock>
                             </Viewbox>
                         </Grid>
 
@@ -78,7 +80,11 @@
 
                         <Grid HorizontalAlignment="Center" Column="0">
                             <Viewbox>
-                                <userControls:GoBackArrow GoBackClicked="GoBackArrow_OnGoBackClicked" />
+                                <userControls:GoBackArrow
+                                    ButtonBackground="Red"
+                                    GoBackClicked="GoBackArrow_OnGoBackClicked"
+                                    IconColor="White"
+                                    IconKind="Logout" />
                             </Viewbox>
                         </Grid>
                     </Grid>
@@ -96,7 +102,7 @@
                                         Height="70"
                                         Margin="10"
                                         materialDesign:ButtonAssist.CornerRadius="10"
-                                        materialDesign:ShadowAssist.ShadowDepth="Depth0"
+                                        materialDesign:ShadowAssist.ShadowDepth="Depth2"
                                         Background="Green"
                                         BorderThickness="0"
                                         Click="BtnLeaderboard_OnClick">

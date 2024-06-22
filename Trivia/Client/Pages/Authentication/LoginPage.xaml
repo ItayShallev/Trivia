@@ -48,9 +48,9 @@
                             <Viewbox MaxWidth="500" HorizontalAlignment="Center">
                                 <StackPanel>
                                     <TextBlock
-                                        FontSize="20"
                                         HorizontalAlignment="Center"
                                         VerticalAlignment="Top"
+                                        FontSize="20"
                                         FontWeight="Medium"
                                         Text="We Found You in Our System!" />
 

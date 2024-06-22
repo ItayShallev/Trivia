@@ -11,8 +11,7 @@ using System.Runtime.Intrinsics;
 
 namespace Client.Communication
 {
-
-    // ******************* REQUESTS STRUCTURES *******************
+    // ********************************************************* REQUESTS STRUCTURES *********************************************************
     public struct LogoutRequest
     {
         [JsonPropertyName("username")] public string Username { get; set; } = "";
@@ -153,8 +152,9 @@ namespace Client.Communication
 
     public struct GetGameResultsRequest { }
 
-    // ******************* RESPONSE STRUCTURES *******************
 
+
+    // ********************************************************* RESPONSE STRUCTURES *********************************************************
     public struct LogoutResponse
     {
         [JsonPropertyName("status")] public uint Status { get; set; } = 1;
@@ -351,7 +351,6 @@ namespace Client.Communication
         }
     }
 
-
     public struct GetGameResultsResponse
     {
         [JsonPropertyName("status")] public uint Status { get; set; } = 0;
@@ -374,10 +373,9 @@ namespace Client.Communication
         }
     }
 
-    
 
 
-    // ******************* OTHERS *******************
+    // ********************************************************* OTHERS *********************************************************
     public struct RoomData
     {
         [JsonPropertyName("id")] public uint Id { get; set; } = 0;

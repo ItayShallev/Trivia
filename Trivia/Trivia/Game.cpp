@@ -2,7 +2,10 @@
 #include "StatisticsManager.h"
 
 
-Game::Game(const uint& gameId, const map<std::shared_ptr<LoggedUser>, GameData>& players, const vector<Question>& questions, const RoomData& gameSettings)
+using std::any_of;
+
+
+Game::Game(const uint& gameId, const map<shared_ptr<LoggedUser>, GameData>& players, const vector<Question>& questions, const RoomData& gameSettings)
 {
 	this->m_gameId = gameId;
 	this->m_players = players;
@@ -19,13 +22,13 @@ Game::Game(const uint& gameId, const map<std::shared_ptr<LoggedUser>, GameData>&
 }
 
 
-Question Game::getQuestionForUser(const std::shared_ptr<LoggedUser>& user)
+Question Game::getQuestionForUser(const shared_ptr<LoggedUser>& user) const
 {
 	return this->m_players.at(user).currentQuestion;
 }
 
 
-void Game::submitAnswer(const std::shared_ptr<LoggedUser>& user, const uint& answerId, const double& answerTime)
+void Game::submitAnswer(const shared_ptr<LoggedUser>& user, const uint& answerId, const double& answerTime)
 {
 	// Getting the given user's GameData
 	GameData& currUserGameData = this->m_players.at(user);
@@ -36,11 +39,11 @@ void Game::submitAnswer(const std::shared_ptr<LoggedUser>& user, const uint& ans
 		currUserGameData.correctAnswerCount++;
 
 		// Adding points according to the answer time and the difficulty of the question
-		currUserGameData.points += StatisticsManager::calculateRoundPoints(answerTime, this->m_gameSettings.timePerQuestion, currUserGameData.currentQuestion.getDifficulty());
+		currUserGameData.points += StatisticsManager::calculatePoints(answerTime, this->m_gameSettings.timePerQuestion, currUserGameData.currentQuestion.getDifficulty());
 	}
 	else if (answerId == TIME_EXPIRED_ANSWER_ID)
 	{
-		// TODO: Maybe implement some logic related to answers that weren't really answered by the user...
+		// Maybe implement some logic related to answers that weren't really answered by the user...
 		currUserGameData.wrongAnswerCount++;
 	}
 	else
@@ -64,11 +67,14 @@ void Game::submitAnswer(const std::shared_ptr<LoggedUser>& user, const uint& ans
 	{
 		currUserGameData.currentQuestion = Question(L"NO QUESTIONS REMAINED!", vector<AnswerItem>(), 0, QuestionDifficulty::Easy);
 		this->m_numFinished++;
+
+		// Changing the user's status
+		user->setUserStatus(UserStatus::InResults);
 	}
 }
 
 
-void Game::removeUser(const std::shared_ptr<LoggedUser>& user)
+void Game::removeUser(const shared_ptr<LoggedUser>& user)
 {
 	this->m_players.erase(user);
 }
@@ -86,7 +92,20 @@ uint Game::getGameId() const
 }
 
 
-map<std::shared_ptr<LoggedUser>, GameData> Game::getPlayers() const
+map<shared_ptr<LoggedUser>, GameData>& Game::getPlayers()
 {
 	return this->m_players;
+}
+
+
+void Game::incrementNumFinished()
+{
+	this->m_numFinished++;
+}
+
+
+bool Game::isAnyPlayerActive() const
+{
+	return any_of(this->m_players.begin(), this->m_players.end(),
+		[](const auto& playerPair) {return playerPair.first->getUserStatus() == UserStatus::InGame;});
 }

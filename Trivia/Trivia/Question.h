@@ -5,12 +5,15 @@
 #include "Constants.h"
 #include "json.hpp"
 
+
 using std::string;
 using std::wstring;
 using std::vector;
 using nlohmann::json;
 
+
 typedef unsigned int uint;
+
 
 struct AnswerItem
 {
@@ -44,7 +47,6 @@ public:
 	void setDifficulty(const QuestionDifficulty& difficulty);
 
 	static QuestionDifficulty getDifficultyFromString(const string& stringDifficulty);
-
 
 private:
 	wstring m_question;

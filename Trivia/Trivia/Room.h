@@ -1,31 +1,34 @@
 #pragma once
+
 #include "LoggedUser.h"
 #include "GameStructures.h"
+
+
+using std::shared_ptr;
 
 
 class Room
 {
 private:
 	RoomData m_metadata;
-	vector<std::shared_ptr<LoggedUser>> m_users;
+	vector<shared_ptr<LoggedUser>> m_users;
 
 public:
 	Room(uint id);
 	Room(const RoomData& metadata);
-	bool addUser(std::shared_ptr<LoggedUser> user);
-	void removeUser(std::shared_ptr<LoggedUser> user);
-	vector<string> getAllUsers();
-
+	bool addUser(shared_ptr<LoggedUser> user);
+	void removeUser(shared_ptr<LoggedUser> user);
+	vector<string> getAllUsers() const;
 
 	// setters
-	void setName(const string name);
+	void setName(const string& name);
 	void setMaxPlayers(const uint maxPlayers);
 	void setNumOfQuestions(const uint numOfQuestions);
 	void setTimePerQuestion(const uint timePerQuestion);
-	void setRoomStatus(const RoomStatus state);
+	void setRoomStatus(const RoomStatus status);
 
 	// getters
-	vector<std::shared_ptr<LoggedUser>> getUsers() const;
+	vector<shared_ptr<LoggedUser>> getUsers() const;
 	RoomData getRoomData() const;
 	uint getId() const;
 	string getName() const;
@@ -34,6 +37,4 @@ public:
 	uint getNumOfQuestions() const;
 	uint getTimePerQuestion() const;
 	RoomStatus getRoomStatus() const;
-
 };
-

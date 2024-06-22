@@ -1,38 +1,37 @@
 #include "SqliteDatabase.h"
-#include "Constants.h"
-#include "Helper.h"
-#include "GameStructures.h"
 #include <iostream>
 #include <io.h>
 #include <set>
 #include <thread>
 #include <codecvt>
+#include "Constants.h"
+#include "Helper.h"
+#include "GameStructures.h"
 
 
 using std::string;
+using std::wstring;
 using std::set;
+using std::pair;
+using std::thread;
 using std::to_string;
 using std::cout;
+using std::cerr;
 using std::stoi;
 using std::stof;
-using std::make_pair;
+using std::wstring_convert;
+using std::codecvt_utf8;
 
 
-/**
- * @brief	Constructor, initializes the SqliteDatabase instance 
- * @param	databaseName		The name to give the database (will determine the .sqlite file name)
- */
 SqliteDatabase::SqliteDatabase(const string& databaseName) : _databaseName(databaseName)
 {
 	this->open();
 }
 
 
-/**
- * @brief	Destructor, closes the Sqlite database and sets the db pointer to nullptr
- */
 SqliteDatabase::~SqliteDatabase()
 {
+	// Closing the database handle
 	sqlite3_close(this->_db);
 	this->_db = nullptr;
 }
@@ -54,7 +53,7 @@ bool SqliteDatabase::executeSqlStatement(const string& statement, const funcPtr 
 
 	if (res != SQLITE_OK)
 	{
-		std::cout << "Failed to send the query:\n" << errMessage << "\n";
+		cout << "Failed to send the query:\n" << errMessage << "\n";
 		this->close();
 
 		return false;
@@ -75,7 +74,7 @@ bool SqliteDatabase::initDatabase()
 	if (!this->executeSqlStatement(initStatement, nullptr, nullptr)) { return false; }
 
 	// Adding questions to the DB from another thread to avoid blocking the main thread
-	std::thread fetchQuestionsThread(fetchQuestion);
+	thread fetchQuestionsThread(fetchQuestion);
 	fetchQuestionsThread.detach();
 
 	return true;
@@ -112,7 +111,8 @@ bool SqliteDatabase::open()
 		return false;
 	}
 
-	if (doesFileExist != 0)			// If the DB doesn't exist
+	// Checking if the DB doesn't exist
+	if (doesFileExist != 0)
 	{
 		// Creating the DB tables
 		this->initDatabase();
@@ -128,12 +128,9 @@ bool SqliteDatabase::open()
 }
 
 
-/**
- * @brief			Closes the Trivia database
- * @return			Void
- */
 bool SqliteDatabase::close()
 {
+	// Trying to close the DB
 	int res = sqlite3_close(this->_db);
 
 	// Checking if the DB was closed successfully
@@ -145,21 +142,14 @@ bool SqliteDatabase::close()
 		return true;
 	}
 
-	return false;		// If the program reaches here - the DB has failed to close (shouldn't occur)
+	return false;		// (If the program reaches here - the DB has failed to close (shouldn't occur))
 }
 
 
-/**
- @brief		Callback function for checking the result-rows-count to figure out if a given user exists
- @param		data			A pointer to a boolean variable where the answer to the "question" will be stored
- @param		argc			The number of columns in the result set
- @param		argv			An array of strings representing the result set
- @param		azColName		An array of strings containing the column names of the result set
- @return	Always returns 0
- */
 int SqliteDatabase::doesUserExistCallback(void* data, int argc, char** argv, char** azColName)
 {
-	*(static_cast<bool*>(data)) = std::stoi(argv[0]) != 0;
+	// Setting the DB result in the passed object
+	*(static_cast<bool*>(data)) = stoi(argv[0]) != 0;
 
 	return 0;
 }
@@ -184,16 +174,9 @@ bool SqliteDatabase::doesUserExist(const string& username)
 }
 
 
-/**
- * @brief		Callback function for finding the password of an existing user on the database
- * @param		data			A pointer to a string where the user's password will be stored
- * @param		argc			The number of columns in the result set
- * @param		argv			An array of strings representing the result set
- * @param		azColName		An array of strings containing the column names of the result set
- * @return		Always returns 0
- */
 int SqliteDatabase::doesPasswordMatchCallback(void* data, int argc, char** argv, char** azColName)
 {
+	// Setting the DB result in the passed object
 	*(static_cast<string*>(data)) = argv[0];
 
 	return 0;
@@ -250,37 +233,22 @@ bool SqliteDatabase::addNewUser(const string& username, const string& password, 
 }
 
 
-/**
- * @brief		Callback function that returns the result of a select query in an integer
- * @param		data			A pointer to an integer where the result will be stored
- * @param		argc			The number of columns in the result set
- * @param		argv			An array of strings representing the result set
- * @param		azColName		An array of strings containing the column names of the result set
- * @return	Always returns 0
- */
 int SqliteDatabase::intCallback(void* data, int argc, char** argv, char** azColName)
 {
+	// Setting the DB result in the passed object
 	*(static_cast<int*>(data)) = stoi(argv[0]);
 
 	return 0;
 }
 
 
-/**
- * @brief		Callback function that returns the result of a select query in a float
- * @param		data			A pointer to an integer where the result will be stored
- * @param		argc			The number of columns in the result set
- * @param		argv			An array of strings representing the result set
- * @param		azColName		An array of strings containing the column names of the result set
- * @return	Always returns 0
- */
 int SqliteDatabase::floatCallback(void* data, int argc, char** argv, char** azColName)
 {
+	// Setting the DB result in the passed object
 	*(static_cast<float*>(data)) = stof(argv[0]);
 
 	return 0;
 }
-
 
 
 /**
@@ -384,6 +352,7 @@ int SqliteDatabase::getUserStatisticsCallback(void* data, int argc, char** argv,
 
 	int x = strtoul(argv[6], &end, BASE_10);
 
+	// Setting the DB result in the passed object
 	*highScores = { argv[0],								// Username
 					strtoul(argv[1], &end, BASE_10),		// Number of games played
 					strtoul(argv[2], &end, BASE_10),		// Number of correct answers
@@ -428,8 +397,9 @@ HighScoreRow SqliteDatabase::getUserStatistics(const string& username)
 int SqliteDatabase::getHighScoresCallback(void* data, int argc, char** argv, char** azColName)
 {
 	vector<HighScoreRow>* highScores = static_cast<vector<HighScoreRow>*>(data);
-
 	char* end;
+
+	// Setting the DB result in the passed object
 	HighScoreRow highScoreRow{ argv[0],									// Username
 								strtoul(argv[1], &end, BASE_10),		// Number of games played
 								strtoul(argv[2], &end, BASE_10),		// Number of correct answers
@@ -464,13 +434,6 @@ vector<HighScoreRow> SqliteDatabase::getHighScores()
 	vector<HighScoreRow> highScores;
 	executeSqlStatement(statement, getHighScoresCallback, &highScores);
 
-	//// Setting the ranks
-	//int currentRank = 1;
-	//for (HighScoreRow& row : highScores)
-	//{
-	//	row.rank = currentRank++;
-	//}
-
 	return highScores;
 }
 
@@ -494,7 +457,7 @@ void SqliteDatabase::addUserStatisticsRecord(const string& username)
 }
 
 
-void SqliteDatabase::submitUserGameStatistics(const std::pair<std::shared_ptr<LoggedUser>, GameData>& user)
+void SqliteDatabase::submitUserGameStatistics(const pair<shared_ptr<LoggedUser>, GameData>& user)
 {
 	GameData userGameData = user.second;
 
@@ -522,14 +485,19 @@ void SqliteDatabase::submitUserGameStatistics(const std::pair<std::shared_ptr<Lo
 }
 
 
-void SqliteDatabase::submitGameStatistics(const map<std::shared_ptr<LoggedUser>, GameData>& users)
+void SqliteDatabase::submitGameStatistics(const map<shared_ptr<LoggedUser>, GameData>& users)
 {
+	// Iterating over all the players and submitting their game statistics
 	for (auto user : users)
 	{
-		const string currentUsername = user.first->getUserName();
+		// Updating the statistics only for the players who finished the game
+		if (!user.second.leftGame)
+		{
+			const string currentUsername = user.first->getUserName();
 
-		// Modifying the user's record at the STATISTICS table
-		submitUserGameStatistics(user);
+			// Modifying the user's record at the STATISTICS table
+			submitUserGameStatistics(user);
+		}
 	}
 }
 
@@ -539,7 +507,7 @@ bool SqliteDatabase::compileSqliteStatement(sqlite3_stmt*& statement, const stri
 	// compiling the SQL statement
 	if (sqlite3_prepare_v2(this->_db, query.c_str(), -1, &statement, nullptr) != SQLITE_OK)
 	{
-		std::cerr << "Failed to prepare statement: " << sqlite3_errmsg(this->_db) << '\n';
+		cerr << "Failed to prepare statement: " << sqlite3_errmsg(this->_db) << '\n';
 
 		sqlite3_close(this->_db);
 
@@ -554,7 +522,7 @@ vector<Question> SqliteDatabase::processGetQuestionsResults(sqlite3_stmt* statem
 {
 	vector<Question> questions;
 
-	std::wstring_convert<std::codecvt_utf8<wchar_t>> utf8ToWstringConverter;
+	wstring_convert<codecvt_utf8<wchar_t>> utf8ToWstringConverter;
 
 	while (sqlite3_step(statement) == SQLITE_ROW)		// Iterating over all the result rows
 	{
@@ -564,7 +532,7 @@ vector<Question> SqliteDatabase::processGetQuestionsResults(sqlite3_stmt* statem
 		string question = reinterpret_cast<const char*>(sqlite3_column_text(statement, 0));
 
 		// Converting the question from UTF-8 to wide string (to support special character displaying)
-		std::wstring wideStringQuestion = utf8ToWstringConverter.from_bytes(question);
+		wstring wideStringQuestion = utf8ToWstringConverter.from_bytes(question);
 		newQuestion.setQuestion(wideStringQuestion);
 
 		// Creating AnswerItems vector and setting an ID for each answer
@@ -574,7 +542,7 @@ vector<Question> SqliteDatabase::processGetQuestionsResults(sqlite3_stmt* statem
 			string currentAnswer = reinterpret_cast<const char*>(sqlite3_column_text(statement, i));
 
 			// Converting the current answer from UTF-8 to wide string (to support special character displaying)
-			std::wstring wideStringAnswer = utf8ToWstringConverter.from_bytes(currentAnswer);
+			wstring wideStringAnswer = utf8ToWstringConverter.from_bytes(currentAnswer);
 
 			possibleAnswers.push_back(AnswerItem(i - 1, wideStringAnswer));
 		}
@@ -624,7 +592,7 @@ vector<Question> SqliteDatabase::getRandomQuestions(const uint& numberOfQuestion
 	{
 		if (sqlite3_bind_int(statement, index, id) != SQLITE_OK)
 		{
-			std::cerr << "Failed to bind parameter: " << sqlite3_errmsg(this->_db) << '\n';
+			cerr << "Failed to bind parameter: " << sqlite3_errmsg(this->_db) << '\n';
 
 			sqlite3_finalize(statement);			// Destroying the prepared SQL statement
 			sqlite3_close(this->_db);
@@ -640,7 +608,7 @@ vector<Question> SqliteDatabase::getRandomQuestions(const uint& numberOfQuestion
 	// Finalize the statement
 	if (sqlite3_finalize(statement) != SQLITE_OK)
 	{
-		std::cerr << "Failed to finalize statement: " << sqlite3_errmsg(this->_db) << '\n';
+		cerr << "Failed to finalize statement: " << sqlite3_errmsg(this->_db) << '\n';
 	}
 
 	return questions;

@@ -19,16 +19,19 @@
             <Button
                 x:Name="BtnGoBackArrow"
                 Width="50"
+                BorderBrush="Transparent"
                 Height="50"
                 Padding="0"
-                materialDesign:ButtonAssist.CornerRadius="5">
+                materialDesign:ButtonAssist.CornerRadius="5"
+                Background="{Binding ButtonBackground, RelativeSource={RelativeSource AncestorType=UserControl}}">
                 <materialDesign:PackIcon
                     x:Name="GoBackArrowIcon"
                     Width="40"
                     Height="40"
                     HorizontalAlignment="Center"
                     VerticalAlignment="Center"
-                    Kind="ArrowLeftBox" />
+                    Foreground="{Binding IconColor, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                    Kind="{Binding IconKind, RelativeSource={RelativeSource AncestorType=UserControl}}" />
             </Button>
         </Grid>
     </Viewbox>

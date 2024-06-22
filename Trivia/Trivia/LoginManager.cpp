@@ -1,14 +1,10 @@
 #include "LoginManager.h"
 
-using std::find_if;
+
+using::std::make_shared;
 
 
-/**
- * @brief	Constructor, Initializes a new LoginManager instance
- * @param	database		The database to set to the new LoginManager object
- * @param	loggedUsers		The logged users vector to set to the new LoginManager object (can be an empty vector)
- */
-LoginManager::LoginManager(IDatabase* database, const vector<std::shared_ptr<LoggedUser>>& loggedUsers) : m_database(database), m_loggedUsers(loggedUsers) { }
+LoginManager::LoginManager(IDatabase* database, const vector<shared_ptr<LoggedUser>>& loggedUsers) : m_database(database), m_loggedUsers(loggedUsers) { }
 
 
 /**
@@ -22,7 +18,9 @@ bool LoginManager::signup(const string& username, const string& password, const 
 {
 	if (this->m_database->addNewUser(username, password, mail))
 	{
-		this->m_loggedUsers.emplace_back(std::make_shared<LoggedUser>(username));		// Adding the user to the logged users vector (emplace back constructs a new LoggedUser object automatically)
+		// IMPORTANT: creating a new shared pointer to a LoggedUser object, unique for the current user
+		// (This LoggedUser will be referenced throughout the program and will be one and only)
+		this->m_loggedUsers.emplace_back(make_shared<LoggedUser>(username, UserStatus::InMenu));		// Adding the user to the logged users vector (emplace back constructs a new LoggedUser object automatically)
 
 		return true;
 	}
@@ -51,7 +49,9 @@ bool LoginManager::login(const string& username, const string& password)
 			}
 		}
 
-		this->m_loggedUsers.emplace_back(std::make_shared<LoggedUser>(username));		// Adding the user to the logged users vector (emplace back constructs a new LoggedUser object automatically)
+		// IMPORTANT: creating a new shared pointer to a LoggedUser object, unique for the current user
+		// (This LoggedUser will be referenced throughout the program and will be one and only)
+		this->m_loggedUsers.emplace_back(make_shared<LoggedUser>(username, UserStatus::InMenu));		// Adding the user to the logged users vector (emplace back constructs a new LoggedUser object automatically)
 		return true;
 	}
 
@@ -85,7 +85,21 @@ bool LoginManager::logout(const string& username)
  * @param	username	The username of the user to check if exists on the database
  * @return	True if the user was exists, false otherwise
  */
-bool LoginManager::doesUserExist(const string& username)
+bool LoginManager::doesUserExist(const string& username) const
 {
 	return this->m_database->doesUserExist(username);
+}
+
+
+shared_ptr<LoggedUser> LoginManager::getLoggedUserByUsername(const string& username) const
+{
+	for (shared_ptr<LoggedUser> loggedUser : this->m_loggedUsers)
+	{
+		if (loggedUser->getUserName() == username)
+		{
+			return loggedUser;
+		}
+	}
+
+	return nullptr;
 }

@@ -2,24 +2,21 @@
 #include <random>
 #include "Helper.h"
 
-#include <iostream>
 
-
-using std::shuffle;
-using std::find;
-using std::distance;
 using std::default_random_engine;
+using std::to_string;
 
 
 /**
  * \brief		Turns a given string into a Buffer object
- * \param		buffer			The string to convert to Buffer object
+ * \param		str			The string to convert to Buffer object
  * \return		A Buffer object with the given string as data
  */
 Buffer Helper::turnStringIntoBuffer(const string& str)
 {
 	return Buffer(str.begin(), str.end());
 }
+
 
 Buffer Helper::turnStringIntoBuffer(const char* pCh)
 {
@@ -29,6 +26,7 @@ Buffer Helper::turnStringIntoBuffer(const char* pCh)
 	// call the other function
 	return turnStringIntoBuffer(charStr);
 }
+
 
 char* Helper::turnBufferToCharArr(const Buffer& buff)
 {
@@ -62,7 +60,7 @@ char* Helper::turnBufferToCharArr(const Buffer& buff)
 string Helper::padNumWith0(size_t num, uint wantedLength)
 {
 	// get the num string
-	string numStr = std::to_string(num);
+	string numStr = to_string(num);
 
 	// get the num of zeroes to add to the number
 	size_t zerosToPad = wantedLength - numStr.length();
@@ -102,10 +100,12 @@ void Helper::setConsoleColor(unsigned int color)
 	SetConsoleTextAttribute(hConsole, color);
 }
 
-RequestResult Helper::buildRequestResult(const Buffer& buff, std::shared_ptr<IRequestHandler> handler)
+
+RequestResult Helper::buildRequestResult(const Buffer& buff, shared_ptr<IRequestHandler> handler)
 {
 	return {buff, handler };
 }
+
 
 GetRoomStateResponse Helper::buildRoomStateResponse(const RoomState& roomState)
 {
@@ -116,11 +116,13 @@ GetRoomStateResponse Helper::buildRoomStateResponse(const RoomState& roomState)
 	};
 }
 
+
 int Helper::generateRandomNumber(const int& minValue, const int& maxValue)
 {
     int range = maxValue - minValue + 1;
     return rand() % range + minValue;
 }
+
 
 set<int> Helper::generateRandomNumbersSet(const uint& setSize, const int& minValue, const int& maxValue)
 {
@@ -142,6 +144,7 @@ set<int> Helper::generateRandomNumbersSet(const uint& setSize, const int& minVal
 
     return randomNumbers;
 }
+
 
 double Helper::getPointsPossibleForDifficulty(const QuestionDifficulty& questionDifficulty)
 {

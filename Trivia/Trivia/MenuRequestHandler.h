@@ -4,16 +4,21 @@
 class RequestHandlerFactory;
 #include "RequestHandlerFactory.h"
 
+
+using std::shared_ptr;
+
+
 class MenuRequestHandler : public IRequestHandler
 {
 public:
-	MenuRequestHandler(std::shared_ptr<LoggedUser> user, RequestHandlerFactory* factory);
+	MenuRequestHandler(shared_ptr<LoggedUser> user, RequestHandlerFactory* factory);
+
 	virtual bool isRequestRelevant(RequestInfo reqInfo) override;
 	virtual RequestResult handleRequest(RequestInfo reqInfo) override;
 
 private:
-	std::shared_ptr<LoggedUser> m_user;
-	RequestHandlerFactory& m_handlerFactory;
+	shared_ptr<LoggedUser> m_user;
+	RequestHandlerFactory* m_handlerFactory;
 
 	RequestResult signout(RequestInfo reqInfo);
 	RequestResult getRooms(RequestInfo reqInfo);
@@ -23,4 +28,3 @@ private:
 	RequestResult joinRoom(RequestInfo reqInfo);
 	RequestResult createRoom(RequestInfo reqInfo);
 };
-

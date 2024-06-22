@@ -5,9 +5,12 @@
 #include "MenuRequestHandler.h"
 
 
-GameRequestHandler::GameRequestHandler(const std::shared_ptr<Game>& game, std::shared_ptr<LoggedUser>& user, GameManager& gameManager, RequestHandlerFactory* factory) : m_game(game), m_user(user), m_gameManager(gameManager), m_handlerFactory(factory)
-{
-}
+using std::sort;
+
+
+GameRequestHandler::GameRequestHandler(const shared_ptr<Game>& game, shared_ptr<LoggedUser>& user, GameManager& gameManager, RequestHandlerFactory* factory)
+	: m_game(game), m_user(user), m_gameManager(gameManager), m_handlerFactory(factory) { }
+
 
 bool GameRequestHandler::isRequestRelevant(RequestInfo reqInfo)
 {
@@ -18,6 +21,7 @@ bool GameRequestHandler::isRequestRelevant(RequestInfo reqInfo)
 		reqId == RequestId::SubmitAnswerRequestId ||
 		reqId == RequestId::GetGameResultRequestId;
 }
+
 
 RequestResult GameRequestHandler::handleRequest(RequestInfo reqInfo)
 {
@@ -37,9 +41,10 @@ RequestResult GameRequestHandler::handleRequest(RequestInfo reqInfo)
 
 	default:
 		return Helper::buildRequestResult(JsonResponsePacketSerializer::serializeResponse(ErrorResponse()),
-			std::shared_ptr<GameRequestHandler>(this, [](GameRequestHandler*) {}));
+			shared_ptr<GameRequestHandler>(this, [](GameRequestHandler*) {}));
 	}
 }
+
 
 RequestResult GameRequestHandler::getQuestion(RequestInfo reqInfo)
 {
@@ -58,8 +63,9 @@ RequestResult GameRequestHandler::getQuestion(RequestInfo reqInfo)
 
 	// build and return the request result
 	return Helper::buildRequestResult(JsonResponsePacketSerializer::serializeResponse(questionResp), 
-		std::shared_ptr<GameRequestHandler>(this, [](GameRequestHandler*) {}));
+		shared_ptr<GameRequestHandler>(this, [](GameRequestHandler*) {}));
 }
+
 
 RequestResult GameRequestHandler::submitAnswer(RequestInfo reqInfo)
 {
@@ -87,13 +93,14 @@ RequestResult GameRequestHandler::submitAnswer(RequestInfo reqInfo)
 
 	// build and return the request result
 	return Helper::buildRequestResult(JsonResponsePacketSerializer::serializeResponse(submitResp),
-		std::shared_ptr<GameRequestHandler>(this, [](GameRequestHandler*) {}));
+		shared_ptr<GameRequestHandler>(this, [](GameRequestHandler*) {}));
 }
+
 
 RequestResult GameRequestHandler::getGameResult(RequestInfo reqInfo)
 {
 	vector<PlayerResults> playerResults;
-	map<std::shared_ptr<LoggedUser>, GameData> players = this->m_game->getPlayers();
+	map<shared_ptr<LoggedUser>, GameData> players = this->m_game->getPlayers();
 
 	for (const auto& player : players)
 	{
@@ -115,7 +122,7 @@ RequestResult GameRequestHandler::getGameResult(RequestInfo reqInfo)
 	}
 
 	// Sorting the players by number of points
-	std::sort(playerResults.begin(), playerResults.end(),
+	sort(playerResults.begin(), playerResults.end(),
 		[](const PlayerResults& playerResults, const PlayerResults& otherPlayerResults)
 		{
 			if (playerResults.points == otherPlayerResults.points)
@@ -136,7 +143,7 @@ RequestResult GameRequestHandler::getGameResult(RequestInfo reqInfo)
 
 	// build and return the request result
 	return Helper::buildRequestResult(JsonResponsePacketSerializer::serializeResponse(gameResultResp),
-		std::shared_ptr<GameRequestHandler>(this, [](GameRequestHandler*) {}));
+		shared_ptr<GameRequestHandler>(this, [](GameRequestHandler*) {}));
 }
 
 
@@ -144,7 +151,7 @@ RequestResult GameRequestHandler::leaveGame(RequestInfo reqInfo)
 {
 	Room& gameRoom = this->m_handlerFactory->getRoomManager().getRoom(this->m_game->getGameId());		// Room and game in a room have the same id
 
-	// Resetting the room status to let users in the menu see the room (only the admin hasn't closed it)
+	// Resetting the room status to let users in the menu see the room (only if the admin hasn't closed it)
 	if (gameRoom.getRoomStatus() != RoomStatus::Closed)
 	{
 		if (gameRoom.getUsers().size() < gameRoom.getRoomData().maxPlayers)
@@ -157,8 +164,9 @@ RequestResult GameRequestHandler::leaveGame(RequestInfo reqInfo)
 		}
 	}
 
-	// creating a new waiting room handler
-	std::shared_ptr<IRequestHandler> newHandler = nullptr;
+	shared_ptr<IRequestHandler> newHandler = nullptr;
+
+	// Checking if the user is an admin or a member of the room
 	if (this->m_user->getUserName() == gameRoom.getAdmin())		// If the user is the admin of the room
 	{
 		newHandler = this->m_handlerFactory->createRoomAdminRequestHandler(this->m_user, gameRoom);
@@ -167,6 +175,24 @@ RequestResult GameRequestHandler::leaveGame(RequestInfo reqInfo)
 	{
 		newHandler = this->m_handlerFactory->createRoomMemberRequestHandler(this->m_user, gameRoom);
 	}
+
+	// Incrementing the number of users who finished the game if the user left mid-game
+	if (this->m_user->getUserStatus() == UserStatus::InGame)
+	{
+		this->m_game->incrementNumFinished();
+
+		map<shared_ptr<LoggedUser>, GameData>& players = this->m_game->getPlayers();
+		players[this->m_user].leftGame = true;
+	}
+
+	// Checking if the game needs to be deleted (if everyone left the game)
+	if (!this->m_game->isAnyPlayerActive())
+	{
+		this->m_gameManager.deleteGame(this->m_game->getGameId());
+	}
+
+	// Changing the user's status
+	this->m_user->setUserStatus(UserStatus::InWaitingRoom);
 
 	// build and return the request result
 	return Helper::buildRequestResult(JsonResponsePacketSerializer::serializeResponse(LeaveGameResponse()), newHandler);
