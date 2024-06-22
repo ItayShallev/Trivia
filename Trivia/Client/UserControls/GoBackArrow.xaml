@@ -6,32 +6,33 @@
     xmlns:local="clr-namespace:Client.UserControls"
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    Width="70"
-    Height="70"
     HorizontalAlignment="Left"
     VerticalAlignment="Top"
     d:DesignHeight="100"
-    d:DesignWidth="100"
+    d:DesignWidth="200"
     mc:Ignorable="d">
-    <Grid
-        Width="100"
-        Height="100"
-        Margin="5"
-        HorizontalAlignment="Center"
-        VerticalAlignment="Center">
-        <Button
-            x:Name="BtnGoBackArrow"
-            Width="50"
-            Height="50"
-            Padding="0"
-            materialDesign:ButtonAssist.CornerRadius="5">
-            <materialDesign:PackIcon
-                x:Name="GoBackArrowIcon"
-                Width="40"
-                Height="40"
-                HorizontalAlignment="Center"
-                VerticalAlignment="Center"
-                Kind="ArrowLeftBox" />
-        </Button>
-    </Grid>
+    <Viewbox>
+        <Grid
+            Margin="5"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center">
+            <Button
+                x:Name="BtnGoBackArrow"
+                Width="50"
+                BorderBrush="Transparent"
+                Height="50"
+                Padding="0"
+                materialDesign:ButtonAssist.CornerRadius="5"
+                Background="{Binding ButtonBackground, RelativeSource={RelativeSource AncestorType=UserControl}}">
+                <materialDesign:PackIcon
+                    x:Name="GoBackArrowIcon"
+                    Width="40"
+                    Height="40"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    Foreground="{Binding IconColor, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                    Kind="{Binding IconKind, RelativeSource={RelativeSource AncestorType=UserControl}}" />
+            </Button>
+        </Grid>
+    </Viewbox>
 </UserControl>

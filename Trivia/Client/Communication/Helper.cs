@@ -4,8 +4,10 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Text.Json;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Markup;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Client.Communication
@@ -59,6 +61,7 @@ namespace Client.Communication
         public static Constants.RoomStatus StringStatusToRoomStatus(string status)
         {
             if (status == "Waiting") return Constants.RoomStatus.Waiting;
+            if (status == "Full") return Constants.RoomStatus.Full;
             if (status == "Playing") return Constants.RoomStatus.Playing;
             return Constants.RoomStatus.Closed;
         }
@@ -66,8 +69,35 @@ namespace Client.Communication
         public static string RoomStatusToStringStatus(Constants.RoomStatus roomStatus)
         {
             if (roomStatus == Constants.RoomStatus.Waiting) return "Waiting";
+            if (roomStatus == Constants.RoomStatus.Full) return "Full";
             if (roomStatus == Constants.RoomStatus.Playing) return "Playing";
             return "Closed";
+        }
+
+        public static string QuestionDifficultyToStringDifficulty(Constants.QuestionDifficulty questionDifficulty)
+        {
+            if (questionDifficulty == Constants.QuestionDifficulty.Easy) return "Easy";
+            if (questionDifficulty == Constants.QuestionDifficulty.Medium) return "Medium";
+            return "Hard";
+        }
+
+        public static bool IsValidEmailAddress(string s)
+        {
+            Regex regex = new Regex(@"^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$");
+            return regex.IsMatch(s);
+        }
+
+        public static string DecodeAsciiCodes(List<int> asciiCodes)
+        {
+            // Converting the list of ASCII codes to character array and then to string
+            char[] chars = new char[asciiCodes.Count];
+
+            for (int i = 0; i < asciiCodes.Count; i++)
+            {
+                chars[i] = (char)asciiCodes[i];
+            }
+
+            return new string(chars);
         }
     }
 }

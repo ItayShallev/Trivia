@@ -12,7 +12,10 @@ namespace Client
         public const string SERVER_IP = "127.0.0.1";
         public const int SERVER_PORT = 8888;
 
-        // ************************** COMMUNICATION PROTOCOL CONSTANTS *************************
+
+        // ************************** COMMUNICATION & PROTOCOL CONSTANTS *************************
+        public const int REQUEST_INTERVAL = 3000;
+
         public const int RESPONSE_ID_INDEX = 0;
         public const int RESPONSE_ID_LENGTH = 2;
         public const int MESSAGE_LENGTH_INDEX = 2;
@@ -21,12 +24,23 @@ namespace Client
         
         public const int NUM_ZEROS_TO_PAD = 4;
 
+        public const int TIME_EXPIRED_ANSWER_ID = 4;
+
         public enum RoomStatus
         {
             Waiting = 0,
-            Playing = 1,
-            Closed = 2 // future use?
+            Full = 1,
+            Playing = 2,
+            Closed = 3,
         };
+
+        public enum QuestionDifficulty
+        {
+            Easy = 0,
+            Medium = 1,
+            Hard = 2
+        }
+
 
         // ************************** REQUEST & RESPONSE ID'S *************************
         public const string LogoutRequestId = "00";
@@ -43,6 +57,10 @@ namespace Client
         public const string LeaveRoomRequestId = "11";
         public const string StartGameRequestId = "12";
         public const string GetRoomStateRequestId = "13";
+        public const string SubmitAnswerRequestId = "14";
+        public const string LeaveGameRequestId = "15";
+        public const string GetQuestionRequestId = "16";
+        public const string GetGameResultRequestId = "17";
 
 
         public const string LogoutResponseId = "00";
@@ -59,6 +77,14 @@ namespace Client
         public const string LeaveRoomResponseId = "11";
         public const string StartGameResponseId = "12";
         public const string GetRoomStateResponseId = "13";
-        public const string ErrorResponseId = "14";
+        public const string SubmitAnswerResponseId = "14";
+        public const string LeaveGameResponseId = "15";
+        public const string GetQuestionResponseId = "16";
+        public const string GetGameResultResponseId = "17";
+        public const string ErrorResponseId = "18";
+
+
+        // ************************** GENERAL *************************
+        public const double FLOAT_DIFFERENCE_TOLERANCE = 1e-9;
     }
 }

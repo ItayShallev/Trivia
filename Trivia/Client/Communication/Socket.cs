@@ -49,7 +49,7 @@ namespace Client.Communication
 
         public string ReceiveMessage()
         {
-            byte[] buffer = new byte[1024];
+            byte[] buffer = new byte[2048];
             int bytesReceived = _clientSocket.Receive(buffer);
             return Encoding.ASCII.GetString(buffer, 0, bytesReceived);
         }

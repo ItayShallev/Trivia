@@ -22,6 +22,7 @@ LoginRequest JsonRequestPacketDeserializer::deserializeLoginRequest(Buffer buff)
     return newLoginRequest;
 }
 
+
 SignupRequest JsonRequestPacketDeserializer::deserializeSignupRequest(Buffer buff)
 {
     // get the message part of the buffer
@@ -36,10 +37,10 @@ SignupRequest JsonRequestPacketDeserializer::deserializeSignupRequest(Buffer buf
     	data["password"],
     	data["mail"] };
 
-    
     // return the request
     return newSignupRequest;
 }
+
 
 GetPlayersInRoomRequest JsonRequestPacketDeserializer::deserializeGetPlayersRequest(Buffer buff)
 {
@@ -56,6 +57,7 @@ GetPlayersInRoomRequest JsonRequestPacketDeserializer::deserializeGetPlayersRequ
     return newGetPlayersInRoomRequest;
 }
 
+
 JoinRoomRequest JsonRequestPacketDeserializer::deserializeJoinRoomRequest(Buffer buff)
 {
     // get the message part of the buffer
@@ -70,6 +72,7 @@ JoinRoomRequest JsonRequestPacketDeserializer::deserializeJoinRoomRequest(Buffer
     // return the request
     return newJoinRoomRequest;
 }
+
 
 CreateRoomRequest JsonRequestPacketDeserializer::deserializeCreateRoomRequest(Buffer buff)
 {
@@ -92,6 +95,7 @@ CreateRoomRequest JsonRequestPacketDeserializer::deserializeCreateRoomRequest(Bu
     return newCreateRoomRequest;
 }
 
+
 CheckIfUserExistsRequest JsonRequestPacketDeserializer::deserializeCheckIfUserExistsRequest(Buffer buff)
 {
     // get the message part of the buffer
@@ -108,6 +112,26 @@ CheckIfUserExistsRequest JsonRequestPacketDeserializer::deserializeCheckIfUserEx
     // return the request
     return newCheckIfUserExistsRequest;
 }
+
+
+SubmitAnswerRequest JsonRequestPacketDeserializer::deserializeSubmitAnswerRequest(Buffer buff)
+{
+    // get the message part of the buffer
+    string message = getMessageFromBuffer(buff);
+
+    // get the json data
+    json data = json::parse(message);
+
+    // create the request
+    SubmitAnswerRequest newSubmitAnswerRequest = {
+        data["answerId"],
+        data["answerTime"]
+    };
+
+    // return the request
+    return newSubmitAnswerRequest;
+}
+
 
 string JsonRequestPacketDeserializer::getMessageFromBuffer(Buffer buff)
 {

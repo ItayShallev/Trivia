@@ -1,7 +1,8 @@
 #include "Room.h"
-#include <iostream>
+
 
 using std::find;
+
 
 Room::Room(uint id)
 {
@@ -17,34 +18,54 @@ Room::Room(uint id)
 	};
 }
 
+
 Room::Room(const RoomData& metadata)
 {
 	this->m_metadata = metadata;
 }
 
-void Room::addUser(std::shared_ptr<LoggedUser> user)
+
+bool Room::addUser(shared_ptr<LoggedUser> user)
 {
 	// if there is room to add users
 	if (m_users.size() < getMaxPlayers())
 	{
 		m_users.push_back(user);
+
+		// Checking if the user took the last seat
+		if (m_users.size() == getMaxPlayers())
+		{
+			this->setRoomStatus(RoomStatus::Full);
+		}
+
+		return true;
 	}
+
+	return false;
 }
 
-void Room::removeUser(std::shared_ptr<LoggedUser> user)
+
+void Room::removeUser(shared_ptr<LoggedUser> user)
 {
 	// remove the user from the vector
 	auto userIndex = find(m_users.begin(), m_users.end(), user);
 	m_users.erase(userIndex);
+
+	// If the room is full (and the game hasn't started yet) , changing the room status
+	if (this->getRoomStatus() == RoomStatus::Full)
+	{
+		this->setRoomStatus(RoomStatus::Waiting);
+	}
 }
 
-vector<string> Room::getAllUsers()
+
+vector<string> Room::getAllUsers() const
 {
 	// init the string vector
 	vector<string> retVector;
 
 	// iterate through the users
-	for (std::shared_ptr<LoggedUser> currUser : m_users)
+	for (shared_ptr<LoggedUser> currUser : m_users)
 	{
 		// add the username to the vector
 		retVector.push_back(currUser->getUserName());
@@ -54,67 +75,86 @@ vector<string> Room::getAllUsers()
 	return retVector;
 }
 
-void Room::setName(const string name)
+
+void Room::setName(const string& name)
 {
 	this->m_metadata.name = name;
 }
+
 
 void Room::setMaxPlayers(const uint maxPlayers)
 {
 	this->m_metadata.maxPlayers = maxPlayers;
 }
 
+
 void Room::setNumOfQuestions(const uint numOfQuestions)
 {
 	this->m_metadata.numOfQuestionsInGame = numOfQuestions;
 }
+
 
 void Room::setTimePerQuestion(const uint timePerQuestion)
 {
 	this->m_metadata.timePerQuestion = timePerQuestion;
 }
 
-void Room::setRoomStatus(const RoomStatus state)
+
+void Room::setRoomStatus(const RoomStatus status)
 {
-	this->m_metadata.roomStatus = state;
+	this->m_metadata.roomStatus = status;
 }
 
-RoomData Room::getRoomData()
+
+vector<shared_ptr<LoggedUser>> Room::getUsers() const
+{
+	return this->m_users;
+}
+
+
+RoomData Room::getRoomData() const
 {
 	return this->m_metadata;
 }
 
-uint Room::getID()
+
+uint Room::getId() const
 {
 	return this->m_metadata.id;
 }
 
-string Room::getName()
+
+string Room::getName() const
 {
 	return this->m_metadata.name;
 }
 
-string Room::getAdmin()
+
+string Room::getAdmin() const
 {
 	return this->m_metadata.admin;
 }
 
-uint Room::getMaxPlayers()
+
+uint Room::getMaxPlayers() const
 {
 	return this->m_metadata.maxPlayers;
 }
 
-uint Room::getNumOfQuestions()
+
+uint Room::getNumOfQuestions() const
 {
 	return this->m_metadata.numOfQuestionsInGame;
 }
 
-uint Room::getTimePerQuestion()
+
+uint Room::getTimePerQuestion() const
 {
 	return this->m_metadata.timePerQuestion;
 }
 
-RoomStatus Room::getRoomStatus()
+
+RoomStatus Room::getRoomStatus() const
 {
 	return this->m_metadata.roomStatus;
 }

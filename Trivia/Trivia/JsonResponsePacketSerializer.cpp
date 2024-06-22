@@ -1,10 +1,8 @@
 #include "JsonResponsePacketSerializer.h"
 #include "json.hpp"
 #include "Helper.h"
-#include "Structures.h"
 
 
-using std::to_string;
 using json = nlohmann::json;
 
 
@@ -104,4 +102,28 @@ Buffer JsonResponsePacketSerializer::serializeResponse(const GetRoomStateRespons
 Buffer JsonResponsePacketSerializer::serializeResponse(const LeaveRoomResponse& leaveRoomResponse)
 {
 	return buildResponse(ResponseId::LeaveRoomResponseId, leaveRoomResponse);
+}
+
+
+Buffer JsonResponsePacketSerializer::serializeResponse(const GetGameResultResponse& getGameResultResponse)
+{
+	return buildResponse(ResponseId::GetGameResultResponseId, getGameResultResponse);
+}
+
+
+Buffer JsonResponsePacketSerializer::serializeResponse(const SubmitAnswerResponse& submitAnswerResponse)
+{
+	return buildResponse(ResponseId::SubmitAnswerResponseId, submitAnswerResponse);
+}
+
+
+Buffer JsonResponsePacketSerializer::serializeResponse(const GetQuestionResponse& getQuestionResponse)
+{
+	return buildResponse(ResponseId::GetQuestionResponseId, getQuestionResponse);
+}
+
+
+Buffer JsonResponsePacketSerializer::serializeResponse(const LeaveGameResponse& leaveGameResponse)
+{
+	return buildResponse(ResponseId::LeaveGameResponseId, leaveGameResponse);
 }

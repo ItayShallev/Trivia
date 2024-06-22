@@ -2,116 +2,18 @@
 
 #include <string>
 #include <vector>
-#include <ctime>
-#include "Constants.h"
-#include "IRequestHandler.h"
 #include "json.hpp"
+#include "GameStructures.h"
 
-// Forward declarations
-struct RoomData;
-class IRequestHandler;
 
 using std::string;
 using std::vector;
 using nlohmann::json;
 
+
 typedef unsigned int uint;
 
 
-// ************************** OTHERS *************************
-typedef vector<unsigned char> Buffer;
-
-
-struct RequestInfo
-{
-	Buffer buffer;
-	RequestId id;
-	time_t ReceivalTime;
-};
-
-
-struct RequestResult
-{
-	Buffer response;
-	std::shared_ptr<IRequestHandler> newHandler;
-};
-
-
-struct RoomState
-{
-	bool hasGameBegan;
-	vector<string> players;
-	uint questionCount;
-	uint answerTimeout;
-	RoomStatus roomStatus;
-};
-
-
-struct RoomData
-{
-	uint id;
-	string name;
-	string admin;
-	uint maxPlayers;
-	uint numOfQuestionsInGame;
-	uint timePerQuestion;
-	RoomStatus roomStatus;
-};
-void to_json(json& j, const RoomData& response);
-
-
-// ******************* REQUESTS STRUCTURES *******************
-struct LoginRequest
-{
-	string username;
-	string password;
-};
-
-
-struct SignupRequest
-{
-	string username;
-	string password;
-	string mail;
-};
-
-
-struct GetPlayersInRoomRequest
-{
-	uint roomID;
-};
-
-
-struct JoinRoomRequest
-{
-	uint roomID;
-};
-
-
-struct CreateRoomRequest
-{
-	string admin;
-	string roomName;
-	uint maxPlayers;
-	uint questionCount;
-	uint answerTimeout;
-};
-
-
-struct CheckIfUserExistsRequest
-{
-	string username;
-};
-
-
-struct CloseRoomRequest
-{
-	uint roomId;
-};
-
-
-
-// ******************* RESPONSE STRUCTURES *******************
 struct ErrorResponse
 {
 	string message = "ERROR";
@@ -158,16 +60,15 @@ void to_json(json& j, const GetPlayersInRoomResponse& response);
 struct GetHighScoreResponse
 {
 	uint status = 1;
-	vector<string> statistics;
+	vector<HighScoreRow> statistics;
 };
-
 void to_json(json& j, const GetHighScoreResponse& response);
 
 
 struct GetPersonalStatsResponse
 {
 	uint status = 1;
-	vector<string> statistics;
+	HighScoreRow statistics;
 };
 void to_json(json& j, const GetPersonalStatsResponse& response);
 
@@ -213,10 +114,6 @@ struct GetRoomStateResponse
 {
 	uint status = 1;
 	RoomState roomState;
-	//bool hasGameBegan = false;
-	//vector<string> players;
-	//uint questionCount = 0;
-	//uint answerTimeout = 0;
 };
 void to_json(json& j, const GetRoomStateResponse& response);
 
@@ -226,3 +123,36 @@ struct LeaveRoomResponse
 	uint status = 1;
 };
 void to_json(json& j, const LeaveRoomResponse& response);
+
+
+struct LeaveGameResponse
+{
+	uint status = 1;
+};
+void to_json(json& j, const LeaveGameResponse& response);
+
+
+struct GetQuestionResponse
+{
+	uint status = 1;
+	wstring question;
+	vector<AnswerItem> answers;
+	QuestionDifficulty difficulty;
+};
+void to_json(json& j, const GetQuestionResponse& response);
+
+
+struct SubmitAnswerResponse
+{
+	uint status = 1;
+	uint correctAnswerId = 0;
+};
+void to_json(json& j, const SubmitAnswerResponse& response);
+
+
+struct GetGameResultResponse
+{
+	uint status;
+	vector<PlayerResults> results;
+};
+void to_json(json& j, const GetGameResultResponse& response);
