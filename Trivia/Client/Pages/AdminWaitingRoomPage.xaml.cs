@@ -62,6 +62,15 @@ namespace Client.Pages
             }
         }
 
+        public RoomData RoomData
+        {
+            get { return _roomData; }
+            set
+            {
+                _roomData = value;
+            }
+        }
+
         public event PropertyChangedEventHandler PropertyChanged;
 
         protected void OnPropertyChanged([CallerMemberName] string propertyName = null)
