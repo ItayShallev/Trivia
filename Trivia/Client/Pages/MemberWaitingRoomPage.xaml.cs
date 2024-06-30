@@ -1,4 +1,5 @@
 ﻿using Client.Communication;
+using Client.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -29,12 +30,6 @@ namespace Client.Pages
         private uint _maxUsers;
         private RoomData _roomData;
         private Timer _timer;
-
-        public string Username
-        {
-            get { return _username; }
-            set { _username = value; }
-        }
 
         public uint UsersCount
         {
@@ -71,6 +66,13 @@ namespace Client.Pages
             }
         }
 
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
 
         public MemberWaitingRoomPage(RoomData roomData, string username)
         {
@@ -80,44 +82,39 @@ namespace Client.Pages
             RoomData = roomData;
             MaxUsers = roomData.MaxPlayers;
 
-            Username = username;
+            _username = username;
 
-            _timer = new Timer(UpdateUI, null, 0, 3000);
-        }
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        protected void OnPropertyChanged([CallerMemberName] string propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            _timer = new Timer(UpdateUI, null, 0, Constants.REQUEST_INTERVAL);
         }
 
         private void LeaveRoom()
         {
+            _timer.Dispose();       // Pausing the getRoomState requests from being sent to the server
+            
             // Sending a LeaveRoom request
             Helper.SendRequest(Constants.LeaveRoomRequestId, JsonSerializer.Serialize(new LeaveRoomRequest()));
             LeaveRoomResponse leaveRoomResponse = Helper.GetResponse<LeaveRoomResponse>();
 
             if (leaveRoomResponse.Status == 1)
             {
-                _timer.Dispose();       // Pausing the getRoomState requests from being sent to the server
-
                 // Navigating the user back to the menu page
-                MenuPage menuPage = new MenuPage(Username);
+                MenuPage menuPage = new MenuPage(_username);
                 NavigationService.Navigate(menuPage);
             }
         }
 
-        private void UpdateUsersList(List<string> players)
+        private void UpdateUsersList(List<string> users)
         {
-            LBUsersList.Items.Clear();      // Removing all players boxes from the players list
+            List<UserEntry> userEntries = new List<UserEntry>();
 
-            // Iterating over the players list and creating a list box item for each player
-            foreach (string playerName in players)
+            // Iterating over the users list and creating a UserEntry item for each one
+            foreach (string user in users)
             {
-                ListBoxItem newPlayerBox = new ListBoxItem { Content = playerName };
-                LBUsersList.Items.Add(newPlayerBox);
+                UserEntry newUserEntry = new UserEntry(user, user == RoomData.Admin, user == _username);
+                userEntries.Add(newUserEntry);
             }
+
+            UsersListDataGrid.ItemsSource = userEntries;
         }
 
         private void UpdateUI(object state)
@@ -136,6 +133,13 @@ namespace Client.Pages
                 if (getRoomStateResponse.RoomStatus == Constants.RoomStatus.Closed)     // Checking if the admin closed the room
                 {
                     LeaveRoom();
+                }
+                else if (getRoomStateResponse.RoomStatus == Constants.RoomStatus.Playing)
+                {
+                    _timer.Dispose();
+
+                    GamePage gamePage = new GamePage(_username, RoomData, UsersCount);
+                    NavigationService.Navigate(gamePage);
                 }
                 else if (UsersCount != getRoomStateResponse.Players.Count)
                 {

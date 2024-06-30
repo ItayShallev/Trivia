@@ -1,65 +1,86 @@
 #pragma once
 
-// ************************** SERVER CONSTANTS *************************
-#define SERVER_PORT 8888
-#define DEFAULT_BUFFER_SIZE 255			// TODO: remove when message format is established, update receive data
-#define LIMIT_OF_MAX_PLAYERS_IN_ROOM 20
+typedef unsigned int uint;
+
+// **************************************************** SERVER CONSTANTS ***************************************************
+#define SERVER_PORT				8888
+#define DEFAULT_BUFFER_SIZE		255
 
 
 
-// ************************** ENUMS *************************
+// **************************************************** ENUMS ***************************************************
 enum RequestId
 {
 	LogoutRequestId = 0,
-	LoginRequestId = 1,
-	SignupRequestId = 2,
-	CreateRoomRequestId = 3,
-	GetRoomsRequestId = 4,
-	GetPlayersInRoomRequestId = 5,
-	JoinRoomRequestId = 6,
-	GetPersonalStatisticsRequestId = 7,
-	GetHighScoreRequestId = 8,
-	CheckIfUserExistsRequestId = 9,
-	CloseRoomRequestId = 10,
-	LeaveRoomRequestId = 11,
-	StartGameRequestId = 12,
-	GetRoomStateRequestId = 13
+	LoginRequestId,
+	SignupRequestId,
+	CreateRoomRequestId,
+	GetRoomsRequestId,
+	GetPlayersInRoomRequestId,
+	JoinRoomRequestId,
+	GetPersonalStatisticsRequestId,
+	GetHighScoreRequestId,
+	CheckIfUserExistsRequestId,
+	CloseRoomRequestId,
+	LeaveRoomRequestId,
+	StartGameRequestId,
+	GetRoomStateRequestId,
+	SubmitAnswerRequestId,
+	LeaveGameRequestId,
+	GetQuestionRequestId,
+	GetGameResultRequestId
 };
 
 
 enum ResponseId
 {
 	LogoutResponseId = 0,
-	LoginResponseId = 1,
-	SignupResponseId = 2,
-	CreateRoomResponseId = 3,
-	GetRoomsResponseId = 4,
-	GetPlayersInRoomResponseId = 5,
-	JoinRoomResponseId = 6,
-	GetPersonalStatisticsResponseId = 7,
-	GetHighScoreResponseId = 8,
-	CheckIfUserExistsResponseId = 9,
-	CloseRoomResponseId = 10,
-	LeaveRoomResponseId = 11,
-	StartGameResponseId = 12,
-	GetRoomStateResponseId = 13,
-	ErrorResponseId = 14
+	LoginResponseId,
+	SignupResponseId,
+	CreateRoomResponseId,
+	GetRoomsResponseId,
+	GetPlayersInRoomResponseId,
+	JoinRoomResponseId,
+	GetPersonalStatisticsResponseId,
+	GetHighScoreResponseId,
+	CheckIfUserExistsResponseId,
+	CloseRoomResponseId,
+	LeaveRoomResponseId,
+	StartGameResponseId,
+	GetRoomStateResponseId,
+	SubmitAnswerResponseId,
+	LeaveGameResponseId,
+	GetQuestionResponseId,
+	GetGameResultResponseId,
+	ErrorResponseId
 };
 
 enum RoomStatus
 {
 	Waiting = 0,
+	Full,
 	Playing,
 	Closed
 };
 
+enum UserStatus
+{
+	InMenu = 0,
+	InWaitingRoom,
+	InGame,
+	InResults
+};
+
+enum QuestionDifficulty
+{
+	Easy = 0,
+	Medium,
+	Hard
+};
 
 
 
-// ************************** DE/SERIALIZERS *************************
-
-
-// ************************** PROTOCOL_CONSTANTS *************************
+// **************************************************** PROTOCOL CONSTANTS ***************************************************
 #define ID_BYTE_LENGTH			2
 
 #define DATA_BYTE_LENGTH		4
@@ -70,9 +91,7 @@ enum RoomStatus
 
 
 
-
-
-// ************************** Database *************************
+// **************************************************** DATABASE ***************************************************
 #define USERS_TABLE_SQL_STATEMENT R"(
 CREATE TABLE USERS(USERNAME TEXT PRIMARY KEY NOT NULL,
 PASSWORD TEXT NOT NULL,
@@ -93,26 +112,40 @@ INCORRECT_ANSWER_3 TEXT NOT NULL);)"
 CREATE TABLE STATISTICS(ID INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
 USERNAME TEXT NOT NULL,
 NUM_GAMES_PLAYED INTEGER NOT NULL,
-POINTS_EARNED INTERGER NOT NULL,
-POINTS_LOST INTEGER NOT NULL,
-NUM_GAMES_WON INTEGER NOT NULL,
-NUM_GAMES_LOST INTEGER NOT NULL,
 NUM_QUESTIONS_ANSWERED INTEGER NOT NULL,
 NUM_CORRECT_ANSWERS INTEGER NOT NULL,
+NUM_WRONG_ANSWERS INTEGER NOT NULL,
 AVERAGE_ANSWER_TIME FLOAT NOT NULL,
-NUM_ROOMS_CREATED INTEGER NOT NULL,
-NUM_ROOMS_JOINED INTEGER NOT NULL,
+POINTS INTEGER NOT NULL,
 FOREIGN KEY (USERNAME) REFERENCES USERS(USERNAME));)"
 
+#define QUESTIONS_TABLE_STARTING_ID		1
+#define MAX_QUESTIONS_PER_REQUEST		50
+#define TIMES_TO_REQUEST_QUESTIONS		4
+
+#define CORRECT_ANSWER_INDEX			1
+#define INCORRECT_ANSWER_1_INDEX		2
+#define INCORRECT_ANSWER_2_INDEX		3
+#define INCORRECT_ANSWER_3_INDEX		4
+#define DIFFICULTY_INDEX				5
+
+#define TIME_EXPIRED_ANSWER_ID			4
 
 
 
-// ************************** Game *************************
-// Leaderboard
-#define LEADERBOARD_SIZE 5
-#define LEADERBOARD_MIN_GAMES_TO_QUALIFY 5
-#define WINS_WEIGHT 2
-#define AVERAGE_ANSWER_TIME_WEIGHT 1
+// **************************************************** GAME ***************************************************
+// ***** LEADERBOARD *****
+#define LEADERBOARD_SIZE					5
+#define LEADERBOARD_MIN_GAMES_TO_QUALIFY	0
+
+// ***** ROOM *****
+#define LIMIT_OF_MAX_PLAYERS_IN_ROOM		15
+
+// ***** POINTS *****
+#define POINTS_POSSIBLE_FOR_EASY			100
+#define POINTS_POSSIBLE_FOR_MEDIUM			350
+#define POINTS_POSSIBLE_FOR_HARD			500
+
 
 
 // ************************** Console Colors *************************
@@ -120,3 +153,8 @@ FOREIGN KEY (USERNAME) REFERENCES USERS(USERNAME));)"
 #define WHITE	15
 #define CYAN	3
 #define GREY	7
+
+
+
+// ************************** GENERAL *************************
+#define BASE_10		10

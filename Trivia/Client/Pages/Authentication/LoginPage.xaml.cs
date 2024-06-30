@@ -30,20 +30,31 @@ namespace Client.Pages
         {
             this._username = username;
             InitializeComponent();
+
+            // Focusing on the password box
+            pswdPasswordBox.Focus();
         }
-        
+
+        private void PswdPasswordBox_OnPasswordChanged(object sender, RoutedEventArgs e)
+        {
+            BtnLogin.IsEnabled = (pswdPasswordBox.Password != "");
+        }
 
         private void BtnLogin_OnClick(object sender, RoutedEventArgs e)
         {
+            // Input validation
+            if (pswdPasswordBox.Password == "")
+            {
+                BtnLogin.IsEnabled = false;
+            }
+
             // Sending a login request to the server
             Helper.SendRequest(Constants.LoginRequestId, JsonSerializer.Serialize(new LoginRequest(this._username, pswdPasswordBox.Password)));
 
-
-            ///////// TODO: DEBUG TO CHECK DESERIALIZER
             // receive the response
             ResponseInfo respInfo = Helper.GetResponseInfo(Communicator.Connection.ReceiveMessage());
 
-            /// if the response is ok
+            // if the response is ok
             if (respInfo.ResponseId == Client.Constants.LoginResponseId)
             {
                 // navigate to the menu page

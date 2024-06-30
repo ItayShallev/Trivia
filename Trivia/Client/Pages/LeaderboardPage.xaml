@@ -8,8 +8,8 @@
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     Title="LeaderboardPage"
-    d:DesignHeight="1140"
-    d:DesignWidth="675"
+    d:DesignHeight="900"
+    d:DesignWidth="1600"
     Loaded="LeaderboardPage_OnLoaded"
     mc:Ignorable="d">
 
@@ -22,34 +22,57 @@
             <materialDesign:DialogHost>
                 <Grid>
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="1*" />
-                        <RowDefinition Height="1*" />
-                        <RowDefinition Height="10*" />
+                        <RowDefinition Height="5*" />
+                        <RowDefinition Height="4*" />
+                        <RowDefinition Height="40*" />
                     </Grid.RowDefinitions>
 
                     <Grid Row="0">
-                        <UserControls:Logo
-                            Width="70"
-                            Height="70"
-                            HorizontalAlignment="Left" />
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="1*" />
+                            <ColumnDefinition Width="2*" />
+                            <ColumnDefinition Width="1*" />
+                        </Grid.ColumnDefinitions>
 
-                        <TextBlock
-                            x:Name="LeaderboardHeader"
-                            HorizontalAlignment="Center"
-                            VerticalAlignment="Center"
-                            FontFamily="Montserrat"
-                            FontSize="24"
-                            FontWeight="Bold"
-                            Text="Leaderboard" />
+                        <Grid Column="0">
+                            <UserControls:Logo HorizontalAlignment="Center" />
+                        </Grid>
 
-                        <UserControls:ThreeDots />
+                        <Grid Column="1">
+                            <Viewbox MaxWidth="450">
+                                <TextBlock
+                                    x:Name="LeaderboardHeader"
+                                    Margin="20,0,20,0"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    FontFamily="Montserrat"
+                                    FontWeight="Bold"
+                                    Text="Leaderboard" />
+                            </Viewbox>
+                        </Grid>
+
+                        <Grid Column="2">
+                            <UserControls:ThreeDots />
+                        </Grid>
                     </Grid>
 
-                    <Grid VerticalAlignment="Top" Row="1">
-                        <UserControls:GoBackArrow GoBackClicked="GoBackArrow_OnGoBackClicked" />
+                    <Grid Row="1">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="1*" />
+                            <ColumnDefinition Width="2*" />
+                            <ColumnDefinition Width="1*" />
+                        </Grid.ColumnDefinitions>
+
+                        <Grid HorizontalAlignment="Center" Column="0">
+                            <Viewbox>
+                                <UserControls:GoBackArrow GoBackClicked="GoBackArrow_OnGoBackClicked" />
+                            </Viewbox>
+                        </Grid>
                     </Grid>
 
                     <Grid Row="2">
+                        <Separator Margin="15,0,15,0" VerticalAlignment="Top" />
+
                         <DataGrid
                             x:Name="LeaderboardDataGrid"
                             Margin="10"
@@ -57,7 +80,80 @@
                             CanUserAddRows="False"
                             CanUserDeleteRows="False"
                             CanUserReorderColumns="False"
-                            CanUserResizeColumns="False">
+                            CanUserResizeColumns="False"
+                            IsReadOnly="True">
+
+                            <DataGrid.ColumnHeaderStyle>
+                                <Style TargetType="DataGridColumnHeader">
+                                    <Setter Property="Height" Value="60" />
+                                    <Setter Property="HorizontalContentAlignment" Value="Center" />
+                                    <Setter Property="FontSize" Value="14" />
+                                    <Setter Property="FontWeight" Value="SemiBold" />
+                                    <Setter Property="BorderBrush" Value="Transparent" />
+                                    <Setter Property="Cursor" Value="Arrow" />
+
+                                    <Setter Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate TargetType="{x:Type DataGridColumnHeader}">
+                                                <Border
+                                                    Background="{TemplateBinding Background}"
+                                                    BorderBrush="{TemplateBinding BorderBrush}"
+                                                    BorderThickness="{TemplateBinding BorderThickness}">
+                                                    <TextBlock
+                                                        HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                                        VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                                        FontSize="{TemplateBinding FontSize}"
+                                                        FontWeight="{TemplateBinding FontWeight}"
+                                                        Text="{TemplateBinding Content}"
+                                                        TextAlignment="Center"
+                                                        TextWrapping="Wrap" />
+                                                </Border>
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+
+                                    <Style.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter Property="BorderThickness" Value="0,0,0,4" />
+                                            <Setter Property="BorderBrush" Value="CornflowerBlue" />
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </DataGrid.ColumnHeaderStyle>
+
+                            <DataGrid.RowStyle>
+                                <Style TargetType="DataGridRow">
+                                    <Setter Property="Background" Value="White" />
+                                    <Setter Property="Foreground" Value="Black" />
+                                    <Setter Property="BorderBrush" Value="LightGray" />
+                                    <Setter Property="BorderThickness" Value="0,0,0,2" />
+                                    <Setter Property="Margin" Value="0,2" />
+                                    <Setter Property="MinHeight" Value="70" />
+                                    <Setter Property="HorizontalContentAlignment" Value="Center" />
+                                    <Setter Property="VerticalAlignment" Value="Center" />
+                                    <Setter Property="Cursor" Value="Hand" />
+                                    <Setter Property="FontSize" Value="16" />
+                                    <Setter Property="FontWeight" Value="SemiBold" />
+                                    <Style.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter Property="BorderThickness" Value="0,0,0,4" />
+                                            <Setter Property="BorderBrush" Value="DarkOrange" />
+                                        </Trigger>
+
+                                        <DataTrigger Binding="{Binding IsHighlighted}" Value="True">
+                                            <Setter Property="Background" Value="Gold" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </DataGrid.RowStyle>
+
+                            <DataGrid.CellStyle>
+                                <Style TargetType="DataGridCell">
+                                    <Setter Property="HorizontalAlignment" Value="Center" />
+                                    <Setter Property="VerticalAlignment" Value="Center" />
+                                </Style>
+                            </DataGrid.CellStyle>
+
                             <DataGrid.Columns>
                                 <DataGridTextColumn
                                     Width="75"
@@ -65,12 +161,28 @@
                                     Header="Rank" />
                                 <DataGridTextColumn
                                     Width="*"
-                                    Binding="{Binding Name}"
-                                    Header="Name" />
+                                    Binding="{Binding Username}"
+                                    Header="Username" />
+                                <DataGridTextColumn
+                                    Width="*"
+                                    Binding="{Binding NumGamesPlayed}"
+                                    Header="Games Played" />
+                                <DataGridTextColumn
+                                    Width="*"
+                                    Binding="{Binding NumCorrectAnswers}"
+                                    Header="Correct Answers" />
+                                <DataGridTextColumn
+                                    Width="*"
+                                    Binding="{Binding NumWrongAnswers}"
+                                    Header="Wrong Answers" />
+                                <DataGridTextColumn
+                                    Width="*"
+                                    Binding="{Binding AverageAnswerTime}"
+                                    Header="Average Answer Time" />
                                 <DataGridTextColumn
                                     Width="100"
-                                    Binding="{Binding Score}"
-                                    Header="Score" />
+                                    Binding="{Binding Points}"
+                                    Header="Points" />
                             </DataGrid.Columns>
                         </DataGrid>
                     </Grid>
@@ -78,5 +190,4 @@
             </materialDesign:DialogHost>
         </materialDesign:Card>
     </Grid>
-
 </Page>

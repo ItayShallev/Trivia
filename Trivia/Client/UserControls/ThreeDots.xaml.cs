@@ -22,15 +22,16 @@ namespace Client.UserControls
     /// </summary>
     public partial class ThreeDots : UserControl
     {
+        public bool IsDarkTheme { get; set; }
+        private readonly PaletteHelper paletteHelper = new PaletteHelper();
+
+
         public ThreeDots()
         {
             InitializeComponent();
         }
 
-        public bool IsDarkTheme { get; set; }
-        private readonly PaletteHelper paletteHelper = new PaletteHelper();
-
-        private void toggleTheme(object sender, RoutedEventArgs e)
+        private void ToggleTheme(object sender, RoutedEventArgs e)
         {
             ITheme theme = paletteHelper.GetTheme();
 
@@ -47,7 +48,7 @@ namespace Client.UserControls
             paletteHelper.SetTheme(theme);
         }
 
-        private void exitApp(object sender, RoutedEventArgs e)
+        private void ExitApp(object sender, RoutedEventArgs e)
         {
             Communicator.Connection.CloseConnection();
             Application.Current.Shutdown();

@@ -1,16 +1,22 @@
 #include <Windows.h>
+#include <random>
 #include "Helper.h"
+
+
+using std::default_random_engine;
+using std::to_string;
 
 
 /**
  * \brief		Turns a given string into a Buffer object
- * \param		buffer			The string to convert to Buffer object
+ * \param		str			The string to convert to Buffer object
  * \return		A Buffer object with the given string as data
  */
 Buffer Helper::turnStringIntoBuffer(const string& str)
 {
 	return Buffer(str.begin(), str.end());
 }
+
 
 Buffer Helper::turnStringIntoBuffer(const char* pCh)
 {
@@ -20,6 +26,7 @@ Buffer Helper::turnStringIntoBuffer(const char* pCh)
 	// call the other function
 	return turnStringIntoBuffer(charStr);
 }
+
 
 char* Helper::turnBufferToCharArr(const Buffer& buff)
 {
@@ -50,13 +57,13 @@ char* Helper::turnBufferToCharArr(const Buffer& buff)
  * \param		wantedLength	The wanted string length to return
  * \return		The given number padded with enough zeros to reach the wantedLength
  */
-string Helper::padNumWith0(int num, int wantedLength)
+string Helper::padNumWith0(size_t num, uint wantedLength)
 {
 	// get the num string
-	string numStr = std::to_string(num);
+	string numStr = to_string(num);
 
 	// get the num of zeroes to add to the number
-	int zerosToPad = wantedLength - numStr.length();
+	size_t zerosToPad = wantedLength - numStr.length();
 
 	// there are zeroes to add
 	if (zerosToPad > 0)
@@ -93,10 +100,12 @@ void Helper::setConsoleColor(unsigned int color)
 	SetConsoleTextAttribute(hConsole, color);
 }
 
-RequestResult Helper::buildRequestResult(const Buffer& buff, std::shared_ptr<IRequestHandler> handler)
+
+RequestResult Helper::buildRequestResult(const Buffer& buff, shared_ptr<IRequestHandler> handler)
 {
 	return {buff, handler };
 }
+
 
 GetRoomStateResponse Helper::buildRoomStateResponse(const RoomState& roomState)
 {
@@ -107,3 +116,49 @@ GetRoomStateResponse Helper::buildRoomStateResponse(const RoomState& roomState)
 	};
 }
 
+
+int Helper::generateRandomNumber(const int& minValue, const int& maxValue)
+{
+    int range = maxValue - minValue + 1;
+    return rand() % range + minValue;
+}
+
+
+set<int> Helper::generateRandomNumbersSet(const uint& setSize, const int& minValue, const int& maxValue)
+{
+    set<int> randomNumbers;
+
+	// Creating a seed for randomization
+	srand(static_cast<unsigned>(time(NULL)));
+
+    while (randomNumbers.size() < setSize)
+    {
+        int randomNumber = Helper::generateRandomNumber(minValue, maxValue);
+
+        // Trying to insert the random number only if it wasn't generated already
+        if (randomNumbers.find(randomNumber) == randomNumbers.end())
+        {
+            randomNumbers.insert(randomNumber);
+        }
+    }
+
+    return randomNumbers;
+}
+
+
+double Helper::getPointsPossibleForDifficulty(const QuestionDifficulty& questionDifficulty)
+{
+	switch (questionDifficulty)
+	{
+	case QuestionDifficulty::Easy:
+		return POINTS_POSSIBLE_FOR_EASY;
+
+	case QuestionDifficulty::Medium:
+		return POINTS_POSSIBLE_FOR_MEDIUM;
+
+	case QuestionDifficulty::Hard:
+		return POINTS_POSSIBLE_FOR_HARD;
+	}
+
+	return 0;
+}

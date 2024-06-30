@@ -36,32 +36,45 @@ namespace Client.Pages
             InitializeComponent();
 
             Username = username;
+
+            // Focusing on the room name text box
+            RoomNameTextBox.Focus();
+        }
+        
+        private void RoomNameTextBox_OnTextChanged(object sender, RoutedEventArgs e)
+        {
+            if (BtnCreateRoom != null)
+            {
+                BtnCreateRoom.IsEnabled = ((RoomNameTextBox.Text != "") && (MaxPlayersComboBox.Text != "Select number of players"));
+            }
         }
 
-        // Checks if the rooms settings are valid and ready for "CreateRoom" Request
-        private bool AreRoomSettingsValid()
+        private void MaxPlayersComboBox_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            return (MaxPlayersComboBox.Text != "Select number of players") && (RoomNameTextBox.Text != "");
+            if (BtnCreateRoom != null)
+            {
+                ComboBoxItem selectedItem = MaxPlayersComboBox.SelectedItem as ComboBoxItem;
+                string selectedValue = selectedItem?.Content.ToString();
+
+                BtnCreateRoom.IsEnabled = ((RoomNameTextBox.Text != "") && (selectedValue != "Select number of players"));
+            }
         }
 
         private void BtnCreateRoom_Click(object sender, RoutedEventArgs e)
         {
-            if (AreRoomSettingsValid())
+            // Sending a create room request to the server
+            CreateRoomRequest createRoomRequest = new CreateRoomRequest(Username, RoomNameTextBox.Text,
+                uint.Parse(MaxPlayersComboBox.Text), uint.Parse(QuestionCountLabel.Content.ToString()), uint.Parse(TimePerQuestionLabel.Content.ToString()));
+            Helper.SendRequest(Constants.CreateRoomRequestId, JsonSerializer.Serialize(createRoomRequest));
+
+            CreateRoomResponse createRoomResponse = Helper.GetResponse<CreateRoomResponse>();       // Getting the server's response
+
+            // Checking if the server has approved to create the room
+            if (createRoomResponse.Status == 1)
             {
-                // Sending a create room request to the server
-                CreateRoomRequest createRoomRequest = new CreateRoomRequest(Username, RoomNameTextBox.Text,
-                    uint.Parse(MaxPlayersComboBox.Text), uint.Parse(QuestionCountLabel.Content.ToString()), uint.Parse(TimePerQuestionLabel.Content.ToString()));
-                Helper.SendRequest(Constants.CreateRoomRequestId, JsonSerializer.Serialize(createRoomRequest));
-
-                CreateRoomResponse createRoomResponse = Helper.GetResponse<CreateRoomResponse>();       // Getting the server's response
-
-                // Checking if the server has approved to create the room
-                if (createRoomResponse.Status == 1)
-                {
-                    // Navigating the user to the waiting room
-                    AdminWaitingRoomPage adminWaitingRoomPage = new AdminWaitingRoomPage(createRoomResponse.RoomData, Username);
-                    NavigationService.Navigate(adminWaitingRoomPage);
-                }
+                // Navigating the user to the waiting room
+                AdminWaitingRoomPage adminWaitingRoomPage = new AdminWaitingRoomPage(createRoomResponse.RoomData, Username);
+                NavigationService.Navigate(adminWaitingRoomPage);
             }
         }
 

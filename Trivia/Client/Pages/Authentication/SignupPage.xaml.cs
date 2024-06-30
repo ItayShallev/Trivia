@@ -28,6 +28,9 @@ namespace Client.Pages
         {
             this._username = username;
             InitializeComponent();
+
+            // Focusing on the password box
+            pswdPasswordBox.Focus();
         }
 
         private void BtnSignup_OnClick(object sender, RoutedEventArgs e)
@@ -43,6 +46,16 @@ namespace Client.Pages
                 MenuPage menuPage = new MenuPage(this._username);
                 NavigationService.Navigate(menuPage);
             }
+        }
+
+        private void TxtMail_OnChanged(object sender, TextChangedEventArgs args)
+        {
+            BtnSignup.IsEnabled = ((txtMail.Text != "") && (pswdPasswordBox.Password != "") && (Helper.IsValidEmailAddress(txtMail.Text)));
+        }
+
+        private void PswdPasswordBox_OnPasswordChanged(object sender, RoutedEventArgs e)
+        {
+            BtnSignup.IsEnabled = ((txtMail.Text != "") && (pswdPasswordBox.Password != ""));
         }
 
         private void GoBackArrow_OnGoBackClicked(object sender, RoutedEventArgs e)

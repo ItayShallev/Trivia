@@ -1,21 +1,21 @@
 #include "Communicator.h"
-
 #include <exception>
 #include <iostream>
 #include <thread>
-#include "LoginRequestHandler.h"
 #include "Constants.h"
 #include "Helper.h"
-#include "JsonRequestPacketDeserializer.h"
 #include "JsonResponsePacketSerializer.h"
+#include "LoginRequestHandler.h"
 
 
 using std::exception;
 using std::cout;
-using std::endl;
 using std::thread;
 using std::to_string;
-using std::pair;
+using std::make_pair;
+
+
+Communicator::Communicator(RequestHandlerFactory* handlerFactory) : m_serverSocket(INVALID_SOCKET), m_handlerFactory(*handlerFactory) { }
 
 
 void Communicator::startHandleRequests()
@@ -25,12 +25,8 @@ void Communicator::startHandleRequests()
 	// run the bind and listen thread
 	thread connectorThread(&Communicator::bindAndListen, this);
 	connectorThread.join(); // join the thread
-
 }
 
-Communicator::Communicator(RequestHandlerFactory* handlerFactory) : m_serverSocket(INVALID_SOCKET), m_handlerFactory(*handlerFactory)
-{
-}
 
 void Communicator::bindAndListen()
 {
@@ -54,6 +50,7 @@ void Communicator::bindAndListen()
 	waitForClientsThread.join(); // join the thread
 }
 
+
 void Communicator::handleNewClient(SOCKET clientSoc, int id)
 {
 	try
@@ -61,20 +58,20 @@ void Communicator::handleNewClient(SOCKET clientSoc, int id)
 		while (true)
 		{
 			// status
- 			cout << endl << "waiting for message ..." << endl;
+ 			cout << '\n' << "waiting for message ..." << '\n';
 
 			// get the data message
 			Buffer buff = receiveDataFromSocket(clientSoc);
 			if (buff.size() == 0) // might imply the user quit
 			{
-				cout << "client quit, closing socket" << endl;
+				cout << "client quit, closing socket" << '\n';
 				throw exception("client quit");
 			}
 
 			// Printing the request of the client
 			Helper::setConsoleColor(CYAN);
-			cout << "CLIENT: " << id << ":\n";
-			for (int i = 0; i < buff.size(); i++)
+			cout << "CLIENT " << id << ":\n";
+			for (size_t i = 0; i < buff.size(); i++)
 			{
 				cout << buff[i];
 			}
@@ -109,12 +106,12 @@ void Communicator::handleNewClient(SOCKET clientSoc, int id)
 				m_clients[clientSoc].reset();
 
 				// Assigning the client the new handler
-				m_clients[clientSoc] = std::shared_ptr<IRequestHandler>(reqResult.newHandler);
+				m_clients[clientSoc] = shared_ptr<IRequestHandler>(reqResult.newHandler);
 			}
 
 			// Printing the server's response
 			Helper::setConsoleColor(GREEN);
-			for(int i = 0; i < reqResult.response.size(); i++)
+			for(size_t i = 0; i < reqResult.response.size(); i++)
 			{
 				cout << reqResult.response[i];
 			}
@@ -131,6 +128,7 @@ void Communicator::handleNewClient(SOCKET clientSoc, int id)
 	}
 }
 
+
 void Communicator::initSocket()
 {
 	this->m_serverSocket = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
@@ -139,16 +137,18 @@ void Communicator::initSocket()
 		throw exception(__FUNCTION__ " - socket");
 }
 
+
 void Communicator::waitForClients()
 {
 	while (true)
 	{
 		// the main thread is only accepting clients 
 		// and add then to the list of handlers
-		cout << "Waiting for client connection request" << endl;
+		cout << "Waiting for client connection request\n";
 		acceptClient(this->m_serverSocket);
 	}
 }
+
 
 void Communicator::acceptClient(SOCKET serverSoc)
 {
@@ -159,11 +159,11 @@ void Communicator::acceptClient(SOCKET serverSoc)
 		throw exception(__FUNCTION__);
 
 	// we got a client, print status
-	cout << "Client accepted. Server and client can speak" << endl;
+	cout << "Client accepted. Server and client can speak\n";
 
 	// Creating a shared pointer to a LoginRequestHandler
-	std::shared_ptr<IRequestHandler> newLoginRequestHandler = this->m_handlerFactory.createLoginRequestHandler();
-	auto newClientInfo = std::make_pair(clientSoc, newLoginRequestHandler);
+	shared_ptr<IRequestHandler> newLoginRequestHandler = this->m_handlerFactory.createLoginRequestHandler();
+	auto newClientInfo = make_pair(clientSoc, newLoginRequestHandler);
 
 	// adding the <Socket,Handler> pair to the clients map
 	this->m_clients.insert(newClientInfo);
@@ -172,6 +172,7 @@ void Communicator::acceptClient(SOCKET serverSoc)
 	thread clientThread(&Communicator::handleNewClient, this, clientSoc, this->m_clients.size());
 	clientThread.detach();		// detach the thread
 }
+
 
 Buffer Communicator::receiveDataFromSocket(SOCKET clientSoc)
 {
@@ -203,6 +204,7 @@ Buffer Communicator::receiveDataFromSocket(SOCKET clientSoc)
 	// return the data received
 	return receivedData;
 }
+
 
 void Communicator::sendDataToSocket(SOCKET clientSoc, Buffer data)
 {

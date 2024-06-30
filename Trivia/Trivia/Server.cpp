@@ -5,9 +5,12 @@
 #include "WSAInitializer.h"
 
 
-Server::Server(IDatabase* database, RequestHandlerFactory* factory) : m_database(database), m_handlerFactory(*factory), m_communicator(&m_handlerFactory)
-{
-}
+using std::exception;
+using std::cout;
+
+
+Server::Server(IDatabase* database, RequestHandlerFactory* factory) : m_database(database), m_handlerFactory(*factory), m_communicator(&m_handlerFactory) { }
+
 
 void Server::run()
 {
@@ -16,8 +19,8 @@ void Server::run()
 		WSAInitializer wsaInit;
 		this->m_communicator.startHandleRequests();
 	}
-	catch (std::exception& e)
+	catch (exception& e)
 	{
-		std::cout << "Error occured: " << e.what() << '\n';
+		cout << "Error occured: " << e.what() << '\n';
 	}
 }

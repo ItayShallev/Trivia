@@ -1,10 +1,14 @@
 #include "RoomAdminRequestHandler.h"
-
 #include "Helper.h"
 #include "JsonResponsePacketSerializer.h"
 
-RoomAdminRequestHandler::RoomAdminRequestHandler(Room& room, std::shared_ptr<LoggedUser> user, RoomManager& roomManager, RequestHandlerFactory* handlerFactory)
+
+using std::any_of;
+
+
+RoomAdminRequestHandler::RoomAdminRequestHandler(Room& room, shared_ptr<LoggedUser> user, RoomManager& roomManager, RequestHandlerFactory* handlerFactory)
 	: m_room(room), m_user(user), m_roomManager(roomManager), m_handlerFactory(handlerFactory) { }
+
 
 bool RoomAdminRequestHandler::isRequestRelevant(RequestInfo reqInfo)
 {
@@ -14,6 +18,7 @@ bool RoomAdminRequestHandler::isRequestRelevant(RequestInfo reqInfo)
         reqId == RequestId::StartGameRequestId ||
         reqId == RequestId::GetRoomStateRequestId;
 }
+
 
 RequestResult RoomAdminRequestHandler::handleRequest(RequestInfo reqInfo)
 {
@@ -30,64 +35,70 @@ RequestResult RoomAdminRequestHandler::handleRequest(RequestInfo reqInfo)
 
     default:
         return Helper::buildRequestResult(JsonResponsePacketSerializer::serializeResponse(ErrorResponse()),
-            std::shared_ptr<RoomAdminRequestHandler>(this, [](RoomAdminRequestHandler*) {}));
+            shared_ptr<RoomAdminRequestHandler>(this, [](RoomAdminRequestHandler*) {}));
     }
-
 }
+
 
 RequestResult RoomAdminRequestHandler::closeRoom(RequestInfo reqInfo)
 {
+    this->m_room.removeUser(this->m_user);
+
+    // Checking if the admin was the only one in the room
+    if (this->m_room.getUsers().empty())
+    {
+	    // Deleting the room from memory
+		this->m_roomManager.deleteRoom(this->m_room.getId());
+    }
+    else
+    {
+		// Changing the room status to closed to notify the participants that the room was closed, and they need to leave it
+        this->m_room.setRoomStatus(RoomStatus::Closed);
+    }
+
 	// change the room status to closed
     this->m_room.setRoomStatus(RoomStatus::Closed);
 
+    // change the user status to menu
+    this->m_user->setUserStatus(UserStatus::InMenu);
+
     // create the new handler
-    std::shared_ptr<MenuRequestHandler> newHandler = this->m_handlerFactory->createMenuRequestHandler(this->m_user);
+    shared_ptr<MenuRequestHandler> newHandler = this->m_handlerFactory->createMenuRequestHandler(this->m_user);
 
     // build and return the request result
     return Helper::buildRequestResult(JsonResponsePacketSerializer::serializeResponse(CloseRoomResponse()), newHandler);
-
-
-
-
-
-
-    //// TODO: check if that's all you need to do
-    //// change the room status to closed
-    //this->m_room.setRoomStatus(RoomStatus::Closed);
-
-    //// TODO: check if room state changed
-    //// get the room state
-    //RoomState currRoomState = this->m_roomManager.getRoomState(this->m_room);
-
-    //// return a room state response with the new room status
-    //// create the room state response
-    //GetRoomStateResponse roomStateResp = Helper::buildRoomStateResponse(currRoomState);
-
-    //// create the new handler
-    //std::shared_ptr<MenuRequestHandler> newHandler = this->m_handlerFactory->createMenuRequestHandler(this->m_user);
-
-    //// build and return the request result
-    //return Helper::buildRequestResult(JsonResponsePacketSerializer::serializeResponse(roomStateResp), newHandler);
 }
+
 
 RequestResult RoomAdminRequestHandler::startGame(RequestInfo reqInfo)
 {
-    // TODO: check if that's all you need to do
+    // Checking if there isn't any player that still playing in the room
+	vector<shared_ptr<LoggedUser>> users = this->m_room.getUsers();
+	if (any_of(users.begin(), users.end(), [](const shared_ptr<LoggedUser>& user){ return user->getUserStatus() != UserStatus::InWaitingRoom; }))
+	{
+        return Helper::buildRequestResult(JsonResponsePacketSerializer::serializeResponse(StartGameResponse({0})),
+            shared_ptr<RoomAdminRequestHandler>(this, [](RoomAdminRequestHandler*) {}));
+	}
+
     // change the room status to playing
     this->m_room.setRoomStatus(RoomStatus::Playing);
 
-    // TODO: check if room state changed
+    // change the user status to in game
+    this->m_user->setUserStatus(UserStatus::InGame);
+
     // get the room state
     RoomState currRoomState = this->m_roomManager.getRoomState(this->m_room);
 
-    // return a room state response with the new room status
-    // create the room state response
-    GetRoomStateResponse roomStateResp = Helper::buildRoomStateResponse(currRoomState);
+    // create the game
+	shared_ptr<Game> game = this->m_handlerFactory->getGameManager().createGame(this->m_room);
+
+    // create a new game handler
+    shared_ptr<GameRequestHandler> newGameHandler = this->m_handlerFactory->createGameRequestHandler(game, this->m_user);
 
     // build and return the request result
-    return Helper::buildRequestResult(JsonResponsePacketSerializer::serializeResponse(roomStateResp),
-        std::shared_ptr<RoomAdminRequestHandler>(this, [](RoomAdminRequestHandler*) {}));
+    return Helper::buildRequestResult(JsonResponsePacketSerializer::serializeResponse(StartGameResponse()), newGameHandler);
 }
+
 
 RequestResult RoomAdminRequestHandler::getRoomState(RequestInfo reqInfo)
 {
@@ -99,5 +110,5 @@ RequestResult RoomAdminRequestHandler::getRoomState(RequestInfo reqInfo)
 
     // build and return the request result
     return Helper::buildRequestResult(JsonResponsePacketSerializer::serializeResponse(roomStateResp),
-        std::shared_ptr<RoomAdminRequestHandler>(this, [](RoomAdminRequestHandler*) {}));
+        shared_ptr<RoomAdminRequestHandler>(this, [](RoomAdminRequestHandler*) {}));
 }
