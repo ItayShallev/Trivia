@@ -30,14 +30,11 @@ This project demonstrates the integration of powerful backend processing with a 
    ```bash
    git clone https://github.com/ItayShallev/Trivia.git
    ```
-2. [Add any additional installation steps here, if necessary]
 
 ## Usage 🕹️
 
 1. Run the Trivia server first.
 2. Launch as many client instances as you wish.
-
-[Add more detailed instructions if needed]
 
 ## License 📄
 
